@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
-
+import * as requestIp from 'request-ip';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +13,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors();
   app.use(csurf({ cookie: true }));
+  app.use(requestIp.mw());
 
   const config = new DocumentBuilder()
     .setTitle('AREA Application Server')
@@ -20,6 +21,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('area')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
