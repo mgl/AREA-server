@@ -5,9 +5,13 @@ import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
-  imports: [AuthModule, UsersModule],
+  imports: [ThrottlerModule.forRoot({
+    ttl: 60,
+    limit: 10,
+  }), AuthModule, UsersModule],
   controllers: [AppController, AboutController],
   providers: [AppService, AboutService],
 })
