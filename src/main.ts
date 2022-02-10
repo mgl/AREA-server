@@ -3,13 +3,16 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as csurf from 'csurf';
+import * as cookieParser from 'cookie-parser';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
+  app.use(cookieParser());
   app.enableCors();
-  app.use(csurf());
+  app.use(csurf({ cookie: true }));
 
   const config = new DocumentBuilder()
     .setTitle('AREA Application Server')

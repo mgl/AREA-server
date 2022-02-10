@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.0",
     "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
     "csurf": "^1.11.0",
     "express-rate-limit": "^6.2.0",
     "express-session": "^1.17.2",
