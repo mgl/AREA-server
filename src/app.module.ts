@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AppController } from './app.controller';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [ThrottlerModule.forRoot({
@@ -13,6 +15,9 @@ import { ThrottlerModule } from '@nestjs/throttler';
     limit: 10,
   }), AuthModule, UsersModule],
   controllers: [AppController, AboutController],
-  providers: [AppService, AboutService],
+  providers: [AppService, AboutService, {
+    provide: APP_GUARD,
+    useClass: JwtAuthGuard,
+  }],
 })
 export class AppModule {}
