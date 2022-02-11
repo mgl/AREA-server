@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { initializeApp } from 'firebase/app';
+import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import { Request, Response } from 'express';
-import { getAuth, signInWithCustomToken } from 'firebase/auth';
+const admin = require('firebase-admin');
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA_6vGnEbnslDskt6Y3DyQFFi6LFxI89Ic',
@@ -14,23 +14,25 @@ const firebaseConfig = {
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
-  private firebase: any;
-
   constructor() {
-    this.firebase = initializeApp(firebaseConfig);
+    initializeApp({
+      credential: applicationDefault(),
+    });
   }
 
   use(req: Request, res: Response, next: Function) {
     const token = req.headers.authorization;
     if (token != null && token != '') {
-      const auth = getAuth();
-      signInWithCustomToken(auth, token)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          req['user'] = user;
+      admin
+        .auth()
+        .verifyIdToken(token)
+        .then((decodedToken) => {
+          req['uid'] = decodedToken.uid;
+          req['email'] = decodedToken.email;
+          next();
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
           this.accessDenied(req.url, res);
         });
     } else {
@@ -46,4 +48,7 @@ export class PreauthMiddleware implements NestMiddleware {
       message: 'Access Denied',
     });
   }
+}
+function getAuth() {
+  throw new Error('Function not implemented.');
 }

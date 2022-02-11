@@ -12,7 +12,7 @@ export class AppController {
 
   @Get('/hello')
   getUser(@Req() request: Request): string {
-    return 'Hello ' + request['user']?.email + '!';
+    return 'Hello ' + request['email'] + ' with uid ' + request['uid'];
   }
 
   @Get('profile')
