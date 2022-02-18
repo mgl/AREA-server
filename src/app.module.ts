@@ -7,7 +7,6 @@ import { AppController } from './app.controller';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PreauthMiddleware } from './auth/preauth.middleware';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { GithubController } from './github/github.controller';
 import { OneDriveController } from './one-drive/one-drive.controller';
 import { TwitterController } from './twitter/twitter.controller';
@@ -19,10 +18,7 @@ import { DiscordController } from './discord/discord.controller';
     limit: 10,
   }), UsersModule],
   controllers: [AppController, AboutController, GithubController, OneDriveController, TwitterController, DiscordController],
-  providers: [AppService, AboutService, {
-    provide: APP_GUARD,
-    useClass: JwtAuthGuard,
-  }],
+  providers: [AppService, AboutService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
