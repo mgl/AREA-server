@@ -11,8 +11,9 @@ export class PreauthMiddleware implements NestMiddleware {
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   use(req: Request, res: Response, next: Function) {
-    const token = req.headers.authorization.replace('Bearer ', '');
+    let token = req.headers.authorization;
     if (token != null && token != '') {
+      token = token.replace('Bearer ', '');
       admin
         .auth()
         .verifyIdToken(token)
