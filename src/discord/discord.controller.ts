@@ -3,6 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 
 @Controller('/services/discord')
 export class DiscordController {
+
     @Post('/subscribe')
     subscribe() {
         //if (_url === "") {
@@ -36,3 +37,4 @@ export class DiscordController {
         return res;
     }
 }
+

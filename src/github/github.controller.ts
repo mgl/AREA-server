@@ -3,6 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 
 @Controller('/services/github')
 export class GithubController {
+
     @Post('subscribe')
     subscribe () {
         return { message: 'Subscribed to Github service' };

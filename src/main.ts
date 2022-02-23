@@ -3,16 +3,22 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as compression from 'compression';
-import * as csurf from 'csurf';
 import * as cookieParser from 'cookie-parser';
+import * as functions from 'firebase-functions';
+import * as express from 'express';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+const server = express();
+
+const bootstrap = async (expressInstance) => {
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressInstance),
+  );
 
   app.use(helmet());
   app.use(cookieParser());
   app.enableCors();
-  //app.use(csurf({ cookie: true }));
   app.use(compression());
 
   const config = new DocumentBuilder()
@@ -24,6 +30,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
-}
-bootstrap();
+  return app.init();
+};
+
+bootstrap(server);
+
+export const api = functions.region('europe-west1').https.onRequest(server);
