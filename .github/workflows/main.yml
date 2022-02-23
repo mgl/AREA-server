@@ -20,6 +20,7 @@ jobs:
           node-version: 'lts/*'
       
       - run: npm ci
+      - run: npm install -g npm-run-all
       - run: npm run build
       - run: npm prune --production
 
