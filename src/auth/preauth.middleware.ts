@@ -1,5 +1,4 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { applicationDefault, initializeApp } from 'firebase-admin/app';
 import { Request, Response } from 'express';
 import admin from 'firebase-admin';
 
