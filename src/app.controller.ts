@@ -1,4 +1,4 @@
-import { Controller, Get, Request, UseGuards, Post, Req, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Request, Req, Delete, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -26,8 +26,18 @@ export class AppController {
   }
 
   @Delete('/profile')
-  async removeActionReaction(@Request() req, @Param('id') id: string, @Param('token') token: string) {
-    var docRef = await req.firestore().collection("actions").doc(token).collection("reactions").doc(id).delete();
+  async removeActionReaction(
+    @Request() req,
+    @Param('id') id: string,
+    @Param('token') token: string,
+  ) {
+    const docRef = await req
+      .firestore()
+      .collection('actions')
+      .doc(token)
+      .collection('reactions')
+      .doc(id)
+      .delete();
     return 'Action deleted';
   }
 }

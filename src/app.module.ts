@@ -32,7 +32,7 @@ import { GoogleController } from './google/google.controller';
     OneDriveController,
     TwitterController,
     DiscordController,
-    GoogleController
+    GoogleController,
   ],
   providers: [AppService, AboutService],
 })
