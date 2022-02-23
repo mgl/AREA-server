@@ -1,4 +1,5 @@
 serviceAccount.json
+.env
 
 # compiled output
 /dist

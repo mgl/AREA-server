@@ -6,14 +6,12 @@ import admin from 'firebase-admin';
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
   constructor() {
-    admin.initializeApp({
-      credential: applicationDefault(),
-    });
+    admin.initializeApp();
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   use(req: Request, res: Response, next: Function) {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization.replace('Bearer ', '');
     if (token != null && token != '') {
       admin
         .auth()
