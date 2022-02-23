@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "prenest:build": "rimraf dist",
-    "build": "npm run nest:build fb:build",
-    "start": "npm run nest:start:dev fb:serve",
-    "deploy": "npm run nest:build fb:deploy",
+    "build": "npm-run-all --parallel nest:build fb:build",
+    "start": "npm-run-all --parallel nest:start:dev fb:serve",
+    "deploy": "npm-run-all nest:build fb:deploy",
     "nest:build": "nest build",
     "nest:start": "nest start",
     "nest:start:dev": "nest start --watch",
