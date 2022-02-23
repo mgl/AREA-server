@@ -15,6 +15,7 @@ import { GithubController } from './github/github.controller';
 import { OneDriveController } from './one-drive/one-drive.controller';
 import { TwitterController } from './twitter/twitter.controller';
 import { DiscordController } from './discord/discord.controller';
+import { GoogleController } from './google/google.controller';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { DiscordController } from './discord/discord.controller';
     OneDriveController,
     TwitterController,
     DiscordController,
+    GoogleController
   ],
   providers: [AppService, AboutService],
 })
