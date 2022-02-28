@@ -28,7 +28,10 @@ export class GithubController {
   }
 
   @Post('/')
-  async createGithubReaction(@Param('id') id: string, @Param('token') token: string) {
+  async createGithubReaction(
+    @Param('id') id: string,
+    @Param('token') token: string,
+  ) {
     const data = {
       token: token,
     };

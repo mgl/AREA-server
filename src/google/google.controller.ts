@@ -28,7 +28,10 @@ export class GoogleController {
   }
 
   @Post('/')
-  async createGoogleCalendarReaction(@Param('id') id: string, @Param('token') token: string) {
+  async createGoogleCalendarReaction(
+    @Param('id') id: string,
+    @Param('token') token: string,
+  ) {
     const data = {
       token: token,
     };

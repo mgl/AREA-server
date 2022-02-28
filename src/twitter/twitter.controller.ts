@@ -28,7 +28,10 @@ export class TwitterController {
   }
 
   @Post('/')
-  async createTwitterReaction(@Param('id') id: string, @Param('token') token: string) {
+  async createTwitterReaction(
+    @Param('id') id: string,
+    @Param('token') token: string,
+  ) {
     const data = {
       token: token,
     };

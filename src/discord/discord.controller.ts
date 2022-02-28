@@ -2,7 +2,6 @@ import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import admin from 'firebase-admin';
 
-
 @Controller('/services/discord')
 export class DiscordController {
   @Post('/subscribe')
@@ -32,7 +31,10 @@ export class DiscordController {
   }
 
   @Post('/')
-  async createDiscordReaction(@Param('id') id: string, @Param('token') token: string) {
+  async createDiscordReaction(
+    @Param('id') id: string,
+    @Param('token') token: string,
+  ) {
     const data = {
       token: token,
     };

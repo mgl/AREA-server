@@ -28,7 +28,10 @@ export class OneDriveController {
   }
 
   @Post('/')
-  async createOneDriveReaction(@Param('id') id: string, @Param('token') token: string) {
+  async createOneDriveReaction(
+    @Param('id') id: string,
+    @Param('token') token: string,
+  ) {
     const data = {
       token: token,
     };

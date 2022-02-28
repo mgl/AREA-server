@@ -38,9 +38,19 @@ import { GoogleController } from './google/google.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(PreauthMiddleware).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
+    consumer
+      .apply(PreauthMiddleware)
+      .exclude(
+        { path: '/hello', method: RequestMethod.GET },
+        { path: '/services/github/webhook', method: RequestMethod.POST },
+        { path: '/services/twitter/webhook', method: RequestMethod.POST },
+        { path: '/services/discord/webhook', method: RequestMethod.POST },
+        { path: '/services/google/webhook', method: RequestMethod.POST },
+        { path: '/services/onedrive/webhook', method: RequestMethod.POST },
+      )
+      .forRoutes({
+        path: '*',
+        method: RequestMethod.ALL,
+      });
   }
 }
