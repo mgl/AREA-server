@@ -1,5 +1,6 @@
 import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import admin from 'firebase-admin';
 
 @Controller('/services/github')
 export class GithubController {
@@ -14,12 +15,11 @@ export class GithubController {
   }
 
   @Post('/')
-  async createGithubAction(@Request() req) {
-    const token = 'ahah';
+  async createGithubAction(@Param('token') token: string) {
     const data = {
       token: token,
     };
-    const res = await req
+    const res = await admin
       .firestore()
       .collection('actions')
       .doc(uuidv4())
@@ -28,12 +28,11 @@ export class GithubController {
   }
 
   @Post('/')
-  async createGithubReaction(@Request() req, @Param('id') id: string) {
-    const token = 'ahah';
+  async createGithubReaction(@Param('id') id: string, @Param('token') token: string) {
     const data = {
       token: token,
     };
-    const res = await req
+    const res = await admin
       .firestore()
       .collection('actions')
       .doc(id)

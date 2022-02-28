@@ -1,5 +1,6 @@
 import { Controller, Request, Get, Post, Delete, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import admin from 'firebase-admin';
 
 @Controller('/services/one-drive')
 export class OneDriveController {
@@ -14,12 +15,11 @@ export class OneDriveController {
   }
 
   @Post('/')
-  async createOneDriveAction(@Request() req) {
-    const token = 'ahah';
+  async createOneDriveAction(@Param('token') token: string) {
     const data = {
       token: token,
     };
-    const res = await req
+    const res = await admin
       .firestore()
       .collection('actions')
       .doc(uuidv4())
@@ -28,12 +28,11 @@ export class OneDriveController {
   }
 
   @Post('/')
-  async createOneDriveReaction(@Request() req, @Param('id') id: string) {
-    const token = 'ahah';
+  async createOneDriveReaction(@Param('id') id: string, @Param('token') token: string) {
     const data = {
       token: token,
     };
-    const res = await req
+    const res = await admin
       .firestore()
       .collection('actions')
       .doc(id)

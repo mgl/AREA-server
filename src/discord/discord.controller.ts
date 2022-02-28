@@ -1,5 +1,7 @@
 import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import admin from 'firebase-admin';
+
 
 @Controller('/services/discord')
 export class DiscordController {
@@ -17,12 +19,11 @@ export class DiscordController {
   }
 
   @Post('/')
-  async createDiscordAction(@Request() req) {
-    const token = 'ahah';
+  async createDiscordAction(@Param('token') token: string) {
     const data = {
       token: token,
     };
-    const res = await req
+    const res = await admin
       .firestore()
       .collection('actions')
       .doc(uuidv4())
@@ -31,12 +32,11 @@ export class DiscordController {
   }
 
   @Post('/')
-  async createDiscordReaction(@Request() req, @Param('id') id: string) {
-    const token = 'ahah';
+  async createDiscordReaction(@Param('id') id: string, @Param('token') token: string) {
     const data = {
       token: token,
     };
-    const res = await req
+    const res = await admin
       .firestore()
       .collection('actions')
       .doc(id)
