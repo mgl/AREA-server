@@ -44,4 +44,9 @@ export class GithubController {
       .set(data);
     return res;
   }
+
+  @Post('/webhook')
+  async React(@Request() request) {
+      console.log(request);
+  }
 }
