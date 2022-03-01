@@ -1,20 +1,31 @@
 import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
+import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from 'uuid';
 import admin from 'firebase-admin';
-import { getAnalytics, setUserProperties } from "firebase/analytics";
 
 @Controller('/services/twitter')
 export class TwitterController {
   @Post('subscribe')
   subscribe(@Param('token') token: string) {
-    const analytics = getAnalytics();
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    setUserProperties(analytics, { twitter_token: token });
+    var ref = admin.database().ref().child(user.uid);
+    ref.set({
+      twitter_token: token
+    })
     return { message: 'Subscribed to Twitter service' };
   }
 
   @Delete('/unsubscribe')
   unsubscribe() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    var ref = admin.database().ref().child(user.uid);
+    ref.set({
+      twitter_token: null
+    })
     return { message: 'Unsubscribed to Twitter service' };
   }
 
