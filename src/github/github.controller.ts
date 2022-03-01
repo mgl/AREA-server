@@ -1,11 +1,15 @@
 import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import admin from 'firebase-admin';
+import { getAnalytics, setUserProperties } from "firebase/analytics";
 
 @Controller('/services/github')
 export class GithubController {
   @Post('subscribe')
-  subscribe() {
+  subscribe(@Param('token') token: string) {
+    const analytics = getAnalytics();
+
+    setUserProperties(analytics, { github_token: token });
     return { message: 'Subscribed to Github service' };
   }
 

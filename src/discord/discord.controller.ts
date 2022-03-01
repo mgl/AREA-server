@@ -1,14 +1,15 @@
 import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import admin from 'firebase-admin';
+import { getAnalytics, setUserProperties } from "firebase/analytics";
 
 @Controller('/services/discord')
 export class DiscordController {
   @Post('/subscribe')
-  subscribe() {
-    //if (_url === "") {
-    //    _url = "https://discordapp.com/api/webhooks/942802858665971832/QlF86Xa2wrzBscnyyRmvC3qYf8D8l2j4Rw-pLbdZbAPZbc7V6B365tyUDDwqVOOIj2G7";
-    //}
+  subscribe(@Param('token') token: string) {
+    const analytics = getAnalytics();
+
+    setUserProperties(analytics, { discord_token: token });
     return { message: 'Subscribed to Discord service' };
   }
 
