@@ -1,19 +1,16 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import admin from 'firebase-admin';
+import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
-  constructor() {
-    admin.initializeApp();
-  }
-
   // eslint-disable-next-line @typescript-eslint/ban-types
   use(req: Request, res: Response, next: Function) {
     let token = req.headers.authorization;
     if (token != null && token != '') {
       token = token.replace('Bearer ', '');
-      admin
+      FirebaseAdmin.getInstance()
+        .getAdmin()
         .auth()
         .verifyIdToken(token)
         .then((decodedToken) => {
