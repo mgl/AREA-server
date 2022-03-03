@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OneDriveController } from './one-drive.controller';
+import { GitlabController } from './gitlab.controller';
 
-describe('OneDriveController', () => {
-  let controller: OneDriveController;
+describe('GitlabController', () => {
+  let controller: GitlabController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OneDriveController],
+      controllers: [GitlabController],
     }).compile();
 
-    controller = module.get<OneDriveController>(OneDriveController);
+    controller = module.get<GitlabController>(GitlabController);
   });
 
   it('should be defined', () => {

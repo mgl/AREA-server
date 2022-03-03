@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import admin from 'firebase-admin';
 
 @Controller('/services/one-drive')
-export class OneDriveController {
+export class GitlabController {
   @Post('/subscribe')
   subscribe(@Param('token') token: string) {
     const auth = getAuth();
@@ -12,9 +12,9 @@ export class OneDriveController {
 
     var ref = admin.database().ref().child(user.uid);
     ref.set({
-      onedrive_token: token
+      gitlab_token: token
     })
-    return { message: 'Subscribed to Onedrive service' };
+    return { message: 'Subscribed to Gitlab service' };
   }
 
   @Delete('/unsubscribe')
@@ -24,13 +24,13 @@ export class OneDriveController {
 
     var ref = admin.database().ref().child(user.uid);
     ref.set({
-      onedrive_token: null
+      gitlab_token: null
     })
-    return { message: 'Unsubscribed to Onedrive service' };
+    return { message: 'Unsubscribed to Gitlab service' };
   }
 
   @Post('/')
-  async createOneDriveAction(@Param('token') token: string) {
+  async createGitlabAction(@Param('token') token: string) {
     const data = {
       token: token,
     };
@@ -48,7 +48,7 @@ export class OneDriveController {
   }
 
   @Post('/')
-  async createOneDriveReaction(
+  async createGitlabReaction(
     @Param('id') id: string,
     @Param('token') token: string,
   ) {
