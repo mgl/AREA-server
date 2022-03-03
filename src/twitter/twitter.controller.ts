@@ -34,13 +34,18 @@ export class TwitterController {
     const data = {
       token: token,
     };
+    const auth = getAuth();
+    const user = auth.currentUser;
+ 
     const res = await admin
       .firestore()
+      .collection('area')
+      .doc(user.uid)
       .collection('actions')
       .doc(uuidv4())
-      .set(data);
-    return res;
-  }
+      .set(data);   
+  return res;
+}
 
   @Post('/')
   async createTwitterReaction(
@@ -50,8 +55,13 @@ export class TwitterController {
     const data = {
       token: token,
     };
+    const auth = getAuth();
+    const user = auth.currentUser;
+
     const res = await admin
       .firestore()
+      .collection('area')
+      .doc(user.uid)
       .collection('actions')
       .doc(id)
       .collection('reactions')

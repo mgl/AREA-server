@@ -34,8 +34,13 @@ export class GoogleController {
     const data = {
       token: token,
     };
+    const auth = getAuth();
+    const user = auth.currentUser;
+
     const res = await admin
       .firestore()
+      .collection('area')
+      .doc(user.uid)
       .collection('actions')
       .doc(uuidv4())
       .set(data);
@@ -50,8 +55,13 @@ export class GoogleController {
     const data = {
       token: token,
     };
+    const auth = getAuth();
+    const user = auth.currentUser;
+
     const res = await admin
       .firestore()
+      .collection('area')
+      .doc(user.uid)
       .collection('actions')
       .doc(id)
       .collection('reactions')
