@@ -1,16 +1,17 @@
-import { Controller, Request, Post, Delete, Param } from '@nestjs/common';
-import { getAuth } from "firebase/auth";
+import { Controller, Request, Post, Delete, Param, Get, Body } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import admin from 'firebase-admin';
+import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
+import { getAuth } from "firebase/auth";
 
 @Controller('/services/github')
 export class GithubController {
+  
   @Post('subscribe')
   subscribe(@Param('token') token: string) {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = admin.database().ref().child(user.uid);
+    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
     ref.set({
       github_token: token
     })
@@ -22,50 +23,51 @@ export class GithubController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = admin.database().ref().child(user.uid);
+    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
     ref.set({
       github_token: null
     })
     return { message: 'Unsubscribed to Github service' };
   }
 
-  @Post('/')
-  async createGithubAction(@Param('token') token: string) {
+  @Post('/action')
+  async createGithubAction(@Body() token: string) {
     const data = {
-      token: token,
+        token: "",
     };
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const res = await admin
+    data.token = token;
+    const res = await FirebaseAdmin.getInstance()
+      .getAdmin()
       .firestore()
       .collection('area')
-      .doc(user.uid)
+      .doc('uuid')
       .collection('actions')
-      .doc(uuidv4())
+      .doc()
       .set(data);
     return res;
   }
 
-  @Post('/')
+  @Post('/reaction')
   async createGithubReaction(
-    @Param('id') id: string,
-    @Param('token') token: string,
+    @Body('id') id: string,
+    @Body('actionId') actionId: string,
+    @Body('token') token: string,
   ) {
     const data = {
-      token: token,
+        id: "",
+        token: "",
     };
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const res = await admin
+    data.id = id;
+    data.token = token;
+    const res = await FirebaseAdmin.getInstance()
+      .getAdmin()
       .firestore()
       .collection('area')
-      .doc(user.uid)
+      .doc("uuid")
       .collection('actions')
-      .doc(id)
+      .doc(actionId)
       .collection('reactions')
-      .doc(uuidv4())
+      .doc()
       .set(data);
     return res;
   }

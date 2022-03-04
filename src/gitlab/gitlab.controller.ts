@@ -1,7 +1,7 @@
-import { Controller, Request, Get, Post, Delete, Param } from '@nestjs/common';
+import { Controller, Request, Post, Delete, Param, Get, Body } from '@nestjs/common';
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from 'uuid';
-import admin from 'firebase-admin';
+import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
 
 @Controller('/services/one-drive')
 export class GitlabController {
@@ -10,7 +10,7 @@ export class GitlabController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = admin.database().ref().child(user.uid);
+    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
     ref.set({
       gitlab_token: token
     })
@@ -22,50 +22,51 @@ export class GitlabController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = admin.database().ref().child(user.uid);
+    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
     ref.set({
       gitlab_token: null
     })
     return { message: 'Unsubscribed to Gitlab service' };
   }
 
-  @Post('/')
-  async createGitlabAction(@Param('token') token: string) {
+  @Post('/action')
+  async createGitlabAction(@Body() token: string) {
     const data = {
-      token: token,
+        token: "",
     };
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const res = await admin
+    data.token = token;
+    const res = await FirebaseAdmin.getInstance()
+      .getAdmin()
       .firestore()
       .collection('area')
-      .doc(user.uid)
+      .doc('uuid')
       .collection('actions')
-      .doc(uuidv4())
+      .doc()
       .set(data);
     return res;
   }
 
-  @Post('/')
+  @Post('/reaction')
   async createGitlabReaction(
-    @Param('id') id: string,
-    @Param('token') token: string,
+    @Body('id') id: string,
+    @Body('actionId') actionId: string,
+    @Body('token') token: string,
   ) {
     const data = {
-      token: token,
+        id: "",
+        token: "",
     };
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const res = await admin
+    data.id = id;
+    data.token = token;
+    const res = await FirebaseAdmin.getInstance()
+      .getAdmin()
       .firestore()
       .collection('area')
-      .doc(user.uid)
+      .doc("uuid")
       .collection('actions')
-      .doc(id)
+      .doc(actionId)
       .collection('reactions')
-      .doc(uuidv4())
+      .doc()
       .set(data);
     return res;
   }
