@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as compression from 'compression';
@@ -10,11 +9,10 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 
 const server = express();
 
-const bootstrap = async (expressInstance) => {
-  const app = await NestFactory.create(
-    AppModule,
-    new ExpressAdapter(expressInstance),
-  );
+// Local test code
+/*
+async function bootstrap_local() {
+  const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
   app.use(cookieParser());
@@ -28,7 +26,25 @@ const bootstrap = async (expressInstance) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
+
+  await app.listen(3000);
+}
+
+bootstrap_local();
+*/
+
+// Production code
+const bootstrap = async (expressInstance) => {
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressInstance),
+  );
+
+  app.use(helmet());
+  app.use(cookieParser());
+  app.enableCors();
+  app.use(compression());
 
   return app.init();
 };

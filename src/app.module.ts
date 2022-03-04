@@ -10,13 +10,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PreauthMiddleware } from './auth/preauth.middleware';
-import { AppController } from './app.controller';
 import { GithubController } from './github/github.controller';
-import { GitlabController } from './gitlab/gitlab.controller';
-import { TwitterController } from './twitter/twitter.controller';
-import { DiscordController } from './discord/discord.controller';
-import { GoogleController } from './google/google.controller';
-import { CodebaseController } from './codebase/codebase.controller';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -30,11 +25,11 @@ import { CodebaseController } from './codebase/codebase.controller';
     AppController,
     AboutController,
     GithubController,
-    GitlabController,
-    TwitterController,
-    DiscordController,
-    GoogleController,
-    CodebaseController,
+    //    GitlabController,
+    //    TwitterController,
+    //    DiscordController,
+    //    GoogleController,
+    //    CodebaseController,
   ],
   providers: [AppService, AboutService],
 })

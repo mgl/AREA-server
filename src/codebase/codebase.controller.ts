@@ -1,6 +1,5 @@
-import { Controller, Request, Post, Delete, Param, Get, Body } from '@nestjs/common';
-import { getAuth } from "firebase/auth";
-import { v4 as uuidv4 } from 'uuid';
+import { Controller, Post, Delete, Param, Body } from '@nestjs/common';
+import { getAuth } from 'firebase/auth';
 import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
 
 @Controller('/services/codebase')
@@ -10,10 +9,14 @@ export class CodebaseController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
+    const ref = FirebaseAdmin.getInstance()
+      .getAdmin()
+      .database()
+      .ref()
+      .child(user.uid);
     ref.set({
-      codebase_token: token
-    })
+      codebase_token: token,
+    });
     return { message: 'Subscribed to Codebase service' };
   }
 
@@ -22,17 +25,21 @@ export class CodebaseController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
+    const ref = FirebaseAdmin.getInstance()
+      .getAdmin()
+      .database()
+      .ref()
+      .child(user.uid);
     ref.set({
-      codebase_token: null
-    })
+      codebase_token: null,
+    });
     return { message: 'Unsubscribed to Codebase service' };
   }
 
-@Post('/action')
+  @Post('/action')
   async createCodebaseAction(@Body() token: string) {
     const data = {
-        token: "",
+      token: '',
     };
     data.token = token;
     const res = await FirebaseAdmin.getInstance()
@@ -53,8 +60,8 @@ export class CodebaseController {
     @Body('token') token: string,
   ) {
     const data = {
-        id: "",
-        token: "",
+      id: '',
+      token: '',
     };
     data.id = id;
     data.token = token;
@@ -62,7 +69,7 @@ export class CodebaseController {
       .getAdmin()
       .firestore()
       .collection('area')
-      .doc("uuid")
+      .doc('uuid')
       .collection('actions')
       .doc(actionId)
       .collection('reactions')

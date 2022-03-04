@@ -1,50 +1,58 @@
-import { Controller, Request, Post, Delete, Param, Get, Body } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
-import { getAuth } from "firebase/auth";
-
+import {
+  Controller,
+  Request,
+  Post,
+  Delete,
+  Param,
+  Body,
+  Req,
+} from '@nestjs/common';
+import Firebase from '../firebase/firebase';
 @Controller('/services/github')
 export class GithubController {
-  
   @Post('subscribe')
-  subscribe(@Param('token') token: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  async subscribe(@Req() request: Request, @Body('token') token: string) {
+    const data = {
+      github_token: token,
+    };
+    //data.github_token = token;
 
-    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
-    ref.set({
-      github_token: token
-    })
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('users')
+      .doc(request['uid'])
+      .set(data);
     return { message: 'Subscribed to Github service' };
   }
 
   @Delete('/unsubscribe')
-  unsubscribe() {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  async unsubscribe() {
+    const user = Firebase.getInstance().getAuth().currentUser;
 
-    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
-    ref.set({
-      github_token: null
-    })
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('users')
+      .doc(user.uid)
+      .delete();
     return { message: 'Unsubscribed to Github service' };
   }
 
   @Post('/action')
   async createGithubAction(@Body() token: string) {
     const data = {
-        token: "",
+      token: token,
     };
-    data.token = token;
-    const res = await FirebaseAdmin.getInstance()
-      .getAdmin()
-      .firestore()
+    await Firebase.getInstance()
+      .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
       .doc()
       .set(data);
-    return res;
   }
 
   @Post('/reaction')
@@ -54,26 +62,22 @@ export class GithubController {
     @Body('token') token: string,
   ) {
     const data = {
-        id: "",
-        token: "",
+      id: id,
+      token: token,
     };
-    data.id = id;
-    data.token = token;
-    const res = await FirebaseAdmin.getInstance()
-      .getAdmin()
-      .firestore()
+    await Firebase.getInstance()
+      .getDb()
       .collection('area')
-      .doc("uuid")
+      .doc('uuid')
       .collection('actions')
       .doc(actionId)
       .collection('reactions')
       .doc()
       .set(data);
-    return res;
   }
 
   @Post('/webhook')
   async React(@Request() request) {
-      console.log(request);
+    console.log(request);
   }
 }

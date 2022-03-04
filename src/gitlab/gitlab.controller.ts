@@ -1,5 +1,13 @@
-import { Controller, Request, Post, Delete, Param, Get, Body } from '@nestjs/common';
-import { getAuth } from "firebase/auth";
+import {
+  Controller,
+  Request,
+  Post,
+  Delete,
+  Param,
+  Get,
+  Body,
+} from '@nestjs/common';
+import { getAuth } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
 
@@ -10,10 +18,14 @@ export class GitlabController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
+    const ref = FirebaseAdmin.getInstance()
+      .getAdmin()
+      .database()
+      .ref()
+      .child(user.uid);
     ref.set({
-      gitlab_token: token
-    })
+      gitlab_token: token,
+    });
     return { message: 'Subscribed to Gitlab service' };
   }
 
@@ -22,17 +34,21 @@ export class GitlabController {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    var ref = FirebaseAdmin.getInstance().getAdmin().database().ref().child(user.uid);
+    const ref = FirebaseAdmin.getInstance()
+      .getAdmin()
+      .database()
+      .ref()
+      .child(user.uid);
     ref.set({
-      gitlab_token: null
-    })
+      gitlab_token: null,
+    });
     return { message: 'Unsubscribed to Gitlab service' };
   }
 
   @Post('/action')
   async createGitlabAction(@Body() token: string) {
     const data = {
-        token: "",
+      token: '',
     };
     data.token = token;
     const res = await FirebaseAdmin.getInstance()
@@ -53,8 +69,8 @@ export class GitlabController {
     @Body('token') token: string,
   ) {
     const data = {
-        id: "",
-        token: "",
+      id: '',
+      token: '',
     };
     data.id = id;
     data.token = token;
@@ -62,7 +78,7 @@ export class GitlabController {
       .getAdmin()
       .firestore()
       .collection('area')
-      .doc("uuid")
+      .doc('uuid')
       .collection('actions')
       .doc(actionId)
       .collection('reactions')

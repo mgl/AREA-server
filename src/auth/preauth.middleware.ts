@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
+import Firebase from 'src/firebase/firebase';
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
@@ -9,9 +9,8 @@ export class PreauthMiddleware implements NestMiddleware {
     let token = req.headers.authorization;
     if (token != null && token != '') {
       token = token.replace('Bearer ', '');
-      FirebaseAdmin.getInstance()
-        .getAdmin()
-        .auth()
+      Firebase.getInstance()
+        .getAuth()
         .verifyIdToken(token)
         .then((decodedToken) => {
           req['uid'] = decodedToken.uid;
