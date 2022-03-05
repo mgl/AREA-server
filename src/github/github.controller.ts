@@ -39,14 +39,15 @@ export class GithubController {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     const data = {
-      github_token: token,
+      name : 'github',
+      token: token,
     };
 
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
-      .collection('users')
+      .collection('services')
       .doc(request['uid'])
       .set(data);
     return { message: 'Subscribed to github service' };

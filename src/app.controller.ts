@@ -1,4 +1,5 @@
-import { Controller, Get, Request, Req, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Request, Req, Delete, Param, Body } from '@nestjs/common';
+import Firebase from 'src/firebase/firebase';
 import { AppService } from './app.service';
 
 @Controller()
@@ -20,9 +21,61 @@ export class AppController {
     return req.user;
   }
 
-  @Get('/profile')
-  getActionList(@Request() req) {
-    return req.user.actions;
+  @Get('/service_list')
+  async getServiceList() {
+    var servicelist = "";
+    const serviceRef = await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('services');
+    const snapshot = await serviceRef.get();
+    snapshot.forEach(doc => {
+      servicelist+=doc.data().name;
+      servicelist+='=';
+      servicelist+=doc.data().token;
+      servicelist+=';';
+    });
+    return { servicelist};
+  }
+
+@Get('/action_list')
+  async getActionList() {
+    var actionlists = "";
+    const actionRef = Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('actions')
+    const snapshot = await actionRef.get();
+    snapshot.forEach(doc => {
+      actionlists+=doc.data().id;
+      actionlists+='=';
+      actionlists+=doc.data().token;
+      actionlists+=';';
+    });
+    return { actionlists};
+  }
+
+@Get('/reaction_list')
+  async getReactionList(@Body("id") id: string) {
+    var reactionlists = "";
+    console.log(id)
+    const reactionRef = Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('actions')
+      .doc(id)
+      .collection('reactions')
+    const snapshot = await reactionRef.get();
+    snapshot.forEach(doc => {
+      reactionlists+=doc.data().id;
+      reactionlists+='=';
+      reactionlists+=doc.data().token;
+      reactionlists+=';';
+    });
+    return { reactionlists};
   }
 
   @Delete('/profile')
