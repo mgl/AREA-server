@@ -1,89 +1,93 @@
+import { Get } from '@nestjs/common';
 import {
   Controller,
   Request,
   Post,
   Delete,
   Param,
-  Get,
   Body,
+  Req,
 } from '@nestjs/common';
-import { getAuth } from 'firebase/auth';
-import { v4 as uuidv4 } from 'uuid';
-import { FirebaseAdmin } from 'src/firebase-admin/firebase-admin';
-
+import Firebase from '../firebase/firebase';
+import {Token, Id, ActionId} from '../error/error';
 @Controller('/services/twitter')
 export class TwitterController {
   @Post('subscribe')
-  subscribe(@Param('token') token: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    const ref = FirebaseAdmin.getInstance()
-      .getAdmin()
-      .database()
-      .ref()
-      .child(user.uid);
-    ref.set({
+  async subscribe(@Req() request: Request, @Body('token') token: Token) {
+    const data = {
       twitter_token: token,
-    });
-    return { message: 'Subscribed to Twitter service' };
+    };
+
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('users')
+      .doc(request['uid'])
+      .set(data);
+    return { message: 'Subscribed to twitter service' };
+  }
+
+  @Get('/')
+  async getToken(@Req() request: Request) {
+    const TokenRef = Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('users')
+      .doc(request['uid'])
+    const doc = await TokenRef.get()
+    if (!doc.exists)
+      return { statusCode: '404', message: 'Not found'}
+    return {message: '200' + doc.data()};
   }
 
   @Delete('/unsubscribe')
-  unsubscribe() {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  async unsubscribe() {
+    const user = Firebase.getInstance().getAuth().currentUser;
 
-    const ref = FirebaseAdmin.getInstance()
-      .getAdmin()
-      .database()
-      .ref()
-      .child(user.uid);
-    ref.set({
-      twitter_token: null,
-    });
-    return { message: 'Unsubscribed to Twitter service' };
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('users')
+      .doc(user.uid)
+      .delete();
+    return { message: 'Unsubscribed to twitter service' };
   }
 
   @Post('/action')
-  async createTwitterAction(@Body() token: string) {
+  async createTwitterAction(@Body() token: Token) {
     const data = {
-      token: '',
+      token: token,
     };
-    data.token = token;
-    const res = await FirebaseAdmin.getInstance()
-      .getAdmin()
-      .firestore()
+    await Firebase.getInstance()
+      .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
       .doc()
       .set(data);
-    return res;
   }
 
   @Post('/reaction')
   async createTwitterReaction(
-    @Body('id') id: string,
-    @Body('actionId') actionId: string,
-    @Body('token') token: string,
+    @Body('id') id: Id,
+    @Body('actionId') actionId: ActionId,
+    @Body('token') token: Token,
   ) {
     const data = {
-      id: '',
-      token: '',
+      id: id,
+      token: token,
     };
-    data.id = id;
-    data.token = token;
-    const res = await FirebaseAdmin.getInstance()
-      .getAdmin()
-      .firestore()
+    await Firebase.getInstance()
+      .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
-      .doc(actionId)
+      .doc(actionId.actionId)
       .collection('reactions')
       .doc()
       .set(data);
-    return res;
   }
 }

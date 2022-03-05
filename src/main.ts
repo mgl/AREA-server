@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
@@ -45,7 +46,7 @@ const bootstrap = async (expressInstance) => {
   app.use(cookieParser());
   app.enableCors();
   app.use(compression());
-
+  app.useGlobalPipes(new ValidationPipe())
   return app.init();
 };
 
