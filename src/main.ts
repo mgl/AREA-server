@@ -1,4 +1,5 @@
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
@@ -34,7 +35,6 @@ async function bootstrap_local() {
 
 bootstrap_local();
 */
-
 // Production code
 const bootstrap = async (expressInstance) => {
   const app = await NestFactory.create(
@@ -51,5 +51,4 @@ const bootstrap = async (expressInstance) => {
 };
 
 bootstrap(server);
-
 export const api = functions.region('europe-west1').https.onRequest(server);

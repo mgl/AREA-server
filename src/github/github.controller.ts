@@ -12,8 +12,10 @@ import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
 @Controller('/services/github')
 export class GithubController {
-  @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: Token) {
+ @Post('subscribe')
+  async subscribe(@Req() request: Request, @Body('token') token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
     const data = {
       github_token: token,
     };
@@ -25,7 +27,7 @@ export class GithubController {
       .collection('users')
       .doc(request['uid'])
       .set(data);
-    return { message: 'Subscribed to Github service' };
+    return { message: 'Subscribed to github service' };
   }
 
   @Get('/')
@@ -43,21 +45,22 @@ export class GithubController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe() {
-    const user = Firebase.getInstance().getAuth().currentUser;
+  async unsubscribe(@Req() request: Request) {
 
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('users')
-      .doc(user.uid)
+      .doc(request['uid'])
       .delete();
-    return { message: 'Unsubscribed to Github service' };
+    return { message: 'Unsubscribed to github service' };
   }
 
   @Post('/action')
-  async createGithubAction(@Body() token: Token) {
+  async createGithubAction(@Body() token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
     const data = {
       token: token,
     };
@@ -76,6 +79,12 @@ export class GithubController {
     @Body('actionId') actionId: ActionId,
     @Body('token') token: Token,
   ) {
+    if (!id || id === undefined)
+      return { message: '400 Bad Parameter'}
+    if (!actionId || actionId === undefined)
+      return { message: '400 Bad Parameter'}
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
     const data = {
       id: id,
       token: token,

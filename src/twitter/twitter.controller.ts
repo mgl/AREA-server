@@ -13,7 +13,9 @@ import {Token, Id, ActionId} from '../error/error';
 @Controller('/services/twitter')
 export class TwitterController {
   @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: Token) {
+  async subscribe(@Req() request: Request, @Body('token') token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
     const data = {
       twitter_token: token,
     };
@@ -43,21 +45,22 @@ export class TwitterController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe() {
-    const user = Firebase.getInstance().getAuth().currentUser;
+  async unsubscribe(@Req() request: Request) {
 
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('users')
-      .doc(user.uid)
+      .doc(request['uid'])
       .delete();
     return { message: 'Unsubscribed to twitter service' };
   }
 
   @Post('/action')
-  async createTwitterAction(@Body() token: Token) {
+  async createTwitterAction(@Body() token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
     const data = {
       token: token,
     };
@@ -76,6 +79,12 @@ export class TwitterController {
     @Body('actionId') actionId: ActionId,
     @Body('token') token: Token,
   ) {
+    if (!id || id === undefined)
+      return { message: '400 Bad Parameter'}
+    if (!actionId || actionId === undefined)
+      return { message: '400 Bad Parameter'}
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
     const data = {
       id: id,
       token: token,
