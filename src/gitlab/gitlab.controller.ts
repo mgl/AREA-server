@@ -88,12 +88,9 @@ export class GitlabController {
   }
 
   @Post('/action/tag_push_events')
-  async createGitlabTagPushEventsAction(@Req() request: Request, @Body() token: string, @Body() repoId: string) {
+  async createGitlabTagPushEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     var authToken = '';
     const serviceRef = Firebase.getInstance()
       .getDb()
@@ -110,18 +107,15 @@ export class GitlabController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
 
     create_webhook_gitlab(repoId, "tag_push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/push_events')
-  async createGitlabPushEventsAction(@Req() request: Request, @Body() token: string, @Body() repoId: string) {
+  async createGitlabPushEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     var authToken = '';
     const serviceRef = Firebase.getInstance()
       .getDb()
@@ -138,18 +132,15 @@ export class GitlabController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
 
     create_webhook_gitlab(repoId, "push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/wiki_page_events')
-  async createWikiPageEventsAction(@Req() request: Request, @Body() token: string, @Body() repoId: string) {
+  async createWikiPageEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     var authToken = '';
     const serviceRef = Firebase.getInstance()
       .getDb()
@@ -166,18 +157,15 @@ export class GitlabController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
 
     create_webhook_gitlab(repoId, "wiki_page_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/note_events')
-  async createNoteEventsAction(@Req() request: Request, @Body() token: string, @Body() repoId: string) {
+  async createNoteEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     var authToken = '';
     const serviceRef = Firebase.getInstance()
       .getDb()
@@ -194,18 +182,15 @@ export class GitlabController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
 
     create_webhook_gitlab(repoId, "note_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/merge_requests_events')
-  async createMergeRequestsEventsAction(@Req() request: Request, @Body() token: string, @Body() repoId: string) {
+  async createMergeRequestsEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     var authToken = '';
     const serviceRef = Firebase.getInstance()
       .getDb()
@@ -222,7 +207,7 @@ export class GitlabController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
 
     create_webhook_gitlab(repoId, "merge_requests_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }

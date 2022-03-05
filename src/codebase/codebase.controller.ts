@@ -58,24 +58,21 @@ export class CodebaseController {
   }
 
   @Post('/action')
-  async createCodebaseAction(@Body() token: string) {
+  async createCodebaseAction(@Body('id') id: string, @Body() token: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
   }
 
   @Post('/reaction')
   async createCodebaseReaction(
-    @Body('id') id: Id,
+    @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
   ) {

@@ -58,24 +58,21 @@ export class GoogleController {
   }
 
   @Post('/action')
-  async createGoogleAction(@Body() token: string) {
+  async createGoogleAction(@Body('id') id: string, @Body() token: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      token: token,
-    };
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
   }
 
   @Post('/reaction')
   async createGoogleReaction(
-    @Body('id') id: Id,
+    @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
   ) {
