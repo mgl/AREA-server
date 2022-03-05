@@ -7,24 +7,54 @@ import {
   Param,
   Body,
   Req,
+  Headers,
 } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
+
+const { info } = require("firebase-functions/lib/logger");
+
+async function create_webhook_gitlab (repoId: string, event : string, url : string) {
+  
+  var params = {
+    "url": url,
+    event: true,
+  }
+  var urlTarget = "https://gitlab.com/api/v4/projects/"+repoId+"/hooks";
+  var XMLHttpRequest = require('xhr2');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", urlTarget);
+  
+  xhr.setRequestHeader("PRIVATE-TOKEN", "glpat-xwsuUnmbtk_xKx2Q_ds");
+  xhr.setRequestHeader("Content-Type", "application/json");
+  
+  
+  xhr.onreadystatechange = function () {
+     if (xhr.readyState === 4) {
+        console.log(xhr.status);
+        console.log(xhr.responseText);
+     }};
+  
+  xhr.send(JSON.stringify(params));
+}
+
 @Controller('/services/gitlab')
 export class GitlabController {
-  @Post('subscribe')
+ @Post('subscribe')
   async subscribe(@Req() request: Request, @Body('token') token: string) {
-    if (!token || token === undefined)
+    if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     const data = {
-      gitlab_token: token,
+      name : 'gitlab',
+      token: token,
     };
 
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
-      .collection('users')
+      .collection('services')
       .doc(request['uid'])
       .set(data);
     return { message: 'Subscribed to gitlab service' };
@@ -36,7 +66,7 @@ export class GitlabController {
       .getDb()
       .collection('area')
       .doc('uuid')
-      .collection('users')
+      .collection('services')
       .doc(request['uid'])
     const doc = await TokenRef.get()
     if (!doc.exists)
@@ -51,15 +81,15 @@ export class GitlabController {
       .getDb()
       .collection('area')
       .doc('uuid')
-      .collection('users')
+      .collection('services')
       .doc(request['uid'])
       .delete();
     return { message: 'Unsubscribed to gitlab service' };
   }
 
-  @Post('/action')
-  async createGitlabAction(@Body() token: string) {
-    if (!token || token === undefined)
+  @Post('/action/tag_push_events')
+  async createGitlabTagPushEventsAction(@Body() token: string, @Body() repoId: string) {
+    if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     const data = {
       token: token,
@@ -71,33 +101,130 @@ export class GitlabController {
       .collection('actions')
       .doc()
       .set(data);
+
+    create_webhook_gitlab(repoId, "tag_push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook");
+  }
+
+  @Post('/action/push_events')
+  async createGitlabPushEventsAction(@Body() token: string, @Body() repoId: string) {
+    if (!token || token == undefined)
+      return { message: '400 Bad Parameter'}
+    const data = {
+      token: token,
+    };
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('actions')
+      .doc()
+      .set(data);
+
+    create_webhook_gitlab(repoId, "push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook");
+  }
+
+  @Post('/action/wiki_page_events')
+  async createWikiPageEventsAction(@Body() token: string, @Body() repoId: string) {
+    if (!token || token == undefined)
+      return { message: '400 Bad Parameter'}
+    const data = {
+      token: token,
+    };
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('actions')
+      .doc()
+      .set(data);
+
+    create_webhook_gitlab(repoId, "wiki_page_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook");
+  }
+
+  @Post('/action/note_events')
+  async createNoteEventsAction(@Body() token: string, @Body() repoId: string) {
+    if (!token || token == undefined)
+      return { message: '400 Bad Parameter'}
+    const data = {
+      token: token,
+    };
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('actions')
+      .doc()
+      .set(data);
+
+    create_webhook_gitlab(repoId, "note_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook");
+  }
+
+  @Post('/action/merge_requests_events')
+  async createMergeRequestsEventsAction(@Body() token: string, @Body() repoId: string) {
+    if (!token || token == undefined)
+      return { message: '400 Bad Parameter'}
+    const data = {
+      token: token,
+    };
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc('uuid')
+      .collection('actions')
+      .doc()
+      .set(data);
+
+    create_webhook_gitlab(repoId, "merge_requests_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook");
   }
 
   @Post('/reaction')
   async createGitlabReaction(
     @Body('id') id: Id,
-    @Body('actionId') actionId: ActionId,
-    @Body('token') token: Token,
+    @Body('actionId') actionId: string,
+    @Body('token') token: string,
   ) {
-    if (!id || id === undefined)
+    if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
-    if (!actionId || actionId === undefined)
+    if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter'}
-    if (!token || token === undefined)
+    if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      id: id,
-      token: token,
-    };
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
-      .doc(actionId.actionId)
+      .doc(actionId)
       .collection('reactions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
   }
 
+  @Post('/webhook')
+  async ReactGitlabWebhook(@Headers('x-gitlab-event') header : any, @Body() payload : any) {
+    switch (header) {
+      case 'Push Hook' : {
+        info("New push", {key1 : header});
+        break;
+      }
+      case 'pull_request' : {
+        info("New PR", {key1 : header});
+        break;
+      }
+      case 'Issue Hook' : {
+        info("New issue", {key1 : header});
+        break;
+      }
+      case 'Note Hook' : {
+        info("New issue commment", {key1 : header});
+        break;
+      }
+      case 'Wiki Page Hook' : {
+        info("Wiki page edited", {key1 : header});
+        break;
+      }
+    }
+    //console.log(header);
+    //console.log("Something have been push");
+  }
 }

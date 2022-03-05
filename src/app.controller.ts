@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Req, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Request, Req, Delete, Param, Headers } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { AppService } from './app.service';
 
@@ -58,7 +58,7 @@ export class AppController {
   }
 
 @Get('/reaction_list')
-  async getReactionList(@Body("id") id: string) {
+  async getReactionList(@Headers("id") id: string) {
     var reactionlists = "";
     console.log(id)
     const reactionRef = Firebase.getInstance()

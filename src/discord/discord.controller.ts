@@ -76,27 +76,23 @@ export class DiscordController {
   @Post('/reaction')
   async createDiscordReaction(
     @Body('id') id: Id,
-    @Body('actionId') actionId: ActionId,
-    @Body('token') token: Token,
+    @Body('actionId') actionId: string,
+    @Body('token') token: string,
   ) {
-    if (!id || id === undefined)
+    if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
-    if (!actionId || actionId === undefined)
+    if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter'}
-    if (!token || token === undefined)
+    if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
-    const data = {
-      id: id,
-      token: token,
-    };
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
-      .doc(actionId.actionId)
+      .doc(actionId)
       .collection('reactions')
       .doc()
-      .set(data);
+      .set({id: id, token: token});
   }
 }
