@@ -13,6 +13,7 @@ import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
 import { GithubWebhookEvents } from '@dev-thought/nestjs-github-webhooks';
 import { DiscordController} from '../discord/discord.controller'
+import { MailReaction} from '../reactions/MailReaction'
 import {DiscordReaction} from '../reactions/DiscordReaction'
 const { Octokit } = require("@octokit/rest");
 
@@ -281,6 +282,7 @@ export class GithubController {
     userNameSnapshot.forEach(async doc => {   
       if (doc.data().repoName == repoName) {
           var discordController = new DiscordController;
+          var mailReaction = new MailReaction;
           const reactionsRef = Firebase.getInstance()
           .getDb()
           .collection('area')
@@ -300,7 +302,9 @@ export class GithubController {
              discordController.executeDiscordClassicReaction(request, reaction.data().message);
           }if (reaction.data().name == "discord_warn_reaction") {
              discordController.executeDiscordClassicReaction(request, reaction.data().message);
-          }
+          }if (reaction.data().name == "mail_action") {
+            mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+         }
         });
       }
     });
@@ -325,6 +329,7 @@ export class GithubController {
           if (doc.data().repoName == repoName) {
             if (doc.data().name == "github_push") {
               var discordController = new DiscordController;
+              var mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
@@ -344,7 +349,9 @@ export class GithubController {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
-              }
+              }if (reaction.data().name == "mail_action") {
+                mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+             }
             });
           }
         }
@@ -365,6 +372,7 @@ export class GithubController {
           if (doc.data().repoName == repoName) {
             if (doc.data().name == "github_pull_request") {
               var discordController = new DiscordController;
+              var mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
@@ -384,7 +392,9 @@ export class GithubController {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
-              }
+              }if (reaction.data().name == "mail_action") {
+                mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+             }
             });
           }
         }
@@ -404,6 +414,7 @@ export class GithubController {
           if (doc.data().repoName == repoName) {
             if (doc.data().name == "github_issues") {
               var discordController = new DiscordController;
+              var mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
@@ -423,7 +434,9 @@ export class GithubController {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
-              }
+              }if (reaction.data().name == "mail_action") {
+                mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+             }
             });
           }
         }
@@ -443,6 +456,7 @@ export class GithubController {
           if (doc.data().repoName == repoName) {
             if (doc.data().name == "github_issue_comment") {
               var discordController = new DiscordController;
+              var mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
@@ -462,7 +476,9 @@ export class GithubController {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
-              }
+              }if (reaction.data().name == "mail_action") {
+                mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+             }
             });
           }
         }
@@ -482,6 +498,7 @@ export class GithubController {
           if (doc.data().repoName == repoName) {
             if (doc.data().name == "github_label") {
               var discordController = new DiscordController;
+              var mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
@@ -501,7 +518,9 @@ export class GithubController {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
-              }
+              }if (reaction.data().name == "mail_action") {
+                mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+             }
             });
           }
         }
@@ -521,6 +540,7 @@ export class GithubController {
           if (doc.data().repoName == repoName) {
             if (doc.data().name == "github_milestone") {
               var discordController = new DiscordController;
+              var mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
@@ -540,7 +560,9 @@ export class GithubController {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
-              }
+              }if (reaction.data().name == "mail_action") {
+                mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
+             }
             });
           }
         }
