@@ -46,9 +46,9 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('services')
       .doc(request['uid'])
+      .collection('services')
+      .doc('github')
       .set(data);
     return { message: 'Subscribed to github service' };
   }
@@ -58,9 +58,9 @@ export class GithubController {
     const TokenRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('services')
       .doc(request['uid'])
+      .collection('services')
+      .doc('github')
     const doc = await TokenRef.get()
     if (!doc.exists)
       return { statusCode: '404', message: 'Not found'}
@@ -73,9 +73,9 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('services')
       .doc(request['uid'])
+      .collection('services')
+      .doc('github')
       .delete();
     return { message: 'Unsubscribed to github service' };
   }
@@ -89,7 +89,7 @@ export class GithubController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
@@ -98,10 +98,10 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
-      .doc()
-      .set({id: id, token: token, name: "push"});
+      .doc('github')
+      .set({id: id, token: token, name: "github_push", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "push", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -114,7 +114,7 @@ export class GithubController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
@@ -123,10 +123,10 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
-      .doc()
-      .set({id: id, token: token, name: "pull_request"});
+      .doc('github')
+      .set({id: id, token: token, name: "github_pull_request", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "pull_request", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -139,7 +139,7 @@ export class GithubController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
@@ -148,10 +148,10 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
-      .doc()
-      .set({id: id, token: token, name: "issues"});
+      .doc('github')
+      .set({id: id, token: token, name: "github_issues", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "issues", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -164,7 +164,7 @@ export class GithubController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
@@ -173,10 +173,10 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
-      .doc()
-      .set({id: id, token: token, name: "issue_comment"});
+      .doc('github')
+      .set({id: id, token: token, name: "github_issue_comment", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "issue_comment", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -189,7 +189,7 @@ export class GithubController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
@@ -198,10 +198,10 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
-      .doc()
-      .set({id: id, token: token, name: "label"});
+      .doc('github')
+      .set({id: id, token: token, name: "github_label", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "label", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -214,7 +214,7 @@ export class GithubController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
@@ -223,16 +223,17 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
-      .doc()
-      .set({id: id, token: token, name: "milestone"});
+      .doc('github')
+      .set({id: id, token: token, name: "github_milestone", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "milestone", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
 
 @Post('/reaction')
   async createGithubReaction(
+    @Req() request: Request, 
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
@@ -246,13 +247,31 @@ export class GithubController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc(actionId)
       .collection('reactions')
       .doc()
       .set({id: id, token: token, name: "github_reaction"});
   }
+
+  @Post('/')
+  async triggerActionAndReaction(
+    @Req() request: Request, 
+    @Body('actionId') actionId: string,) {
+      const actionRef = Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+    const snapshot = await actionRef.where('capital', '==', true).get();
+    snapshot.forEach(doc => {
+
+    });
+  }
+
+
+
 
   @GithubWebhookEvents(['push', 'pull_request', 'issues', 'issue_comment', 'label'])
   @Post('/webhook')

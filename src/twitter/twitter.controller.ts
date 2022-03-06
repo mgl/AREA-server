@@ -23,9 +23,9 @@ export class TwitterController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('users')
       .doc(request['uid'])
+      .collection('services')
+      .doc('twitter')
       .set(data);
     return { message: 'Subscribed to twitter service' };
   }
@@ -35,9 +35,9 @@ export class TwitterController {
     const TokenRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('users')
       .doc(request['uid'])
+      .collection('services')
+      .doc('twitter')
     const doc = await TokenRef.get()
     if (!doc.exists)
       return { statusCode: '404', message: 'Not found'}
@@ -50,21 +50,21 @@ export class TwitterController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('users')
       .doc(request['uid'])
+      .collection('services')
+      .doc('twitter')
       .delete();
     return { message: 'Unsubscribed to twitter service' };
   }
 
   @Post('/action')
-  async createTwitterAction(@Body('id') id: string, @Body() token: string) {
+  async createTwitterAction(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "twitter_action"});
@@ -72,6 +72,7 @@ export class TwitterController {
 
   @Post('/reaction')
   async createTwitterReaction(
+    @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
@@ -85,7 +86,7 @@ export class TwitterController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc(actionId)
       .collection('reactions')

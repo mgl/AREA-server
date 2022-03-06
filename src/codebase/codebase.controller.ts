@@ -23,9 +23,9 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('users')
       .doc(request['uid'])
+      .collection('services')
+      .doc('codebase')
       .set(data);
     return { message: 'Subscribed to codebase service' };
   }
@@ -35,9 +35,9 @@ export class CodebaseController {
     const TokenRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('users')
       .doc(request['uid'])
+      .collection('services')
+      .doc('codebase')
     const doc = await TokenRef.get()
     if (!doc.exists)
       return { statusCode: '404', message: 'Not found'}
@@ -50,21 +50,21 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('users')
       .doc(request['uid'])
+      .collection('services')
+      .doc('codebase')
       .delete();
     return { message: 'Unsubscribed to codebase service' };
   }
 
   @Post('/action')
-  async createCodebaseAction(@Body('id') id: string, @Body() token: string) {
+  async createCodebaseAction(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "codebase_action"});
@@ -72,6 +72,7 @@ export class CodebaseController {
 
   @Post('/reaction')
   async createCodebaseReaction(
+    @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
@@ -85,7 +86,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc(actionId)
       .collection('reactions')
