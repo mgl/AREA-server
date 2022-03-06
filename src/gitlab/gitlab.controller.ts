@@ -53,9 +53,9 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('services')
       .doc(request['uid'])
+      .collection('services')
+      .doc('gitlab')
       .set(data);
     return { message: 'Subscribed to gitlab service' };
   }
@@ -65,9 +65,9 @@ export class GitlabController {
     const TokenRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('services')
       .doc(request['uid'])
+      .collection('services')
+      .doc('gitlab')
     const doc = await TokenRef.get()
     if (!doc.exists)
       return { statusCode: '404', message: 'Not found'}
@@ -80,9 +80,9 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
-      .collection('services')
       .doc(request['uid'])
+      .collection('services')
+      .doc('gitlab')
       .delete();
     return { message: 'Unsubscribed to gitlab service' };
   }
@@ -95,7 +95,7 @@ export class GitlabController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'gitlab').get();
     snapshot.forEach(doc => {
@@ -104,10 +104,10 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "tag_push_events"});
+      .set({id: id, token: token, name: "gitlab_tag_push_events"});
 
     create_webhook_gitlab(repoId, "tag_push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
@@ -120,7 +120,7 @@ export class GitlabController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'gitlab').get();
     snapshot.forEach(doc => {
@@ -129,10 +129,10 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "push_events"});
+      .set({id: id, token: token, name: "gitlab_push_events"});
 
     create_webhook_gitlab(repoId, "push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
@@ -145,7 +145,7 @@ export class GitlabController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'gitlab').get();
     snapshot.forEach(doc => {
@@ -154,10 +154,10 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "wiki_page_events"});
+      .set({id: id, token: token, name: "gitlab_wiki_page_events"});
 
     create_webhook_gitlab(repoId, "wiki_page_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
@@ -170,7 +170,7 @@ export class GitlabController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'gitlab').get();
     snapshot.forEach(doc => {
@@ -179,10 +179,10 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "note_events"});
+      .set({id: id, token: token, name: "gitlab_note_events"});
 
     create_webhook_gitlab(repoId, "note_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
@@ -195,7 +195,7 @@ export class GitlabController {
     const serviceRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'gitlab').get();
     snapshot.forEach(doc => {
@@ -204,16 +204,17 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "merge_requests_events"});
+      .set({id: id, token: token, name: "gitlab_merge_requests_events"});
 
     create_webhook_gitlab(repoId, "merge_requests_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/reaction')
   async createGitlabReaction(
+    @Req() request: Request,
     @Body('id') id: Id,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
@@ -227,7 +228,7 @@ export class GitlabController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc(actionId)
       .collection('reactions')

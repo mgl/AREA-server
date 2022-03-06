@@ -22,12 +22,12 @@ export class AppController {
   }
 
   @Get('/service_list')
-  async getServiceList() {
+  async getServiceList(@Req() request: Request) {
     var servicelist = "";
     const serviceRef = await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('services');
     const snapshot = await serviceRef.get();
     snapshot.forEach(doc => {
@@ -40,12 +40,12 @@ export class AppController {
   }
 
 @Get('/action_list')
-  async getActionList() {
+  async getActionList(@Req() request: Request) {
     var actionlists = "";
     const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
     const snapshot = await actionRef.get();
     snapshot.forEach(doc => {
@@ -60,13 +60,13 @@ export class AppController {
   }
 
 @Get('/reaction_list')
-  async getReactionList(@Headers("id") id: string) {
+  async getReactionList(@Req() request: Request, @Headers("id") id: string) {
     var reactionlists = "";
     console.log(id)
     const reactionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
       .doc(id)
       .collection('reactions')
