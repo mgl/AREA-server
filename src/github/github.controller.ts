@@ -290,17 +290,16 @@ export class GithubController {
           .collection('reactions') 
           const reactionsSnapshot = await reactionsRef.get();
           reactionsSnapshot.forEach(reaction => {
-          console.log("reaction.data()");
           if (reaction.data().name == "discord_classic_reaction") {
-             discordController.executeDiscordClassicReaction(request, "Message reçu");
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
           }if (reaction.data().name == "discord_success_reaction") {
-             discordController.executeDiscordClassicReaction(request, "Succès");
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
           }if (reaction.data().name == "discord_error_reaction") {
-             discordController.executeDiscordClassicReaction(request, "Erreur");
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
           }if (reaction.data().name == "discord_info_reaction") {
-             discordController.executeDiscordClassicReaction(request, "Important");
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
           }if (reaction.data().name == "discord_warn_reaction") {
-             discordController.executeDiscordClassicReaction(request, "Attention");
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
           }
         });
       }
