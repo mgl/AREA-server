@@ -45,11 +45,11 @@ export class AppModule implements NestModule {
       .exclude(
         { path: '/hello', method: RequestMethod.GET },
         { path: '/api', method: RequestMethod.GET },
-        { path: '/services/github/trigger', method: RequestMethod.POST },
+        { path: '/services/github/webhook', method: RequestMethod.POST },
         { path: '/services/twitter/webhook', method: RequestMethod.POST },
         { path: '/services/discord/webhook', method: RequestMethod.POST },
         { path: '/services/google/webhook', method: RequestMethod.POST },
-        { path: '/services/gitlab/trigger', method: RequestMethod.POST },
+        { path: '/services/gitlab/webhook', method: RequestMethod.POST },
         { path: '/services/codebase/webhook', method: RequestMethod.POST },
       )
       .forRoutes({
