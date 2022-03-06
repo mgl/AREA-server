@@ -275,25 +275,32 @@ export class GithubController {
       const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('gqrfqYKmhFWwpL0VC50a5leSagl2')
+      .doc(request['uid'])
       .collection('actions')
     const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
     userNameSnapshot.forEach(async doc => {   
       if (doc.data().repoName == repoName) {
+          var discordController = new DiscordController;
           const reactionsRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc('gqrfqYKmhFWwpL0VC50a5leSagl2')
+          .doc(request['uid'])
           .collection('actions')
           .doc(doc.data().userName)
           .collection('reactions') 
           const reactionsSnapshot = await reactionsRef.get();
-          var discordController = new DiscordController;
-          discordController.createDiscordReaction(request, '13', doc.data().userName, 'esrdty');
           reactionsSnapshot.forEach(reaction => {
           console.log("reaction.data()");
-          if (reaction.data().name == "discord_reaction") {
-             discordController.executeDiscordReaction(request, "Ici, on nique les boches");
+          if (reaction.data().name == "discord_classic_reaction") {
+             discordController.executeDiscordClassicReaction(request, "Message reçu");
+          }if (reaction.data().name == "discord_success_reaction") {
+             discordController.executeDiscordClassicReaction(request, "Succès");
+          }if (reaction.data().name == "discord_error_reaction") {
+             discordController.executeDiscordClassicReaction(request, "Erreur");
+          }if (reaction.data().name == "discord_info_reaction") {
+             discordController.executeDiscordClassicReaction(request, "Important");
+          }if (reaction.data().name == "discord_warn_reaction") {
+             discordController.executeDiscordClassicReaction(request, "Attention");
           }
         });
       }
