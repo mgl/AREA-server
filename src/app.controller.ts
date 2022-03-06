@@ -52,6 +52,8 @@ export class AppController {
       actionlists+=doc.data().id;
       actionlists+='=';
       actionlists+=doc.data().token;
+      actionlists+='=';
+      actionlists+=doc.data().name;
       actionlists+=';';
     });
     return { actionlists};
@@ -73,6 +75,8 @@ export class AppController {
       reactionlists+=doc.data().id;
       reactionlists+='=';
       reactionlists+=doc.data().token;
+      reactionlists+='=';
+      reactionlists+=doc.data().name;
       reactionlists+=';';
     });
     return { reactionlists};

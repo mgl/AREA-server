@@ -101,7 +101,7 @@ export class GithubController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "push"});
     
     create_webhook_github(userName, repoName, "push", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -126,7 +126,7 @@ export class GithubController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "pull_request"});
     
     create_webhook_github(userName, repoName, "pull_request", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -151,7 +151,7 @@ export class GithubController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "issues"});
     
     create_webhook_github(userName, repoName, "issues", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -176,7 +176,7 @@ export class GithubController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "issue_comment"});
     
     create_webhook_github(userName, repoName, "issue_comment", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -201,7 +201,7 @@ export class GithubController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "label"});
     
     create_webhook_github(userName, repoName, "label", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -226,7 +226,7 @@ export class GithubController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "milestone"});
     
     create_webhook_github(userName, repoName, "milestone", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
@@ -251,7 +251,7 @@ export class GithubController {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "github_reaction"});
   }
 
   @GithubWebhookEvents(['push', 'pull_request', 'issues', 'issue_comment', 'label'])

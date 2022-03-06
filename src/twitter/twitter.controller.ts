@@ -67,7 +67,7 @@ export class TwitterController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "twitter_action"});
   }
 
   @Post('/reaction')
@@ -90,6 +90,6 @@ export class TwitterController {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "twitter_reaction"});
   }
 }

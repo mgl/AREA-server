@@ -67,7 +67,7 @@ export class DiscordController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "discord_action"});
   }
 
   @Post('/reaction')
@@ -90,6 +90,6 @@ export class DiscordController {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "discord_reaction"});
   }
 }

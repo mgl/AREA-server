@@ -67,7 +67,7 @@ export class CodebaseController {
       .doc('uuid')
       .collection('actions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "codebase_action"});
   }
 
   @Post('/reaction')
@@ -90,6 +90,6 @@ export class CodebaseController {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({id: id, token: token});
+      .set({id: id, token: token, name: "codebase_reaction"});
   }
 }
