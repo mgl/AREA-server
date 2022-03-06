@@ -308,36 +308,245 @@ export class GithubController {
   
   @GithubWebhookEvents(['push', 'pull_request', 'issues', 'issue_comment', 'label'])
   @Post('/webhook')
-  async ReactGithubWebhook(@Headers('X-GitHub-Event') header : any, @Body() payload : any) {
+  async ReactGithubWebhook(@Headers('X-GitHub-Event') header : any, @Req() request: Request, @Body() actionContent : any) {
+      
+    
     switch (header) {
       case 'push' : {
-        info("New push", {key1 : header});
+        var userName = actionContent['repository']['owner']['name'];
+        var repoName = actionContent['repository']['name'];
+        const actionRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+        userNameSnapshot.forEach(async doc => {   
+          if (doc.data().repoName == repoName) {
+            if (doc.data().name == "github_push") {
+              var discordController = new DiscordController;
+              const reactionsRef = Firebase.getInstance()
+              .getDb()
+              .collection('area')
+              .doc(request['uid'])
+              .collection('actions')
+              .doc(doc.data().userName)
+              .collection('reactions') 
+              const reactionsSnapshot = await reactionsRef.get();
+              reactionsSnapshot.forEach(reaction => {
+              if (reaction.data().name == "discord_classic_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_success_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_error_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_info_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_warn_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }
+            });
+          }
+        }
+        });
+
         break;
       }
       case 'pull_request' : {
-        info("New PR", {key1 : header});
+        var userName = actionContent['repository']['owner']['name'];
+        var repoName = actionContent['repository']['name'];
+        const actionRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+        userNameSnapshot.forEach(async doc => {   
+          if (doc.data().repoName == repoName) {
+            if (doc.data().name == "github_pull_request") {
+              var discordController = new DiscordController;
+              const reactionsRef = Firebase.getInstance()
+              .getDb()
+              .collection('area')
+              .doc(request['uid'])
+              .collection('actions')
+              .doc(doc.data().userName)
+              .collection('reactions') 
+              const reactionsSnapshot = await reactionsRef.get();
+              reactionsSnapshot.forEach(reaction => {
+              if (reaction.data().name == "discord_classic_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_success_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_error_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_info_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_warn_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }
+            });
+          }
+        }
+        });
         break;
       }
       case 'issues' : {
-        info("New issue", {key1 : header});
+        var userName = actionContent['repository']['owner']['name'];
+        var repoName = actionContent['repository']['name'];
+        const actionRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+        userNameSnapshot.forEach(async doc => {   
+          if (doc.data().repoName == repoName) {
+            if (doc.data().name == "github_issues") {
+              var discordController = new DiscordController;
+              const reactionsRef = Firebase.getInstance()
+              .getDb()
+              .collection('area')
+              .doc(request['uid'])
+              .collection('actions')
+              .doc(doc.data().userName)
+              .collection('reactions') 
+              const reactionsSnapshot = await reactionsRef.get();
+              reactionsSnapshot.forEach(reaction => {
+              if (reaction.data().name == "discord_classic_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_success_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_error_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_info_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_warn_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }
+            });
+          }
+        }
+        });
         break;
       }
       case 'issue_comment' : {
-        info("New issue commment", {key1 : header});
+        var userName = actionContent['repository']['owner']['name'];
+        var repoName = actionContent['repository']['name'];
+        const actionRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+        userNameSnapshot.forEach(async doc => {   
+          if (doc.data().repoName == repoName) {
+            if (doc.data().name == "github_issue_comment") {
+              var discordController = new DiscordController;
+              const reactionsRef = Firebase.getInstance()
+              .getDb()
+              .collection('area')
+              .doc(request['uid'])
+              .collection('actions')
+              .doc(doc.data().userName)
+              .collection('reactions') 
+              const reactionsSnapshot = await reactionsRef.get();
+              reactionsSnapshot.forEach(reaction => {
+              if (reaction.data().name == "discord_classic_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_success_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_error_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_info_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_warn_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }
+            });
+          }
+        }
+        });
         break;
       }
       case 'label' : {
-        info("New label 5", {key1 : header});
+        var userName = actionContent['repository']['owner']['name'];
+        var repoName = actionContent['repository']['name'];
+        const actionRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+        userNameSnapshot.forEach(async doc => {   
+          if (doc.data().repoName == repoName) {
+            if (doc.data().name == "github_label") {
+              var discordController = new DiscordController;
+              const reactionsRef = Firebase.getInstance()
+              .getDb()
+              .collection('area')
+              .doc(request['uid'])
+              .collection('actions')
+              .doc(doc.data().userName)
+              .collection('reactions') 
+              const reactionsSnapshot = await reactionsRef.get();
+              reactionsSnapshot.forEach(reaction => {
+              if (reaction.data().name == "discord_classic_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_success_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_error_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_info_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_warn_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }
+            });
+          }
+        }
+        });
         break;
       }
       case 'milestone' : {
-        info("New milestone", {key1 : header});
+        var userName = actionContent['repository']['owner']['name'];
+        var repoName = actionContent['repository']['name'];
+        const actionRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+        userNameSnapshot.forEach(async doc => {   
+          if (doc.data().repoName == repoName) {
+            if (doc.data().name == "github_milestone") {
+              var discordController = new DiscordController;
+              const reactionsRef = Firebase.getInstance()
+              .getDb()
+              .collection('area')
+              .doc(request['uid'])
+              .collection('actions')
+              .doc(doc.data().userName)
+              .collection('reactions') 
+              const reactionsSnapshot = await reactionsRef.get();
+              reactionsSnapshot.forEach(reaction => {
+              if (reaction.data().name == "discord_classic_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_success_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_error_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_info_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }if (reaction.data().name == "discord_warn_reaction") {
+                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+              }
+            });
+          }
+        }
+        });
         break;
       }
     }
-    //console.log(payload);
-    //console.log("Something have been push");
-    //functions.logger.console.log("Something have been push");
-    //info("Something new happend on repo", {key1 : header});
   }
 }
