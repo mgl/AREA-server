@@ -10,6 +10,9 @@ import {
 } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
+
+const { info } = require("firebase-functions/lib/logger");
+
 @Controller('/services/codebase')
 export class CodebaseController {
   @Post('subscribe')
@@ -131,5 +134,32 @@ export class CodebaseController {
       .collection('reactions')
       .doc()
       .set({id: id, token: token, name: "codebase_reaction"});
+  }
+
+  @Post('/webhook')
+  async ReactCodebaseWebhook(@Body() payload : any) {
+    switch (payload['type']) {
+      case 'push' : {
+        info("New push", {key1 : payload['type']});
+        break;
+      }
+      case 'merge_request_creation' : {
+        info("New PR", {key1 : payload['type']});
+        break;
+      }
+      case 'ticket_creation' : {
+        info("New ticket", {key1 : payload['type']});
+        break;
+      }
+      case 'ticket_update' : {
+        info("Ticket updated", {key1 : payload['type']});
+        break;
+      }
+      case 'Wiki Page Hook' : {
+        info("Wiki page edited", {key1 : payload['type']});
+        break;
+      }
+    }
+    console.log(payload['type']);
   }
 }
