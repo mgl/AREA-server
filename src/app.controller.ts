@@ -1,4 +1,12 @@
-import { Controller, Get, Request, Req, Delete, Param, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Request,
+  Req,
+  Delete,
+  Param,
+  Headers,
+} from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { AppService } from './app.service';
 
@@ -23,63 +31,63 @@ export class AppController {
 
   @Get('/service_list')
   async getServiceList(@Req() request: Request) {
-    var servicelist = "";
+    let servicelist = '';
     const serviceRef = await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('services');
     const snapshot = await serviceRef.get();
-    snapshot.forEach(doc => {
-      servicelist+=doc.data().name;
-      servicelist+='=';
-      servicelist+=doc.data().token;
-      servicelist+=';';
+    snapshot.forEach((doc) => {
+      servicelist += doc.data().name;
+      servicelist += '=';
+      servicelist += doc.data().token;
+      servicelist += ';';
     });
-    return { servicelist};
+    return { servicelist };
   }
 
-@Get('/action_list')
+  @Get('/action_list')
   async getActionList(@Req() request: Request) {
-    var actionlists = "";
+    let actionlists = '';
     const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
-      .collection('actions')
+      .collection('actions');
     const snapshot = await actionRef.get();
-    snapshot.forEach(doc => {
-      actionlists+=doc.data().id;
-      actionlists+='=';
-      actionlists+=doc.data().token;
-      actionlists+='=';
-      actionlists+=doc.data().name;
-      actionlists+=';';
+    snapshot.forEach((doc) => {
+      actionlists += doc.data().id;
+      actionlists += '=';
+      actionlists += doc.data().token;
+      actionlists += '=';
+      actionlists += doc.data().name;
+      actionlists += ';';
     });
-    return { actionlists};
+    return { actionlists };
   }
 
-@Get('/reaction_list')
-  async getReactionList(@Req() request: Request, @Headers("id") id: string) {
-    var reactionlists = "";
-    console.log(id)
+  @Get('/reaction_list')
+  async getReactionList(@Req() request: Request, @Headers('id') id: string) {
+    let reactionlists = '';
+    console.log(id);
     const reactionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc('uuid')
       .collection('actions')
       .doc(id)
-      .collection('reactions')
+      .collection('reactions');
     const snapshot = await reactionRef.get();
-    snapshot.forEach(doc => {
-      reactionlists+=doc.data().id;
-      reactionlists+='=';
-      reactionlists+=doc.data().token;
-      reactionlists+='=';
-      reactionlists+=doc.data().name;
-      reactionlists+=';';
+    snapshot.forEach((doc) => {
+      reactionlists += doc.data().id;
+      reactionlists += '=';
+      reactionlists += doc.data().token;
+      reactionlists += '=';
+      reactionlists += doc.data().name;
+      reactionlists += ';';
     });
-    return { reactionlists};
+    return { reactionlists };
   }
 
   @Delete('/profile')
@@ -88,7 +96,7 @@ export class AppController {
     @Param('id') id: string,
     @Param('token') token: string,
   ) {
-    const docRef = await req
+    await req
       .firestore()
       .collection('actions')
       .doc(token)

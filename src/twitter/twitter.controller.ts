@@ -22,6 +22,8 @@ export class TwitterController {
       return { message: '400 Bad Parameter' };
 
     const data = {
+      name: 'twitter',
+      token: accessToken,
       appKey: appKey,
       appSecret: appSecret,
       accessToken: accessToken,
