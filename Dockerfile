@@ -14,6 +14,8 @@ RUN npm ci \
 
 FROM node:lts-alpine
 
+RUN apk -U upgrade
+
 ENV NODE_ENV docker
 
 WORKDIR /app
