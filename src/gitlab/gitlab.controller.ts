@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
+import {DiscordReaction} from '../reactions/DiscordReaction'
 
 const { info } = require("firebase-functions/lib/logger");
 
@@ -258,18 +259,30 @@ export class GitlabController {
       .doc(request['uid'])
       .collection('actions')
     const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-    userNameSnapshot.forEach( async doc => {
-       const reactionsRef = Firebase.getInstance()
+    userNameSnapshot.forEach(async doc => {   
+          var discordController = new DiscordController;
+          const reactionsRef = Firebase.getInstance()
           .getDb()
           .collection('area')
           .doc(request['uid'])
           .collection('actions')
-          .doc(doc.data().repoId)
-          .collection('reactions')
+          .doc(doc.data().userName)
+          .collection('reactions') 
           const reactionsSnapshot = await reactionsRef.get();
           reactionsSnapshot.forEach(reaction => {
-          });
+          if (reaction.data().name == "discord_classic_reaction") {
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
+          }if (reaction.data().name == "discord_success_reaction") {
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
+          }if (reaction.data().name == "discord_error_reaction") {
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
+          }if (reaction.data().name == "discord_info_reaction") {
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
+          }if (reaction.data().name == "discord_warn_reaction") {
+             discordController.executeDiscordClassicReaction(request, reaction.data().message);
+          }
         });
+    });
     }
 
   @Post('/webhook')
