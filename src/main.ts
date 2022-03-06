@@ -9,10 +9,10 @@ import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 
+// Local test code
+
 const server = express();
 
-// Local test code
-/*
 async function bootstrap_local() {
   const app = await NestFactory.create(AppModule);
 
@@ -33,9 +33,6 @@ async function bootstrap_local() {
   await app.listen(3000);
 }
 
-bootstrap_local();
-*/
-// Production code
 const bootstrap = async (expressInstance) => {
   const app = await NestFactory.create(
     AppModule,
@@ -46,9 +43,14 @@ const bootstrap = async (expressInstance) => {
   app.use(cookieParser());
   app.enableCors();
   app.use(compression());
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(new ValidationPipe());
   return app.init();
 };
 
-bootstrap(server);
+if (process.env.NODE_ENV === 'docker') {
+  bootstrap_local();
+} else {
+  bootstrap(server);
+}
+
 export const api = functions.region('europe-west1').https.onRequest(server);
