@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
+import { DiscordController} from '../discord/discord.controller'
 import {DiscordReaction} from '../reactions/DiscordReaction'
 
 const { info } = require("firebase-functions/lib/logger");
