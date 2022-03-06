@@ -255,24 +255,28 @@ export class GithubController {
       .set({id: id, token: token, name: "github_reaction"});
   }
 
-  @Post('/')
+  @Post('/trigger')
   async triggerActionAndReaction(
     @Req() request: Request, 
-    @Body('actionId') actionId: string,) {
+    @Body() actionContent : string) {
+      var userName = actionContent['repository']['owner']['name'];
+      var repoName = actionContent['repository']['name'];
       const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-    const snapshot = await actionRef.where('capital', '==', true).get();
-    snapshot.forEach(doc => {
-
+    const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+    userNameSnapshot.forEach(doc => {
+      if (doc.data().repoName ==  repoName) {
+          const reactionsRef = doc.data().collection('reactions');
+          const reactionsSnapshot = reactionsRef.get();
+          reactionsSnapshot.forEach(reaction => {
+          });
+      }
     });
   }
-
-
-
-
+  
   @GithubWebhookEvents(['push', 'pull_request', 'issues', 'issue_comment', 'label'])
   @Post('/webhook')
   async ReactGithubWebhook(@Headers('X-GitHub-Event') header : any, @Body() payload : any) {

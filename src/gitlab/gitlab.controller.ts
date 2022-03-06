@@ -236,6 +236,28 @@ export class GitlabController {
       .set({id: id, token: token, name: "gitlab_reaction"});
   }
 
+  @Post('/trigger')
+  async triggerActionAndReaction(
+    @Req() request: Request, 
+    @Body() actionContent : string) {
+      var userName = actionContent['repository']['name'];
+      const actionRef = Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+    const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
+    userNameSnapshot.forEach(doc => {
+      const reactionSnapshot = doc.data().collection('reactions')
+        reactionSnapshot.forEach(action => {
+          const reactionsRef = action.data().collection('reactions');
+          const reactionsSnapshot = reactionsRef.get();
+          reactionsSnapshot.forEach(reaction => {
+          });
+        });
+    });
+  }
+
   @Post('/webhook')
   async ReactGitlabWebhook(@Headers('x-gitlab-event') header : any, @Body() payload : any) {
     switch (header) {

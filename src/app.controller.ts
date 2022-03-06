@@ -66,7 +66,7 @@ export class AppController {
     const reactionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc(request['uid'])
+      .doc('uuid')
       .collection('actions')
       .doc(id)
       .collection('reactions')
