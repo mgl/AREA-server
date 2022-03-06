@@ -33,6 +33,7 @@
   },
   "main": "dist/main.js",
   "dependencies": {
+    "@dev-thought/nestjs-github-webhooks": "^1.0.0",
     "@firebase/auth": "^0.19.9",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
