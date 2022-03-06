@@ -79,6 +79,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
+    @Body('message') message: string,
   ) {
     if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
@@ -103,7 +104,7 @@ export class DiscordController {
         .doc(doc.data().userName)
         .collection('reactions')
         .doc()
-        .set({id: id, token: token, name: "discord_classic_reaction"});
+        .set({id: id, token: token, name: "discord_classic_reaction", message: message});
       }
     });
   }
@@ -114,6 +115,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
+    @Body('message') message: string,
   ) {
     if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
@@ -138,7 +140,7 @@ export class DiscordController {
         .doc(doc.data().userName)
         .collection('reactions')
         .doc()
-        .set({id: id, token: token, name: "discord_success_reaction"});
+        .set({id: id, token: token, name: "discord_success_reaction", message: message});
       }
     });
   }
@@ -149,6 +151,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
+    @Body('message') message: string,
   ) {
     if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
@@ -173,7 +176,7 @@ export class DiscordController {
         .doc(doc.data().userName)
         .collection('reactions')
         .doc()
-        .set({id: id, token: token, name: "discord_error_reaction"});
+        .set({id: id, token: token, name: "discord_error_reaction", message: message});
       }
     });
 
@@ -183,6 +186,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
+    @Body('message') message: string,
   ) {
     if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
@@ -207,7 +211,7 @@ export class DiscordController {
         .doc(doc.data().userName)
         .collection('reactions')
         .doc()
-        .set({id: id, token: token, name: "discord_info_reaction"});
+        .set({id: id, token: token, name: "discord_info_reaction", message: message});
       }
     });
   }
@@ -218,6 +222,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
+    @Body('message') message: string,
   ) {
     if (!id || id == undefined)
       return { message: '400 Bad Parameter'}
@@ -242,7 +247,7 @@ export class DiscordController {
         .doc(doc.data().userName)
         .collection('reactions')
         .doc()
-        .set({id: id, token: token, name: "discord_warn_reaction"});
+        .set({id: id, token: token, name: "discord_warn_reaction", message: message});
       }
     });
   }
