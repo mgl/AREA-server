@@ -12,6 +12,8 @@ import {
 import Firebase from '../firebase/firebase';
 import {Token, Id, ActionId} from '../error/error';
 import { GithubWebhookEvents } from '@dev-thought/nestjs-github-webhooks';
+import { DiscordController} from '../discord/discord.controller'
+import {DiscordReaction} from '../reactions/DiscordReaction'
 const { Octokit } = require("@octokit/rest");
 
 const { info } = require("firebase-functions/lib/logger");
@@ -250,7 +252,6 @@ export class GithubController {
       .collection('actions')
     const userNameSnapshot = await actionRef.get();
     userNameSnapshot.forEach(async doc => {
-      console.log(doc.data().userName);
       if (doc.data().userName == actionId) {
         await Firebase.getInstance()
         .getDb()
@@ -274,22 +275,27 @@ export class GithubController {
       const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc(request['uid'])
+      .doc('gqrfqYKmhFWwpL0VC50a5leSagl2')
       .collection('actions')
     const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-    userNameSnapshot.forEach(async doc => {
+    userNameSnapshot.forEach(async doc => {   
       if (doc.data().repoName == repoName) {
           const reactionsRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc('gqrfqYKmhFWwpL0VC50a5leSagl2')
           .collection('actions')
           .doc(doc.data().userName)
-          .collection('reactions')
+          .collection('reactions') 
           const reactionsSnapshot = await reactionsRef.get();
+          var discordController = new DiscordController;
+          discordController.createDiscordReaction(request, '13', doc.data().userName, 'esrdty');
           reactionsSnapshot.forEach(reaction => {
-            console.log(reaction.data());
-          });
+          console.log("reaction.data()");
+          if (reaction.data().name == "discord_reaction") {
+             discordController.executeDiscordReaction(request, "Ici, on nique les boches");
+          }
+        });
       }
     });
   }

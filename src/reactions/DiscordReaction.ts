@@ -6,9 +6,9 @@ export class DiscordReaction {
 
     // Send specials messages
     Hook.info('AREA-Info', message);
-    Hook.warn('AREA-Warn', message);
-    Hook.err('AREA-Err', message);
-    Hook.success('AREA-Success', message);
+//    Hook.warn('AREA-Warn', message);
+//    Hook.err('AREA-Err', message);
+//    Hook.success('AREA-Success', message);
 
     // Send classic message
     const msg = new webhook.MessageBuilder()

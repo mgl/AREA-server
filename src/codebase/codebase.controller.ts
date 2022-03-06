@@ -57,8 +57,8 @@ export class CodebaseController {
     return { message: 'Unsubscribed to codebase service' };
   }
 
-  @Post('/action')
-  async createCodebaseAction(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
+  @Post('/action/codebase_merge_request')
+  async codebaseMergeRequest(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
     await Firebase.getInstance()
@@ -67,7 +67,46 @@ export class CodebaseController {
       .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "codebase_action"});
+      .set({id: id, token: token, name: "codebase_merge_request"});
+  }
+
+  @Post('/action/codebase_push')
+  async codebasePush(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc()
+      .set({id: id, token: token, name: "codebase_push"});
+  }
+
+@Post('/action/codebase_ticket_creation')
+  async codebaseTicketCreation(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc()
+      .set({id: id, token: token, name: "codebase_ticket_creationn"});
+  }
+
+  @Post('/action/codebase_ticket_update')
+  async codebaseTicketUpdate(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
+    if (!token || token === undefined)
+      return { message: '400 Bad Parameter'}
+    await Firebase.getInstance()
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc()
+      .set({id: id, token: token, name: "codebase_ticket_update"});
   }
 
   @Post('/reaction')
