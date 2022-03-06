@@ -12,6 +12,11 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { PreauthMiddleware } from './auth/preauth.middleware';
 import { GithubController } from './github/github.controller';
 import { AppController } from './app.controller';
+import { GitlabController } from './gitlab/gitlab.controller';
+import { TwitterController } from './twitter/twitter.controller';
+import { DiscordController } from './discord/discord.controller';
+import { GoogleController } from './google/google.controller';
+import { CodebaseController } from './codebase/codebase.controller';
 
 @Module({
   imports: [
@@ -25,11 +30,11 @@ import { AppController } from './app.controller';
     AppController,
     AboutController,
     GithubController,
-    //    GitlabController,
-    //    TwitterController,
-    //    DiscordController,
-    //    GoogleController,
-    //    CodebaseController,
+    GitlabController,
+    TwitterController,
+    DiscordController,
+    GoogleController,
+    CodebaseController,
   ],
   providers: [AppService, AboutService],
 })
@@ -44,7 +49,7 @@ export class AppModule implements NestModule {
         { path: '/services/twitter/webhook', method: RequestMethod.POST },
         { path: '/services/discord/webhook', method: RequestMethod.POST },
         { path: '/services/google/webhook', method: RequestMethod.POST },
-        { path: '/services/gitlab/webhook', method: RequestMethod.POST },
+        { path: '/services/gitlab/trigger', method: RequestMethod.POST },
         { path: '/services/codebase/webhook', method: RequestMethod.POST },
       )
       .forRoutes({
