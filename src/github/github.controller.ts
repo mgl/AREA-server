@@ -264,14 +264,21 @@ export class GithubController {
       const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc(request['uid'])
+      .doc('uuid')
       .collection('actions')
     const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-    userNameSnapshot.forEach(doc => {
+    userNameSnapshot.forEach(async doc => {
       if (doc.data().repoName ==  repoName) {
-          const reactionsRef = doc.data().collection('reactions');
-          const reactionsSnapshot = reactionsRef.get();
+          const reactionsRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+          .doc(doc.data().id)
+          .collection('reactions')
+          const reactionsSnapshot = await reactionsRef.get();
           reactionsSnapshot.forEach(reaction => {
+            console.log(reaction.data());
           });
       }
     });

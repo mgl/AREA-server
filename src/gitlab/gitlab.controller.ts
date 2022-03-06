@@ -247,16 +247,19 @@ export class GitlabController {
       .doc(request['uid'])
       .collection('actions')
     const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-    userNameSnapshot.forEach(doc => {
-      const reactionSnapshot = doc.data().collection('reactions')
-        reactionSnapshot.forEach(action => {
-          const reactionsRef = action.data().collection('reactions');
-          const reactionsSnapshot = reactionsRef.get();
+    userNameSnapshot.forEach( async doc => {
+       const reactionsRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+          .doc(request['uid'])
+          .collection('actions')
+          .doc(doc.data().id)
+          .collection('reactions')
+          const reactionsSnapshot = await reactionsRef.get();
           reactionsSnapshot.forEach(reaction => {
           });
         });
-    });
-  }
+    }
 
   @Post('/webhook')
   async ReactGitlabWebhook(@Headers('x-gitlab-event') header : any, @Body() payload : any) {
