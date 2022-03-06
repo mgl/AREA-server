@@ -21,7 +21,7 @@ export class CodebaseController {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
     const data = {
-      codebase_token: token,
+      token: token,
     };
 
     await Firebase.getInstance()
