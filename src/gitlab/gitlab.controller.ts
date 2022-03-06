@@ -88,7 +88,7 @@ export class GitlabController {
   }
 
   @Post('/action/tag_push_events')
-  async createGitlabTagPushEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
+  async createGitlabTagPushEventsAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('repoId') repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -106,14 +106,14 @@ export class GitlabController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(repoId)
       .set({id: id, token: token, name: "gitlab_tag_push_events"});
 
     create_webhook_gitlab(repoId, "tag_push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/push_events')
-  async createGitlabPushEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
+  async createGitlabPushEventsAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('repoId') repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -131,14 +131,14 @@ export class GitlabController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(repoId)
       .set({id: id, token: token, name: "gitlab_push_events"});
 
     create_webhook_gitlab(repoId, "push_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/wiki_page_events')
-  async createWikiPageEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
+  async createWikiPageEventsAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('repoId') repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -156,14 +156,14 @@ export class GitlabController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(repoId)
       .set({id: id, token: token, name: "gitlab_wiki_page_events"});
 
     create_webhook_gitlab(repoId, "wiki_page_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/note_events')
-  async createNoteEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
+  async createNoteEventsAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('repoId') repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -181,14 +181,14 @@ export class GitlabController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(repoId)
       .set({id: id, token: token, name: "gitlab_note_events"});
 
     create_webhook_gitlab(repoId, "note_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/action/merge_requests_events')
-  async createMergeRequestsEventsAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() repoId: string) {
+  async createMergeRequestsEventsAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('repoId') repoId: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -206,34 +206,45 @@ export class GitlabController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(repoId)
       .set({id: id, token: token, name: "gitlab_merge_requests_events"});
 
     create_webhook_gitlab(repoId, "merge_requests_events", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook", authToken);
   }
 
   @Post('/reaction')
-  async createGitlabReaction(
-    @Req() request: Request,
-    @Body('id') id: Id,
+  async createGithubReaction(
+    @Req() request: Request, 
+    @Body('id') id: string,
     @Body('actionId') actionId: string,
     @Body('token') token: string,
   ) {
-    if (!id || id == undefined)
+    if (!id || id == 'undefined')
       return { message: '400 Bad Parameter'}
-    if (!actionId || actionId == undefined)
+    if (!actionId || actionId == 'undefined')
       return { message: '400 Bad Parameter'}
-    if (!token || token == undefined)
+    if (!token || token == 'undefined')
       return { message: '400 Bad Parameter'}
-    await Firebase.getInstance()
+    const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(actionId)
-      .collection('reactions')
-      .doc()
-      .set({id: id, token: token, name: "gitlab_reaction"});
+    const userNameSnapshot = await actionRef.get();
+    userNameSnapshot.forEach(async doc => {
+      console.log(doc.data().userName);
+      if (doc.data().userName == actionId) {
+        await Firebase.getInstance()
+        .getDb()
+        .collection('area')
+        .doc(request['uid'])
+        .collection('actions')
+        .doc(doc.data().repoId)
+        .collection('reactions')
+        .doc()
+        .set({id: id, token: token, name: "github_reaction"});
+      }    
+    });
   }
 
   @Post('/trigger')
@@ -253,7 +264,7 @@ export class GitlabController {
           .collection('area')
           .doc(request['uid'])
           .collection('actions')
-          .doc(doc.data().id)
+          .doc(doc.data().repoId)
           .collection('reactions')
           const reactionsSnapshot = await reactionsRef.get();
           reactionsSnapshot.forEach(reaction => {

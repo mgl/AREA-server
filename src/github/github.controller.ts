@@ -82,7 +82,7 @@ export class GithubController {
 
 
   @Post('/action/push')
-  async createGithubPushAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() userName: string, @Body() repoName: string) {
+  async createGithubPushAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('userName') userName: string, @Body('repoName') repoName: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -100,14 +100,14 @@ export class GithubController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc('github')
+      .doc(userName)
       .set({id: id, token: token, name: "github_push", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "push", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
 
   @Post('/action/pull_request')
-  async createGithubPullRequestAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() userName: string, @Body() repoName: string) {
+  async createGithubPullRequestAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('userName') userName: string, @Body('repoName') repoName: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -125,14 +125,14 @@ export class GithubController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc('github')
+      .doc(userName)
       .set({id: id, token: token, name: "github_pull_request", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "pull_request", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
 
   @Post('/action/issues')
-  async createGithubIssuesAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() userName: string, @Body() repoName: string) {
+  async createGithubIssuesAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('userName') userName: string, @Body('repoName') repoName: string) {
     if (!token || token === undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -150,14 +150,14 @@ export class GithubController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc('github')
+      .doc(userName)
       .set({id: id, token: token, name: "github_issues", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "issues", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
 
   @Post('/action/issue_comment')
-  async createGithubIssueCommentAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() userName: string, @Body() repoName: string) {
+  async createGithubIssueCommentAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('userName') userName: string, @Body('repoName') repoName: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -175,14 +175,14 @@ export class GithubController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc('github')
+      .doc(userName)
       .set({id: id, token: token, name: "github_issue_comment", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "issue_comment", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
 
   @Post('/action/label')
-  async createGithubLabelAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() userName: string, @Body() repoName: string) {
+  async createGithubLabelAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('userName') userName: string, @Body('repoName') repoName: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -193,21 +193,20 @@ export class GithubController {
       .collection('services')
     const snapshot = await serviceRef.where('name', '==', 'github').get();
     snapshot.forEach(doc => {
-      authToken = doc.data().token;
+      authToken = doc.data().token;    
     });
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc('github')
+      .doc(userName)
       .set({id: id, token: token, name: "github_label", userName: userName, repoName: repoName});
-    
     create_webhook_github(userName, repoName, "label", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
   }
 
   @Post('/action/milestone')
-  async createGithubMilestoneAction(@Req() request: Request, @Body('id') id: string, @Body() token: string, @Body() userName: string, @Body() repoName: string) {
+  async createGithubMilestoneAction(@Req() request: Request, @Body('id') id: string, @Body('token') token: string, @Body('userName') userName: string, @Body('repoName') repoName: string) {
     if (!token || token == undefined)
       return { message: '400 Bad Parameter'}
     var authToken = '';
@@ -225,7 +224,7 @@ export class GithubController {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc('github')
+      .doc(userName)
       .set({id: id, token: token, name: "github_milestone", userName: userName, repoName: repoName});
     
     create_webhook_github(userName, repoName, "milestone", "https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook", authToken);
@@ -238,21 +237,32 @@ export class GithubController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
   ) {
-    if (!id || id == undefined)
+    if (!id || id == 'undefined')
       return { message: '400 Bad Parameter'}
-    if (!actionId || actionId == undefined)
+    if (!actionId || actionId == 'undefined')
       return { message: '400 Bad Parameter'}
-    if (!token || token == undefined)
+    if (!token || token == 'undefined')
       return { message: '400 Bad Parameter'}
-    await Firebase.getInstance()
+    const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(actionId)
-      .collection('reactions')
-      .doc()
-      .set({id: id, token: token, name: "github_reaction"});
+    const userNameSnapshot = await actionRef.get();
+    userNameSnapshot.forEach(async doc => {
+      console.log(doc.data().userName);
+      if (doc.data().userName == actionId) {
+        await Firebase.getInstance()
+        .getDb()
+        .collection('area')
+        .doc(request['uid'])
+        .collection('actions')
+        .doc(doc.data().userName)
+        .collection('reactions')
+        .doc()
+        .set({id: id, token: token, name: "github_reaction"});
+      }    
+    });
   }
 
   @Post('/trigger')
@@ -264,17 +274,17 @@ export class GithubController {
       const actionRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(request['uid'])
       .collection('actions')
     const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
     userNameSnapshot.forEach(async doc => {
-      if (doc.data().repoName ==  repoName) {
+      if (doc.data().repoName == repoName) {
           const reactionsRef = Firebase.getInstance()
           .getDb()
           .collection('area')
           .doc(request['uid'])
           .collection('actions')
-          .doc(doc.data().id)
+          .doc(doc.data().userName)
           .collection('reactions')
           const reactionsSnapshot = await reactionsRef.get();
           reactionsSnapshot.forEach(reaction => {
