@@ -7,7 +7,6 @@ export class DiscordReaction {
     const msg = new webhook.MessageBuilder()
       .setName('AREA-Message')
       .setText(message);
-
     Hook.send(msg);
   }
 

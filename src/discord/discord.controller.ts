@@ -272,12 +272,14 @@ export class DiscordController {
     @Req() request: Request,
     @Body('message') message: string,
   ) {
-    var discordReaction = new DiscordReaction();
+    let discordReaction = new DiscordReaction();
     discordReaction.classicMessage(
       message,
       'https://discord.com/api/webhooks/945680220483092600/ETxK6Iv_y6fN5FI4MSaBIXdZztfqcZEp-rHY0Hatulaer2K_uT-wktGrpDNgLqkad0sm',
     );
+
   }
+
   @Post('/execute_discord_success_reaction')
   async executeDiscordSuccessReaction(
     @Req() request: Request,

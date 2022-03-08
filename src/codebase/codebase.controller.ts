@@ -12,7 +12,10 @@ import Firebase from '../firebase/firebase';
 import { DiscordController} from '../discord/discord.controller'
 import {Token, Id, ActionId} from '../error/error';
 
+
 const { info } = require("firebase-functions/lib/logger");
+
+const user = Firebase.getInstance().getAuth().currentUser;
 
 @Controller('/services/codebase')
 export class CodebaseController {
@@ -27,7 +30,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('services')
       .doc('codebase')
       .set(data);
@@ -39,7 +42,7 @@ export class CodebaseController {
     const TokenRef = Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('services')
       .doc('codebase')
     const doc = await TokenRef.get()
@@ -54,7 +57,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('services')
       .doc('codebase')
       .delete();
@@ -68,7 +71,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "codebase_merge_request"});
@@ -81,7 +84,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "codebase_push"});
@@ -94,7 +97,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "codebase_ticket_creation"});
@@ -107,7 +110,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "codebase_ticket_update"});
@@ -120,7 +123,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('actions')
       .doc()
       .set({id: id, token: token, name: "codebase_wiki_page_hook"});
@@ -142,7 +145,7 @@ export class CodebaseController {
     await Firebase.getInstance()
       .getDb()
       .collection('area')
-      .doc('uuid')
+      .doc(user)
       .collection('actions')
       .doc(actionId)
       .collection('reactions')
@@ -158,7 +161,7 @@ export class CodebaseController {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc('uuid')
+          .doc(user)
           .collection('actions')
         const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
         userNameSnapshot.forEach(async doc => {
@@ -167,7 +170,7 @@ export class CodebaseController {
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc('uuid')
+              .doc(user)
               .collection('actions')
               .doc(doc.data().userName)
               .collection('reactions') 
@@ -193,7 +196,7 @@ export class CodebaseController {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc('uuid')
+          .doc(user)
           .collection('actions')
         const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
         userNameSnapshot.forEach(async doc => {
@@ -202,7 +205,7 @@ export class CodebaseController {
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc('uuid')
+              .doc(user)
               .collection('actions')
               .doc(doc.data().userName)
               .collection('reactions') 
@@ -228,7 +231,7 @@ export class CodebaseController {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc('uuid')
+          .doc(user)
           .collection('actions')
         const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
         userNameSnapshot.forEach(async doc => {
@@ -237,7 +240,7 @@ export class CodebaseController {
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc('uuid')
+              .doc(user)
               .collection('actions')
               .doc(doc.data().userName)
               .collection('reactions') 
@@ -263,7 +266,7 @@ export class CodebaseController {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc('uuid')
+          .doc(user)
           .collection('actions')
         const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
         userNameSnapshot.forEach(async doc => {
@@ -272,7 +275,7 @@ export class CodebaseController {
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc('uuid')
+              .doc(user)
               .collection('actions')
               .doc(doc.data().userName)
               .collection('reactions') 
@@ -298,7 +301,7 @@ export class CodebaseController {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc('uuid')
+          .doc(user)
           .collection('actions')
         const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
         userNameSnapshot.forEach(async doc => {
@@ -307,7 +310,7 @@ export class CodebaseController {
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc('uuid')
+              .doc(user)
               .collection('actions')
               .doc(doc.data().userName)
               .collection('reactions') 

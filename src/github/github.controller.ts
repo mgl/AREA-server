@@ -319,23 +319,28 @@ export class GithubController {
       case 'push' : {
         var userName = actionContent['repository']['owner']['name'];
         var repoName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
-        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-        userNameSnapshot.forEach(async doc => {   
+        const actionSnapshot = await actionRef.get();        
+        actionSnapshot.forEach(async doc => { 
           if (doc.data().repoName == repoName) {
-            if (doc.data().name == "github_push") {
-              var discordController = new DiscordController;
-              var mailReaction = new MailReaction;
+            if (doc.data().name == 'github_push') {
+              let discordController = new DiscordController;
+              let mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
-              .doc(doc.data().userName)
+              .doc("OtGzpEnetxXxohg3HAMo")
               .collection('reactions') 
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach(reaction => {
@@ -356,7 +361,7 @@ export class GithubController {
           }
         }
         });
-
+        });
         break;
       }
       case 'pull_request' : {
@@ -446,10 +451,16 @@ export class GithubController {
       case 'issue_comment' : {
         var userName = actionContent['repository']['owner']['name'];
         var repoName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
+          console.log(user.id, '=>', user.data());
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
         const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
         userNameSnapshot.forEach(async doc => {   
@@ -460,7 +471,7 @@ export class GithubController {
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
               .doc(doc.data().userName)
               .collection('reactions') 
@@ -481,7 +492,8 @@ export class GithubController {
              }
             });
           }
-        }
+          }
+        });        
         });
         break;
       }
