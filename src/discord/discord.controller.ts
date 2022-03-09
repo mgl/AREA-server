@@ -275,20 +275,20 @@ export class DiscordController {
     let discordReaction = new DiscordReaction();
     discordReaction.classicMessage(
       message,
-      'https://discord.com/api/webhooks/945680220483092600/ETxK6Iv_y6fN5FI4MSaBIXdZztfqcZEp-rHY0Hatulaer2K_uT-wktGrpDNgLqkad0sm',
+      'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
     );
 
   }
 
   @Post('/execute_discord_success_reaction')
-  async executeDiscordSuccessReaction(
+ executeDiscordSuccessReaction(
     @Req() request: Request,
     @Body('message') message: string,
   ) {
     var discordReaction = new DiscordReaction();
     discordReaction.successMessage(
       message,
-      'https://discord.com/api/webhooks/945680220483092600/ETxK6Iv_y6fN5FI4MSaBIXdZztfqcZEp-rHY0Hatulaer2K_uT-wktGrpDNgLqkad0sm',
+      'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
     );
   }
 
@@ -300,7 +300,7 @@ export class DiscordController {
     var discordReaction = new DiscordReaction();
     discordReaction.errorMessage(
       message,
-      'https://discord.com/api/webhooks/945680220483092600/ETxK6Iv_y6fN5FI4MSaBIXdZztfqcZEp-rHY0Hatulaer2K_uT-wktGrpDNgLqkad0sm',
+      'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
     );
   }
 
@@ -312,7 +312,7 @@ export class DiscordController {
     var discordReaction = new DiscordReaction();
     discordReaction.infoMessage(
       message,
-      'https://discord.com/api/webhooks/945680220483092600/ETxK6Iv_y6fN5FI4MSaBIXdZztfqcZEp-rHY0Hatulaer2K_uT-wktGrpDNgLqkad0sm',
+      'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
     );
   }
 
@@ -324,7 +324,7 @@ export class DiscordController {
     var discordReaction = new DiscordReaction();
     discordReaction.warnMessage(
       message,
-      'https://discord.com/api/webhooks/945680220483092600/ETxK6Iv_y6fN5FI4MSaBIXdZztfqcZEp-rHY0Hatulaer2K_uT-wktGrpDNgLqkad0sm',
+      'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
     );
   }
 }

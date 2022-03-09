@@ -231,196 +231,231 @@ export class GitlabController {
     switch (header) {
       case 'Push Hook' : {
         var userName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
-        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-        userNameSnapshot.forEach(async doc => {
-          if (doc.data().name == "gitlab_push_events") {
-              var discordController = new DiscordController;
-              var mailReaction = new MailReaction;
+        const actionSnapshot = await actionRef.get();        
+        actionSnapshot.forEach(async doc => { 
+            if (doc.data().name == 'gitlab_push_events') {
+              let discordController = new DiscordController;
+              let mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
-              .doc(doc.data().userName)
+              .doc(doc.id)
               .collection('reactions') 
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach(reaction => {
               if (reaction.data().name == "discord_classic_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_success_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                console.log(reaction.data().name)
+                discordController.executeDiscordSuccessReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_error_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordErrorReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_info_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordInfoReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordWarnReaction(request, reaction.data().message);
               }if (reaction.data().name == "mail_action") {
                 mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
              }
             });
           }
+        });
         });
         break;
       }
       case 'pull_request' : {
         var userName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
-        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-        userNameSnapshot.forEach(async doc => {
-          if (doc.data().name == "gitlab_merge_requests_events") {
-              var discordController = new DiscordController;
-              var mailReaction = new MailReaction;
+        const actionSnapshot = await actionRef.get();        
+        actionSnapshot.forEach(async doc => { 
+            if (doc.data().name == 'gitlab_merge_requests_events') {
+              let discordController = new DiscordController;
+              let mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
-              .doc(doc.data().userName)
+              .doc(doc.id)
               .collection('reactions') 
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach(reaction => {
               if (reaction.data().name == "discord_classic_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_success_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                console.log(reaction.data().name)
+                discordController.executeDiscordSuccessReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_error_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordErrorReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_info_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordInfoReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordWarnReaction(request, reaction.data().message);
               }if (reaction.data().name == "mail_action") {
                 mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
              }
             });
           }
+        });
         });
         break;
       }
       case 'Issue Hook' : {
         var userName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
-        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-        userNameSnapshot.forEach(async doc => {
-          if (doc.data().name == "gitlab_push_events") {
-              var discordController = new DiscordController;
-              var mailReaction = new MailReaction;
+        const actionSnapshot = await actionRef.get();        
+        actionSnapshot.forEach(async doc => { 
+            if (doc.data().name == 'gitlab_push_events') {
+              let discordController = new DiscordController;
+              let mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
-              .doc(doc.data().userName)
+              .doc(doc.id)
               .collection('reactions') 
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach(reaction => {
               if (reaction.data().name == "discord_classic_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_success_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                console.log(reaction.data().name)
+                discordController.executeDiscordSuccessReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_error_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordErrorReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_info_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordInfoReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordWarnReaction(request, reaction.data().message);
               }if (reaction.data().name == "mail_action") {
                 mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
              }
             });
           }
+        });
         });
         break;
       }
       case 'Note Hook' : {
         var userName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
-        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-        userNameSnapshot.forEach(async doc => {
-          if (doc.data().name == "gitlab_note_events") {
-              var discordController = new DiscordController;
-              var mailReaction = new MailReaction;
+        const actionSnapshot = await actionRef.get();        
+        actionSnapshot.forEach(async doc => { 
+            if (doc.data().name == 'gitlab_note_events') {
+              let discordController = new DiscordController;
+              let mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
-              .doc(doc.data().userName)
+              .doc(doc.id)
               .collection('reactions') 
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach(reaction => {
               if (reaction.data().name == "discord_classic_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_success_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                console.log(reaction.data().name)
+                discordController.executeDiscordSuccessReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_error_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordErrorReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_info_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordInfoReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordWarnReaction(request, reaction.data().message);
               }if (reaction.data().name == "mail_action") {
                 mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
              }
             });
           }
         });
+        });
         break;
       }
       case 'Wiki Page Hook' : {
         var userName = actionContent['repository']['name'];
+        const areaRef = Firebase.getInstance()
+          .getDb()
+          .collection('area')
+        const areaSnapshot = await areaRef.get();
+        areaSnapshot.forEach(async user => {
         const actionRef = Firebase.getInstance()
           .getDb()
           .collection('area')
-          .doc(request['uid'])
+          .doc(user.id)
           .collection('actions')
-        const userNameSnapshot = await actionRef.where('userName', '==', userName).get(); 
-        userNameSnapshot.forEach(async doc => {
-          if (doc.data().name == "gitlab_wiki_page_events") {
-              var discordController = new DiscordController;
-              var mailReaction = new MailReaction;
+        const actionSnapshot = await actionRef.get();        
+        actionSnapshot.forEach(async doc => { 
+            if (doc.data().name == 'gitlab_wiki_page_events') {
+              let discordController = new DiscordController;
+              let mailReaction = new MailReaction;
               const reactionsRef = Firebase.getInstance()
               .getDb()
               .collection('area')
-              .doc(request['uid'])
+              .doc(user.id)
               .collection('actions')
-              .doc(doc.data().userName)
+              .doc(doc.id)
               .collection('reactions') 
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach(reaction => {
               if (reaction.data().name == "discord_classic_reaction") {
                 discordController.executeDiscordClassicReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_success_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                console.log(reaction.data().name)
+                discordController.executeDiscordSuccessReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_error_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordErrorReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_info_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordInfoReaction(request, reaction.data().message);
               }if (reaction.data().name == "discord_warn_reaction") {
-                discordController.executeDiscordClassicReaction(request, reaction.data().message);
+                discordController.executeDiscordWarnReaction(request, reaction.data().message);
               }if (reaction.data().name == "mail_action") {
                 mailReaction.send_mail(reaction.data().object, reaction.data().message, reaction.data().receiver);
              }
             });
           }
+        });
         });
         break;
       }
