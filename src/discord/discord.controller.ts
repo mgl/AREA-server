@@ -1,15 +1,6 @@
 import { Get } from '@nestjs/common';
-import {
-  Controller,
-  Request,
-  Post,
-  Delete,
-  Param,
-  Body,
-  Req,
-} from '@nestjs/common';
+import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
-import { Token, Id, ActionId } from '../error/error';
 import { DiscordReaction } from '../reactions/DiscordReaction';
 
 @Controller('/services/discord')
@@ -272,20 +263,19 @@ export class DiscordController {
     @Req() request: Request,
     @Body('message') message: string,
   ) {
-    let discordReaction = new DiscordReaction();
+    const discordReaction = new DiscordReaction();
     discordReaction.classicMessage(
       message,
       'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
     );
-
   }
 
   @Post('/execute_discord_success_reaction')
- executeDiscordSuccessReaction(
+  executeDiscordSuccessReaction(
     @Req() request: Request,
     @Body('message') message: string,
   ) {
-    var discordReaction = new DiscordReaction();
+    const discordReaction = new DiscordReaction();
     discordReaction.successMessage(
       message,
       'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
@@ -297,7 +287,7 @@ export class DiscordController {
     @Req() request: Request,
     @Body('message') message: string,
   ) {
-    var discordReaction = new DiscordReaction();
+    const discordReaction = new DiscordReaction();
     discordReaction.errorMessage(
       message,
       'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
@@ -309,7 +299,7 @@ export class DiscordController {
     @Req() request: Request,
     @Body('message') message: string,
   ) {
-    var discordReaction = new DiscordReaction();
+    const discordReaction = new DiscordReaction();
     discordReaction.infoMessage(
       message,
       'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',
@@ -321,7 +311,7 @@ export class DiscordController {
     @Req() request: Request,
     @Body('message') message: string,
   ) {
-    var discordReaction = new DiscordReaction();
+    const discordReaction = new DiscordReaction();
     discordReaction.warnMessage(
       message,
       'https://discord.com/api/webhooks/951157415800348775/58vW_TnHr1sT5aehQ9xOn2D9ZtP_tK_n04S7F0OY43YRpXlKpgL5LbmLcBG_xs2df_nW',

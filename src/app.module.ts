@@ -7,7 +7,6 @@ import {
 import { AboutController } from './about/about.controller';
 import { AboutService } from './about/about.service';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PreauthMiddleware } from './auth/preauth.middleware';
 import { GithubController } from './github/github.controller';
@@ -24,7 +23,6 @@ import { CodebaseController } from './codebase/codebase.controller';
       ttl: 60,
       limit: 10,
     }),
-    UsersModule,
   ],
   controllers: [
     AppController,

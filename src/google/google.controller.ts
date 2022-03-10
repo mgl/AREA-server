@@ -1,21 +1,11 @@
 import { Get } from '@nestjs/common';
-import {
-  Controller,
-  Request,
-  Post,
-  Delete,
-  Param,
-  Body,
-  Req,
-} from '@nestjs/common';
+import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
-import {Token, Id, ActionId} from '../error/error';
 @Controller('/services/google')
 export class GoogleController {
   @Post('subscribe')
   async subscribe(@Req() request: Request, @Body('token') token: string) {
-    if (!token || token === undefined)
-      return { message: '400 Bad Parameter'}
+    if (!token || token === undefined) return { message: '400 Bad Parameter' };
     const data = {
       google_token: token,
     };
@@ -37,16 +27,14 @@ export class GoogleController {
       .collection('area')
       .doc(request['uid'])
       .collection('services')
-      .doc('google')
-    const doc = await TokenRef.get()
-    if (!doc.exists)
-      return { statusCode: '404', message: 'Not found'}
-    return {message: '200' + doc.data()};
+      .doc('google');
+    const doc = await TokenRef.get();
+    if (!doc.exists) return { statusCode: '404', message: 'Not found' };
+    return { message: '200' + doc.data() };
   }
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-
     await Firebase.getInstance()
       .getDb()
       .collection('area')
@@ -58,16 +46,19 @@ export class GoogleController {
   }
 
   @Post('/action')
-  async createGoogleAction(@Req() request: Request, @Body('id') id: string, @Body() token: string) {
-    if (!token || token === undefined)
-      return { message: '400 Bad Parameter'}
+  async createGoogleAction(
+    @Req() request: Request,
+    @Body('id') id: string,
+    @Body() token: string,
+  ) {
+    if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await Firebase.getInstance()
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({id: id, token: token, name: "google_action"});
+      .set({ id: id, token: token, name: 'google_action' });
   }
 
   @Post('/reaction')
@@ -77,12 +68,10 @@ export class GoogleController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
   ) {
-    if (!id || id == undefined)
-      return { message: '400 Bad Parameter'}
+    if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
-      return { message: '400 Bad Parameter'}
-    if (!token || token == undefined)
-      return { message: '400 Bad Parameter'}
+      return { message: '400 Bad Parameter' };
+    if (!token || token == undefined) return { message: '400 Bad Parameter' };
     await Firebase.getInstance()
       .getDb()
       .collection('area')
@@ -91,6 +80,6 @@ export class GoogleController {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({id: id, token: token, name: "google_reaction"});
+      .set({ id: id, token: token, name: 'google_reaction' });
   }
 }

@@ -4,8 +4,7 @@ import Firebase from 'src/firebase/firebase';
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  use(req: Request, res: Response, next: Function) {
+  use(req: Request, res: Response, next: any) {
     let token = req.headers.authorization;
     if (token != null && token != '') {
       token = token.replace('Bearer ', '');

@@ -1,15 +1,6 @@
 import { Get } from '@nestjs/common';
-import {
-  Controller,
-  Request,
-  Post,
-  Delete,
-  Param,
-  Body,
-  Req,
-} from '@nestjs/common';
+import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
-import { Token, Id, ActionId } from '../error/error';
 import { MailReaction } from '../reactions/MailReaction';
 
 @Controller('/services/mail')
@@ -122,7 +113,7 @@ export class MailController {
     @Body('content') content: string,
     @Body('reiceiver') reicever: string,
   ) {
-    var mailReaction = new MailReaction();
+    const mailReaction = new MailReaction();
 
     mailReaction.send_mail(object, content, reicever);
   }
