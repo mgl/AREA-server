@@ -48,6 +48,9 @@ const bootstrap = async (expressInstance) => {
   app.enableCors();
   app.use(compression());
   app.useGlobalPipes(new ValidationPipe());
+
+  new DiscordReaction();
+
   return app.init();
 };
 
