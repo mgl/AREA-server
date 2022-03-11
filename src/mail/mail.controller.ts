@@ -1,7 +1,7 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
-import Firebase from '../firebase/firebase';
 import { MailReaction } from '../reactions/MailReaction';
+import Firebase from '../firebase/firebase';
 
 @Controller('/services/mail')
 export class MailController {

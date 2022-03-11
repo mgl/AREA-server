@@ -1,5 +1,12 @@
-import { Get } from '@nestjs/common';
-import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
+import {
+  Request,
+  Post,
+  Delete,
+  Body,
+  Req,
+  Get,
+  Controller,
+} from '@nestjs/common';
 import Firebase from '../firebase/firebase';
 import { DiscordReaction } from '../reactions/DiscordReaction';
 
@@ -262,34 +269,29 @@ export class DiscordController {
   async executeDiscordClassicReaction(
     @Req() request: Request,
     @Body('message') message: string,
-  ) {
-  }
+  ) {}
 
   @Post('/execute_discord_success_reaction')
   executeDiscordSuccessReaction(
     @Req() request: Request,
     @Body('message') message: string,
-  ) {
-  }
+  ) {}
 
   @Post('/execute_discord_error_reaction')
   async executeDiscordErrorReaction(
     @Req() request: Request,
     @Body('message') message: string,
-  ) {
-  }
+  ) {}
 
   @Post('/execute_discord_info_reaction')
   async executeDiscordInfoReaction(
     @Req() request: Request,
     @Body('message') message: string,
-  ) {
-  }
+  ) {}
 
   @Post('/execute_discord_warn_reaction')
   async executeDiscordWarnReaction(
     @Req() request: Request,
     @Body('message') message: string,
-  ) {
-  }
+  ) {}
 }

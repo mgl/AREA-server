@@ -13,7 +13,7 @@ export default class Firebase {
     this.auth = getAuth();
   }
 
-  public static getInstance(): Firebase {
+  static getInstance(): Firebase {
     if (!Firebase.instance) {
       Firebase.instance = new Firebase();
     }
@@ -21,11 +21,11 @@ export default class Firebase {
     return Firebase.instance;
   }
 
-  public getDb(): FirebaseFirestore.Firestore {
+  getDb(): FirebaseFirestore.Firestore {
     return this.db;
   }
 
-  public getAuth(): any {
+  getAuth(): any {
     return this.auth;
   }
 }

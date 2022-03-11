@@ -1,10 +1,10 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Firebase from 'src/firebase/firebase';
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: any) {
+  use(req: Request, res: Response, next: NextFunction) {
     let token = req.headers.authorization;
     if (token != null && token != '') {
       token = token.replace('Bearer ', '');
