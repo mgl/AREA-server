@@ -9,6 +9,7 @@ import {
   Headers,
 } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
+import { DiscordReaction } from 'src/reactions/DiscordReaction';
 import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 
@@ -225,6 +226,25 @@ export class GitlabController {
     );
   }
 
+  async determineReaction(request: Request, reactionData: any) {
+    const discordReaction = new DiscordReaction();
+    const mailReaction = new MailReaction();
+    if (reactionData.name == 'discord_classic_reaction') {
+      discordReaction.sendMessage(
+        reactionData.server,
+        reactionData.channel,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'mail_action') {
+      mailReaction.send_mail(
+        reactionData.object,
+        reactionData.message,
+        reactionData.receiver,
+      );
+    }
+  }
+
   @Post('/reaction')
   async createGithubReaction(
     @Req() request: Request,
@@ -258,6 +278,26 @@ export class GitlabController {
     });
   }
 
+  async initReaction(request: Request, name: string) {
+    const areaRef = firebase.getDb().collection('area');
+    const areaSnapshot = await areaRef.get();
+    areaSnapshot.forEach(async (user) => {
+      const actionRef = areaRef.doc(user.id).collection('actions');
+      const actionSnapshot = await actionRef.get();
+      actionSnapshot.forEach(async (doc) => {
+        if (doc.data().name == name) {
+          const reactionsSnapshot = await actionRef
+            .doc(doc.id)
+            .collection('reactions')
+            .get();
+          reactionsSnapshot.forEach((reaction) => {
+            this.determineReaction(request, reaction);
+          });
+        }
+      });
+    });
+  }
+
   @Post('/webhook')
   async ReactGitlabWebhook(
     @Headers('x-gitlab-event') header: any,
@@ -288,35 +328,14 @@ export class GitlabController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -355,35 +374,15 @@ export class GitlabController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
                   console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -422,35 +421,15 @@ export class GitlabController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
                   console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -489,35 +468,15 @@ export class GitlabController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
                   console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -556,35 +515,15 @@ export class GitlabController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
                   console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(

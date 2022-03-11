@@ -11,6 +11,7 @@ export class DiscordReaction {
     DiscordReaction.instance = this;
 
     this.client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+    console.log(process.env.DISCORD_BOT_TOKEN);
     this.client.login(process.env.DISCORD_BOT_TOKEN);
   }
   sendMessage(serverName: string, channelName: string, message: string) {

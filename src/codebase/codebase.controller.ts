@@ -1,7 +1,8 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
+import { DiscordController } from 'src/discord/discord.controller';
 import Firebase from '../firebase/firebase';
-import { DiscordController } from '../discord/discord.controller';
+import { DiscordReaction } from '../reactions/DiscordReaction';
 import { MailReaction } from '../reactions/MailReaction';
 
 const firebase = new Firebase();
@@ -153,6 +154,45 @@ export class CodebaseController {
       .set({ id: id, token: token, name: 'codebase_reaction' });
   }
 
+  async determineReaction(request: Request, reactionData: any) {
+    const discordReaction = new DiscordReaction();
+    const mailReaction = new MailReaction();
+    if (reactionData.name == 'discord_classic_reaction') {
+      discordReaction.sendMessage(
+        reactionData.server,
+        reactionData.channel,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'mail_action') {
+      mailReaction.send_mail(
+        reactionData.object,
+        reactionData.message,
+        reactionData.receiver,
+      );
+    }
+  }
+
+  async initReaction(request: Request, name: string) {
+    const areaRef = firebase.getDb().collection('area');
+    const areaSnapshot = await areaRef.get();
+    areaSnapshot.forEach(async (user) => {
+      const actionRef = areaRef.doc(user.id).collection('actions');
+      const actionSnapshot = await actionRef.get();
+      actionSnapshot.forEach(async (doc) => {
+        if (doc.data().name == name) {
+          const reactionsSnapshot = await actionRef
+            .doc(doc.id)
+            .collection('reactions')
+            .get();
+          reactionsSnapshot.forEach((reaction) => {
+            this.determineReaction(request, reaction);
+          });
+        }
+      });
+    });
+  }
+
   @Post('/webhook')
   async ReactCodebaseWebhook(@Req() request: Request, @Body() payload: any) {
     switch (payload['type']) {
@@ -180,35 +220,14 @@ export class CodebaseController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -247,35 +266,14 @@ export class CodebaseController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -314,35 +312,14 @@ export class CodebaseController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -381,35 +358,14 @@ export class CodebaseController {
               const reactionsSnapshot = await reactionsRef.get();
               reactionsSnapshot.forEach((reaction) => {
                 if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
                 }
                 if (reaction.data().name == 'mail_action') {
                   mailReaction.send_mail(
@@ -425,6 +381,5 @@ export class CodebaseController {
         break;
       }
     }
-    console.log(payload['type']);
   }
 }
