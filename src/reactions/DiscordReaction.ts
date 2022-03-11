@@ -1,41 +1,22 @@
+import { Client, Intents } from 'discord.js';
+
 export class DiscordReaction {
-  webhook = require('webhook-discord');
+  public client: any;
 
-  public async classicMessage(message: string, url: string) {
-    // Setup
-    const Hook = new this.webhook.Webhook(url);
-
-    const msg = new this.webhook.MessageBuilder()
-      .setName('AREA-Message')
-      .setText(message);
-    Hook.send(msg);
+  constructor() {
+    this.client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+    this.client.login(process.env.DISCORD_BOT_TOKEN);
   }
 
-  public async successMessage(message: string, url: string) {
-    // Setup
-    const Hook = new this.webhook.Webhook(url);
-
-    Hook.success('AREA-Success', message);
-  }
-
-  public async errorMessage(message: string, url: string) {
-    // Setup
-    const Hook = new this.webhook.Webhook(url);
-
-    Hook.err('AREA-Err', message);
-  }
-
-  public async infoMessage(message: string, url: string) {
-    // Setup
-    const Hook = new this.webhook.Webhook(url);
-
-    Hook.info('AREA-Info', message);
-  }
-
-  public async warnMessage(message: string, url: string) {
-    // Setup
-    const Hook = new this.webhook.Webhook(url);
-
-    Hook.warn('AREA-Warn', message);
+  sendMessage(serverName: string, channelName: string, message: string) {
+    this.client.guilds.cache.forEach((server) => {
+      if (server.name === serverName) {
+        server.channels.cache.forEach((channel) => {
+          if (channel.name === channelName) {
+            channel.send(message);
+          }
+        });
+      }
+    });
   }
 }
