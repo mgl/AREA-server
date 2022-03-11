@@ -8,6 +8,7 @@ import * as cookieParser from 'cookie-parser';
 import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { DiscordReaction } from './reactions/DiscordReaction';
 
 // Local test code
 

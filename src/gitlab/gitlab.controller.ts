@@ -9,7 +9,7 @@ import {
   Headers,
 } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
-import { DiscordController } from '../discord/discord.controller';
+import { DiscordReaction } from '../reactions/DiscordReaction';
 import { MailReaction } from '../reactions/MailReaction';
 
 async function create_webhook_gitlab(
@@ -223,6 +223,25 @@ export class GitlabController {
     );
   }
 
+  async determineReaction(request: Request, reactionData: any) {
+    const discordReaction = new DiscordReaction();
+    const mailReaction = new MailReaction();
+    if (reactionData.name == 'discord_classic_reaction') {
+      discordReaction.sendMessage(
+        reactionData.server,
+        reactionData.channel,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'mail_action') {
+      mailReaction.send_mail(
+        reactionData.object,
+        reactionData.message,
+        reactionData.receiver,
+      );
+    }
+  }
+
   @Post('/reaction')
   async createGithubReaction(
     @Req() request: Request,
@@ -256,6 +275,26 @@ export class GitlabController {
     });
   }
 
+  async initReaction(request: Request, name: string) {
+    const areaRef = Firebase.getInstance().getDb().collection('area');
+    const areaSnapshot = await areaRef.get();
+    areaSnapshot.forEach(async (user) => {
+      const actionRef = areaRef.doc(user.id).collection('actions');
+      const actionSnapshot = await actionRef.get();
+      actionSnapshot.forEach(async (doc) => {
+        if (doc.data().name == name) {
+          const reactionsSnapshot = await actionRef
+            .doc(doc.id)
+            .collection('reactions')
+            .get();
+          reactionsSnapshot.forEach((reaction) => {
+            this.determineReaction(request, reaction);
+          });
+        }
+      });
+    });
+  }
+
   @Post('/webhook')
   async ReactGitlabWebhook(
     @Headers('x-gitlab-event') header: any,
@@ -263,338 +302,23 @@ export class GitlabController {
   ) {
     switch (header) {
       case 'Push Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().name == 'gitlab_push_events') {
-              const discordController = new DiscordController();
-              const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
-                .getDb()
-                .collection('area')
-                .doc(user.id)
-                .collection('actions')
-                .doc(doc.id)
-                .collection('reactions');
-              const reactionsSnapshot = await reactionsRef.get();
-              reactionsSnapshot.forEach((reaction) => {
-                if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'mail_action') {
-                  mailReaction.send_mail(
-                    reaction.data().object,
-                    reaction.data().message,
-                    reaction.data().receiver,
-                  );
-                }
-              });
-            }
-          });
-        });
+        this.initReaction(request, 'gitlab_push_events');
         break;
       }
       case 'pull_request': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().name == 'gitlab_merge_requests_events') {
-              const discordController = new DiscordController();
-              const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
-                .getDb()
-                .collection('area')
-                .doc(user.id)
-                .collection('actions')
-                .doc(doc.id)
-                .collection('reactions');
-              const reactionsSnapshot = await reactionsRef.get();
-              reactionsSnapshot.forEach((reaction) => {
-                if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'mail_action') {
-                  mailReaction.send_mail(
-                    reaction.data().object,
-                    reaction.data().message,
-                    reaction.data().receiver,
-                  );
-                }
-              });
-            }
-          });
-        });
+        this.initReaction(request, 'gitlab_merge_requests_events');
         break;
       }
       case 'Issue Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().name == 'gitlab_push_events') {
-              const discordController = new DiscordController();
-              const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
-                .getDb()
-                .collection('area')
-                .doc(user.id)
-                .collection('actions')
-                .doc(doc.id)
-                .collection('reactions');
-              const reactionsSnapshot = await reactionsRef.get();
-              reactionsSnapshot.forEach((reaction) => {
-                if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'mail_action') {
-                  mailReaction.send_mail(
-                    reaction.data().object,
-                    reaction.data().message,
-                    reaction.data().receiver,
-                  );
-                }
-              });
-            }
-          });
-        });
+        this.initReaction(request, 'gitlab_push_events');
         break;
       }
       case 'Note Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().name == 'gitlab_note_events') {
-              const discordController = new DiscordController();
-              const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
-                .getDb()
-                .collection('area')
-                .doc(user.id)
-                .collection('actions')
-                .doc(doc.id)
-                .collection('reactions');
-              const reactionsSnapshot = await reactionsRef.get();
-              reactionsSnapshot.forEach((reaction) => {
-                if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'mail_action') {
-                  mailReaction.send_mail(
-                    reaction.data().object,
-                    reaction.data().message,
-                    reaction.data().receiver,
-                  );
-                }
-              });
-            }
-          });
-        });
+        this.initReaction(request, 'gitlab_note_events');
         break;
       }
       case 'Wiki Page Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().name == 'gitlab_wiki_page_events') {
-              const discordController = new DiscordController();
-              const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
-                .getDb()
-                .collection('area')
-                .doc(user.id)
-                .collection('actions')
-                .doc(doc.id)
-                .collection('reactions');
-              const reactionsSnapshot = await reactionsRef.get();
-              reactionsSnapshot.forEach((reaction) => {
-                if (reaction.data().name == 'discord_classic_reaction') {
-                  discordController.executeDiscordClassicReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_success_reaction') {
-                  console.log(reaction.data().name);
-                  discordController.executeDiscordSuccessReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_error_reaction') {
-                  discordController.executeDiscordErrorReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_info_reaction') {
-                  discordController.executeDiscordInfoReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'discord_warn_reaction') {
-                  discordController.executeDiscordWarnReaction(
-                    request,
-                    reaction.data().message,
-                  );
-                }
-                if (reaction.data().name == 'mail_action') {
-                  mailReaction.send_mail(
-                    reaction.data().object,
-                    reaction.data().message,
-                    reaction.data().receiver,
-                  );
-                }
-              });
-            }
-          });
-        });
+        this.initReaction(request, 'gitlab_wiki_page_events');
         break;
       }
     }
