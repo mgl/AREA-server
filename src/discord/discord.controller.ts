@@ -71,6 +71,8 @@ export class DiscordController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
     @Body('message') message: string,
+    @Body('server') server: string,
+    @Body('channel') channel: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -98,6 +100,8 @@ export class DiscordController {
             token: token,
             name: 'discord_classic_reaction',
             message: message,
+            server: server,
+            channel: channel,
           });
       }
     });
@@ -110,6 +114,8 @@ export class DiscordController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
     @Body('message') message: string,
+    @Body('server') server: string,
+    @Body('channel') channel: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -137,6 +143,8 @@ export class DiscordController {
             token: token,
             name: 'discord_success_reaction',
             message: message,
+            server: server,
+            channel: channel,
           });
       }
     });
@@ -149,6 +157,8 @@ export class DiscordController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
     @Body('message') message: string,
+    @Body('server') server: string,
+    @Body('channel') channel: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -176,6 +186,8 @@ export class DiscordController {
             token: token,
             name: 'discord_error_reaction',
             message: message,
+            server: server,
+            channel: channel,
           });
       }
     });
@@ -187,6 +199,8 @@ export class DiscordController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
     @Body('message') message: string,
+    @Body('server') server: string,
+    @Body('channel') channel: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -214,6 +228,8 @@ export class DiscordController {
             token: token,
             name: 'discord_info_reaction',
             message: message,
+            server: server,
+            channel: channel,
           });
       }
     });
@@ -226,6 +242,8 @@ export class DiscordController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
     @Body('message') message: string,
+    @Body('server') server: string,
+    @Body('channel') channel: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -253,43 +271,10 @@ export class DiscordController {
             token: token,
             name: 'discord_warn_reaction',
             message: message,
+            server: server,
+            channel: channel,
           });
       }
     });
-  }
-
-  @Post('/execute_discord_classic_reaction')
-  async executeDiscordClassicReaction(
-    @Req() request: Request,
-    @Body('message') message: string,
-  ) {
-  }
-
-  @Post('/execute_discord_success_reaction')
-  executeDiscordSuccessReaction(
-    @Req() request: Request,
-    @Body('message') message: string,
-  ) {
-  }
-
-  @Post('/execute_discord_error_reaction')
-  async executeDiscordErrorReaction(
-    @Req() request: Request,
-    @Body('message') message: string,
-  ) {
-  }
-
-  @Post('/execute_discord_info_reaction')
-  async executeDiscordInfoReaction(
-    @Req() request: Request,
-    @Body('message') message: string,
-  ) {
-  }
-
-  @Post('/execute_discord_warn_reaction')
-  async executeDiscordWarnReaction(
-    @Req() request: Request,
-    @Body('message') message: string,
-  ) {
   }
 }
