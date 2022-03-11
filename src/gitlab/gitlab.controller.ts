@@ -9,7 +9,7 @@ import {
   Headers,
 } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
-import { DiscordReaction } from 'src/reactions/DiscordReaction';
+import { DiscordClientInstance } from 'src/reactions/DiscordReaction';
 import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 
@@ -227,10 +227,9 @@ export class GitlabController {
   }
 
   async determineReaction(request: Request, reactionData: any) {
-    const discordReaction = new DiscordReaction();
     const mailReaction = new MailReaction();
     if (reactionData.name == 'discord_classic_reaction') {
-      discordReaction.sendMessage(
+      DiscordClientInstance.sendMessage(
         reactionData.server,
         reactionData.channel,
         reactionData.message,

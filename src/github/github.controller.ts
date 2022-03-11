@@ -12,7 +12,7 @@ import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 import { Octokit } from '@octokit/rest';
 import Firebase from 'src/firebase/firebase';
-import { DiscordReaction } from 'src/reactions/DiscordReaction';
+import { DiscordClientInstance } from '../reactions/DiscordReaction';
 
 const firebase = new Firebase();
 
@@ -415,11 +415,10 @@ export class GithubController {
   }
 
   async determineReaction(request: Request, reactionData: any) {
-    const discordReaction = new DiscordReaction();
     const mailReaction = new MailReaction();
     console.log(reactionData);
     if (reactionData.name == 'discord_classic_reaction') {
-      discordReaction.sendMessage(
+      DiscordClientInstance.sendMessage(
         reactionData.server,
         reactionData.channel,
         reactionData.message,

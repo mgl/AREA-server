@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { AppService } from './app.service';
+import { DiscordClientInstance } from './reactions/DiscordReaction';
 
 const firebase = new Firebase();
 
@@ -18,6 +19,7 @@ export class AppController {
 
   @Get('/hello')
   getHello(): string {
+    DiscordClientInstance.sendMessage('YearEndProject', 'bot-test', 'test');
     return this.appService.getHello();
   }
 

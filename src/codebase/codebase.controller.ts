@@ -2,7 +2,7 @@ import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
 import { DiscordController } from 'src/discord/discord.controller';
 import Firebase from '../firebase/firebase';
-import { DiscordReaction } from '../reactions/DiscordReaction';
+import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { MailReaction } from '../reactions/MailReaction';
 
 const firebase = new Firebase();
@@ -155,10 +155,9 @@ export class CodebaseController {
   }
 
   async determineReaction(request: Request, reactionData: any) {
-    const discordReaction = new DiscordReaction();
     const mailReaction = new MailReaction();
     if (reactionData.name == 'discord_classic_reaction') {
-      discordReaction.sendMessage(
+      DiscordClientInstance.sendMessage(
         reactionData.server,
         reactionData.channel,
         reactionData.message,
