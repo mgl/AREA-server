@@ -1,98 +1,34 @@
 import { TwitterApi } from 'twitter-api-v2';
 
 export class TwitterReaction {
-  public async Tweet(
-    message: string,
-    appKey: string,
-    appSecret: string,
-    accessToken: string,
-    accessSecret: string,
-  ) {
-    // Setup
-    const client = new TwitterApi({
-      appKey: appKey,
-      appSecret: appSecret,
-      accessToken: accessToken,
-      accessSecret: accessSecret,
-    });
+  private twitterClient: TwitterApi;
 
+  constructor() {
+    this.twitterClient = new TwitterApi({
+      appKey: process.env.TWITTER_APP_KEY,
+      appSecret: process.env.TWITTER_APP_SECRET,
+      accessToken: process.env.TWITTER_ACCESS_TOKEN,
+      accessSecret: process.env.TWITTER_ACCESS_SECRET,
+    });
+  }
+
+  public async Tweet(message: string) {
     // Tweet
-    client.v2
-      .tweet(message)
-      .then((val) => {
-        console.log(val);
-        console.log('success');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.twitterClient.v2.tweet(message);
   }
 
-  public async Follow(
-    userId: string,
-    targetId: string,
-    appKey: string,
-    appSecret: string,
-    accessToken: string,
-    accessSecret: string,
-  ) {
-    // Setup
-    const client = new TwitterApi({
-      appKey: appKey,
-      appSecret: appSecret,
-      accessToken: accessToken,
-      accessSecret: accessSecret,
-    });
-
+  public async Follow(userId: string, targetId: string) {
     // Follow
-    client.v2
-      .follow(userId, targetId)
-      .then((val) => {
-        console.log(val);
-        console.log('success');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.twitterClient.v2.follow(userId, targetId);
   }
 
-  public async TwitterReTweet(
-    userId: string,
-    tweetId: string,
-    appKey: string,
-    appSecret: string,
-    accessToken: string,
-    accessSecret: string,
-  ) {
-    // Setup
-    const client = new TwitterApi({
-      appKey: appKey,
-      appSecret: appSecret,
-      accessToken: accessToken,
-      accessSecret: accessSecret,
-    });
-
+  public async TwitterReTweet(userId: string, tweetId: string) {
     // ReTweet
-    client.v2.retweet(userId, tweetId);
+    this.twitterClient.v2.retweet(userId, tweetId);
   }
 
-  public async TwitterLike(
-    userId: string,
-    tweetId: string,
-    appKey: string,
-    appSecret: string,
-    accessToken: string,
-    accessSecret: string,
-  ) {
-    // Setup
-    const client = new TwitterApi({
-      appKey: appKey,
-      appSecret: appSecret,
-      accessToken: accessToken,
-      accessSecret: accessSecret,
-    });
-
+  public async TwitterLike(userId: string, tweetId: string) {
     // Like
-    client.v2.like(userId, tweetId);
+    this.twitterClient.v2.like(userId, tweetId);
   }
 }

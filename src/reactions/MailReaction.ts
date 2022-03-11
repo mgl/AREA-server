@@ -1,17 +1,21 @@
 import nodemailer from 'nodemailer';
 
 export class MailReaction {
-  async send_mail(object: string, content: string, receiver: string) {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
+  private transporter: nodemailer.Transporter;
+
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      service: process.env.MAILER_TRANSPORT_SERVICE,
       auth: {
-        user: 'smarthears@gmail.com',
-        pass: 'albangrincheux',
+        user: process.env.MAILER_AUTH_USER,
+        pass: process.env.MAILER_AUTH_PASSWORD,
       },
     });
+  }
 
+  async send_mail(object: string, content: string, receiver: string) {
     if (content != '') {
-      const info = await transporter.sendMail({
+      const info = await this.transporter.sendMail({
         from: '"SmartHears" <smarthears@gmail.com>',
         to: receiver,
         subject: object,
@@ -19,7 +23,7 @@ export class MailReaction {
       });
       console.log('Message sent: %s', info.messageId);
     } else {
-      const info = await transporter.sendMail({
+      const info = await this.transporter.sendMail({
         from: '"SmartHears" <smarthears@gmail.com>',
         to: receiver,
         subject: object,
@@ -28,7 +32,7 @@ export class MailReaction {
           {
             filename: 'SmartHears.png',
             path: './SmartHears.png',
-            cid: 'SmartHears', //same cid value as in the html img src
+            cid: 'SmartHears',
           },
         ],
       });

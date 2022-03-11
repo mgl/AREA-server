@@ -9,7 +9,6 @@ import {
   Headers,
 } from '@nestjs/common';
 import Firebase from '../firebase/firebase';
-import { GithubWebhookEvents } from '@dev-thought/nestjs-github-webhooks';
 import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 import { Octokit } from '@octokit/rest';
@@ -432,13 +431,6 @@ export class GithubController {
     });
   }
 
-  @GithubWebhookEvents([
-    'push',
-    'pull_request',
-    'issues',
-    'issue_comment',
-    'label',
-  ])
   @Post('/webhook')
   async ReactGithubWebhook(
     @Headers('X-GitHub-Event') header: any,
