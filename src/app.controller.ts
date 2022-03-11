@@ -10,6 +10,8 @@ import {
 import Firebase from 'src/firebase/firebase';
 import { AppService } from './app.service';
 
+const firebase = new Firebase();
+
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -32,7 +34,7 @@ export class AppController {
   @Get('/service_list')
   async getServiceList(@Req() request: Request) {
     let servicelist = '';
-    const serviceRef = await Firebase.getInstance()
+    const serviceRef = await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -50,7 +52,7 @@ export class AppController {
   @Get('/action_list')
   async getActionList(@Req() request: Request) {
     let actionlists = '';
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -71,7 +73,7 @@ export class AppController {
   async getReactionList(@Req() request: Request, @Headers('id') id: string) {
     let reactionlists = '';
     console.log(id);
-    const reactionRef = Firebase.getInstance()
+    const reactionRef = firebase
       .getDb()
       .collection('area')
       .doc('uuid')

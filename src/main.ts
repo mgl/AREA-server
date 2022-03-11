@@ -8,6 +8,8 @@ import * as cookieParser from 'cookie-parser';
 import * as functions from 'firebase-functions';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { DiscordReaction } from './reactions/DiscordReaction';
+import 'dotenv/config';
 
 // Local test code
 
@@ -29,6 +31,8 @@ async function bootstrap_local() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
+
+  new DiscordReaction();
 
   await app.listen(3000);
 }

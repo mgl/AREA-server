@@ -7,18 +7,15 @@ export default class Firebase {
   private db: FirebaseFirestore.Firestore;
   private auth: Auth;
 
-  private constructor() {
+  constructor() {
+    if (Firebase.instance) {
+      return Firebase.instance;
+    }
+    Firebase.instance = this;
+
     initializeApp();
     this.db = getFirestore();
     this.auth = getAuth();
-  }
-
-  static getInstance(): Firebase {
-    if (!Firebase.instance) {
-      Firebase.instance = new Firebase();
-    }
-
-    return Firebase.instance;
   }
 
   getDb(): FirebaseFirestore.Firestore {

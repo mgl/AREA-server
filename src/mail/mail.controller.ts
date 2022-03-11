@@ -1,8 +1,9 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
+import Firebase from 'src/firebase/firebase';
 import { MailReaction } from '../reactions/MailReaction';
-import Firebase from '../firebase/firebase';
 
+const firebase = new Firebase();
 @Controller('/services/mail')
 export class MailController {
   @Post('subscribe')
@@ -13,7 +14,7 @@ export class MailController {
       token: token,
     };
 
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -25,7 +26,7 @@ export class MailController {
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    const TokenRef = Firebase.getInstance()
+    const TokenRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -38,7 +39,7 @@ export class MailController {
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -55,7 +56,7 @@ export class MailController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -78,7 +79,7 @@ export class MailController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -87,7 +88,7 @@ export class MailController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data());
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])

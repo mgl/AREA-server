@@ -1,6 +1,8 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
-import Firebase from '../firebase/firebase';
+import Firebase from 'src/firebase/firebase';
+
+const firebase = new Firebase();
 @Controller('/services/google')
 export class GoogleController {
   @Post('subscribe')
@@ -10,7 +12,7 @@ export class GoogleController {
       google_token: token,
     };
 
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -22,7 +24,7 @@ export class GoogleController {
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    const TokenRef = Firebase.getInstance()
+    const TokenRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -35,7 +37,7 @@ export class GoogleController {
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -52,7 +54,7 @@ export class GoogleController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -72,7 +74,7 @@ export class GoogleController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])

@@ -4,7 +4,8 @@ import Firebase from '../firebase/firebase';
 import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 
-const user = Firebase.getInstance().getAuth().currentUser;
+const firebase = new Firebase();
+const user = firebase.getAuth().currentUser;
 
 @Controller('/services/codebase')
 export class CodebaseController {
@@ -15,7 +16,7 @@ export class CodebaseController {
       token: token,
     };
 
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -27,7 +28,7 @@ export class CodebaseController {
 
   @Get('/')
   async getToken() {
-    const TokenRef = Firebase.getInstance()
+    const TokenRef = firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -40,7 +41,7 @@ export class CodebaseController {
 
   @Delete('/unsubscribe')
   async unsubscribe() {
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -57,7 +58,7 @@ export class CodebaseController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -73,7 +74,7 @@ export class CodebaseController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -89,7 +90,7 @@ export class CodebaseController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -105,7 +106,7 @@ export class CodebaseController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -121,7 +122,7 @@ export class CodebaseController {
     @Body() token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -141,7 +142,7 @@ export class CodebaseController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(user)
@@ -156,10 +157,10 @@ export class CodebaseController {
   async ReactCodebaseWebhook(@Req() request: Request, @Body() payload: any) {
     switch (payload['type']) {
       case 'push': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -169,7 +170,7 @@ export class CodebaseController {
             if (doc.data().name == 'codebase_push') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -223,10 +224,10 @@ export class CodebaseController {
         break;
       }
       case 'merge_request_creation': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -236,7 +237,7 @@ export class CodebaseController {
             if (doc.data().name == 'codebase_merge_request') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -290,10 +291,10 @@ export class CodebaseController {
         break;
       }
       case 'ticket_update': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -303,7 +304,7 @@ export class CodebaseController {
             if (doc.data().name == 'codebase_ticket_update') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -357,10 +358,10 @@ export class CodebaseController {
         break;
       }
       case 'Wiki Page Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -370,7 +371,7 @@ export class CodebaseController {
             if (doc.data().name == 'codebase_wiki_page_hook') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)

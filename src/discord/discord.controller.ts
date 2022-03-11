@@ -7,8 +7,9 @@ import {
   Get,
   Controller,
 } from '@nestjs/common';
-import Firebase from '../firebase/firebase';
-import { DiscordReaction } from '../reactions/DiscordReaction';
+import Firebase from 'src/firebase/firebase';
+
+const firebase = new Firebase();
 
 @Controller('/services/discord')
 export class DiscordController {
@@ -20,7 +21,7 @@ export class DiscordController {
       name: 'discord',
     };
 
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -32,7 +33,7 @@ export class DiscordController {
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    const TokenRef = Firebase.getInstance()
+    const TokenRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -45,7 +46,7 @@ export class DiscordController {
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -62,7 +63,7 @@ export class DiscordController {
     @Body('token') token: string,
   ) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -83,7 +84,7 @@ export class DiscordController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -92,7 +93,7 @@ export class DiscordController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data());
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
@@ -122,7 +123,7 @@ export class DiscordController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -131,7 +132,7 @@ export class DiscordController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data());
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
@@ -161,7 +162,7 @@ export class DiscordController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -170,7 +171,7 @@ export class DiscordController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data());
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
@@ -199,7 +200,7 @@ export class DiscordController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -208,7 +209,7 @@ export class DiscordController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data());
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
@@ -238,7 +239,7 @@ export class DiscordController {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -247,7 +248,7 @@ export class DiscordController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data());
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])

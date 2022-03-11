@@ -8,9 +8,11 @@ import {
   Req,
   Headers,
 } from '@nestjs/common';
-import Firebase from '../firebase/firebase';
+import Firebase from 'src/firebase/firebase';
 import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
+
+const firebase = new Firebase();
 
 async function create_webhook_gitlab(
   repoId: string,
@@ -52,7 +54,7 @@ export class GitlabController {
       token: token,
     };
 
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -64,7 +66,7 @@ export class GitlabController {
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    const TokenRef = Firebase.getInstance()
+    const TokenRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -77,7 +79,7 @@ export class GitlabController {
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -96,7 +98,7 @@ export class GitlabController {
   ) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     let authToken = '';
-    const serviceRef = Firebase.getInstance()
+    const serviceRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -105,7 +107,7 @@ export class GitlabController {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -130,7 +132,7 @@ export class GitlabController {
   ) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     let authToken = '';
-    const serviceRef = Firebase.getInstance()
+    const serviceRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -139,7 +141,7 @@ export class GitlabController {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -164,7 +166,7 @@ export class GitlabController {
   ) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     let authToken = '';
-    const serviceRef = Firebase.getInstance()
+    const serviceRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -173,7 +175,7 @@ export class GitlabController {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -198,7 +200,7 @@ export class GitlabController {
   ) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     let authToken = '';
-    const serviceRef = Firebase.getInstance()
+    const serviceRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -207,7 +209,7 @@ export class GitlabController {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
-    await Firebase.getInstance()
+    await firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -234,7 +236,7 @@ export class GitlabController {
     if (!actionId || actionId == 'undefined')
       return { message: '400 Bad Parameter' };
     if (!token || token == 'undefined') return { message: '400 Bad Parameter' };
-    const actionRef = Firebase.getInstance()
+    const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -243,7 +245,7 @@ export class GitlabController {
     userNameSnapshot.forEach(async (doc) => {
       console.log(doc.data().userName);
       if (doc.data().userName == actionId) {
-        await Firebase.getInstance()
+        await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
@@ -263,10 +265,10 @@ export class GitlabController {
   ) {
     switch (header) {
       case 'Push Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -276,7 +278,7 @@ export class GitlabController {
             if (doc.data().name == 'gitlab_push_events') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -330,10 +332,10 @@ export class GitlabController {
         break;
       }
       case 'pull_request': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -343,7 +345,7 @@ export class GitlabController {
             if (doc.data().name == 'gitlab_merge_requests_events') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -397,10 +399,10 @@ export class GitlabController {
         break;
       }
       case 'Issue Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -410,7 +412,7 @@ export class GitlabController {
             if (doc.data().name == 'gitlab_push_events') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -464,10 +466,10 @@ export class GitlabController {
         break;
       }
       case 'Note Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -477,7 +479,7 @@ export class GitlabController {
             if (doc.data().name == 'gitlab_note_events') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)
@@ -531,10 +533,10 @@ export class GitlabController {
         break;
       }
       case 'Wiki Page Hook': {
-        const areaRef = Firebase.getInstance().getDb().collection('area');
+        const areaRef = firebase.getDb().collection('area');
         const areaSnapshot = await areaRef.get();
         areaSnapshot.forEach(async (user) => {
-          const actionRef = Firebase.getInstance()
+          const actionRef = firebase
             .getDb()
             .collection('area')
             .doc(user.id)
@@ -544,7 +546,7 @@ export class GitlabController {
             if (doc.data().name == 'gitlab_wiki_page_events') {
               const discordController = new DiscordController();
               const mailReaction = new MailReaction();
-              const reactionsRef = Firebase.getInstance()
+              const reactionsRef = firebase
                 .getDb()
                 .collection('area')
                 .doc(user.id)

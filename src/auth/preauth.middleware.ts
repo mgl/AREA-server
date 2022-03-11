@@ -8,7 +8,7 @@ export class PreauthMiddleware implements NestMiddleware {
     let token = req.headers.authorization;
     if (token != null && token != '') {
       token = token.replace('Bearer ', '');
-      Firebase.getInstance()
+      new Firebase()
         .getAuth()
         .verifyIdToken(token)
         .then((decodedToken) => {
