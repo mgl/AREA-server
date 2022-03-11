@@ -364,56 +364,6 @@ export class GithubController {
     });
   }
 
-  @Post('/trigger')
-  async triggerActionAndReaction(
-    @Req() request: Request,
-    @Body() actionContent: string,
-  ) {
-    const userName = actionContent['repository']['owner']['name'];
-    const repoName = actionContent['repository']['name'];
-    const actionRef = firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('actions');
-    const userNameSnapshot = await actionRef
-      .where('userName', '==', userName)
-      .get();
-    userNameSnapshot.forEach(async (doc) => {
-      if (doc.data().repoName == repoName) {
-        const discordController = new DiscordController();
-        const mailReaction = new MailReaction();
-        const reactionsRef = firebase
-          .getDb()
-          .collection('area')
-          .doc(request['uid'])
-          .collection('actions')
-          .doc(doc.data().userName)
-          .collection('reactions');
-        const reactionsSnapshot = await reactionsRef.get();
-        reactionsSnapshot.forEach((reaction) => {
-          if (reaction.data().name == 'discord_classic_reaction') {
-          }
-          if (reaction.data().name == 'discord_success_reaction') {
-          }
-          if (reaction.data().name == 'discord_error_reaction') {
-          }
-          if (reaction.data().name == 'discord_info_reaction') {
-          }
-          if (reaction.data().name == 'discord_warn_reaction') {
-          }
-          if (reaction.data().name == 'mail_action') {
-            mailReaction.send_mail(
-              reaction.data().object,
-              reaction.data().message,
-              reaction.data().receiver,
-            );
-          }
-        });
-      }
-    });
-  }
-
   async determineReaction(request: Request, reactionData: any) {
     const mailReaction = new MailReaction();
     console.log(reactionData);
@@ -486,7 +436,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction);
+                  this.determineReaction(request, reaction.data());
                 });
               }
             }
@@ -517,7 +467,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction);
+                  this.determineReaction(request, reaction.data());
                 });
               }
             }
@@ -548,7 +498,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction);
+                  this.determineReaction(request, reaction.data());
                 });
               }
             }
@@ -579,7 +529,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction);
+                  this.determineReaction(request, reaction.data());
                 });
               }
             }
@@ -610,7 +560,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction);
+                  this.determineReaction(request, reaction.data());
                 });
               }
             }
@@ -641,7 +591,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction);
+                  this.determineReaction(request, reaction.data());
                 });
               }
             }

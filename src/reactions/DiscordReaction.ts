@@ -1,4 +1,5 @@
 import { Client, Intents, TextChannel } from 'discord.js';
+import 'dotenv/config';
 
 class DiscordClient {
   private static discordClient: DiscordClient;
@@ -7,6 +8,7 @@ class DiscordClient {
   private constructor() {
     this.APIClient = new Client({ intents: [Intents.FLAGS.GUILDS] });
     this.APIClient.login(process.env.DISCORD_BOT_TOKEN);
+    console.log(process.env.DISCORD_BOT_TOKEN);
   }
 
   public static get Instance() {
