@@ -12,23 +12,23 @@ export class TwitterReaction {
     });
   }
 
-  public async Tweet(message: string) {
+  async Tweet(message: string) {
     // Tweet
-    this.twitterClient.v2.tweet(message);
+    await this.twitterClient.v2.tweet(message);
   }
 
-  public async Follow(userId: string, targetId: string) {
+  async Follow(userId: string, targetId: string) {
     // Follow
-    this.twitterClient.v2.follow(userId, targetId);
+    await this.twitterClient.v2.follow(userId, targetId);
   }
 
-  public async TwitterReTweet(userId: string, tweetId: string) {
+  async TwitterReTweet(userId: string, tweetId: string) {
     // ReTweet
-    this.twitterClient.v2.retweet(userId, tweetId);
+    await this.twitterClient.v2.retweet(userId, tweetId);
   }
 
-  public async TwitterLike(userId: string, tweetId: string) {
+  async TwitterLike(userId: string, tweetId: string) {
     // Like
-    this.twitterClient.v2.like(userId, tweetId);
+    await this.twitterClient.v2.like(userId, tweetId);
   }
 }
