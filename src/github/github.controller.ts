@@ -431,6 +431,49 @@ export class GithubController {
     });
   }
 
+  async determineReaction(request: Request, reactionData: any) {
+    const discordController = new DiscordController();
+    const mailReaction = new MailReaction();
+    if (reactionData.name == 'discord_classic_reaction') {
+      discordController.executeDiscordClassicReaction(
+        request,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'discord_success_reaction') {
+      console.log(reactionData.name);
+      discordController.executeDiscordSuccessReaction(
+        request,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'discord_error_reaction') {
+      discordController.executeDiscordErrorReaction(
+        request,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'discord_info_reaction') {
+      discordController.executeDiscordInfoReaction(
+        request,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'discord_warn_reaction') {
+      discordController.executeDiscordWarnReaction(
+        request,
+        reactionData.message,
+      );
+    }
+    if (reactionData.name == 'mail_action') {
+      mailReaction.send_mail(
+        reactionData.object,
+        reactionData.message,
+        reactionData.receiver,
+      );
+    }
+  }
+
   @Post('/webhook')
   async ReactGithubWebhook(
     @Headers('X-GitHub-Event') header: any,
@@ -452,8 +495,6 @@ export class GithubController {
           actionSnapshot.forEach(async (doc) => {
             if (doc.data().repoName == repoName) {
               if (doc.data().name == 'github_push') {
-                const discordController = new DiscordController();
-                const mailReaction = new MailReaction();
                 const reactionsRef = Firebase.getInstance()
                   .getDb()
                   .collection('area')
@@ -463,44 +504,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  if (reaction.data().name == 'discord_classic_reaction') {
-                    discordController.executeDiscordClassicReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_success_reaction') {
-                    console.log(reaction.data().name);
-                    discordController.executeDiscordSuccessReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_error_reaction') {
-                    discordController.executeDiscordErrorReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_info_reaction') {
-                    discordController.executeDiscordInfoReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_warn_reaction') {
-                    discordController.executeDiscordWarnReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'mail_action') {
-                    mailReaction.send_mail(
-                      reaction.data().object,
-                      reaction.data().message,
-                      reaction.data().receiver,
-                    );
-                  }
+                  this.determineReaction(request, reaction);
                 });
               }
             }
@@ -522,8 +526,6 @@ export class GithubController {
           actionSnapshot.forEach(async (doc) => {
             if (doc.data().repoName == repoName) {
               if (doc.data().name == 'github_pull_request') {
-                const discordController = new DiscordController();
-                const mailReaction = new MailReaction();
                 const reactionsRef = Firebase.getInstance()
                   .getDb()
                   .collection('area')
@@ -533,44 +535,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  if (reaction.data().name == 'discord_classic_reaction') {
-                    discordController.executeDiscordClassicReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_success_reaction') {
-                    console.log(reaction.data().name);
-                    discordController.executeDiscordSuccessReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_error_reaction') {
-                    discordController.executeDiscordErrorReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_info_reaction') {
-                    discordController.executeDiscordInfoReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_warn_reaction') {
-                    discordController.executeDiscordWarnReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'mail_action') {
-                    mailReaction.send_mail(
-                      reaction.data().object,
-                      reaction.data().message,
-                      reaction.data().receiver,
-                    );
-                  }
+                  this.determineReaction(request, reaction);
                 });
               }
             }
@@ -592,8 +557,6 @@ export class GithubController {
           actionSnapshot.forEach(async (doc) => {
             if (doc.data().repoName == repoName) {
               if (doc.data().name == 'github_issues') {
-                const discordController = new DiscordController();
-                const mailReaction = new MailReaction();
                 const reactionsRef = Firebase.getInstance()
                   .getDb()
                   .collection('area')
@@ -603,44 +566,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  if (reaction.data().name == 'discord_classic_reaction') {
-                    discordController.executeDiscordClassicReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_success_reaction') {
-                    console.log(reaction.data().name);
-                    discordController.executeDiscordSuccessReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_error_reaction') {
-                    discordController.executeDiscordErrorReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_info_reaction') {
-                    discordController.executeDiscordInfoReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_warn_reaction') {
-                    discordController.executeDiscordWarnReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'mail_action') {
-                    mailReaction.send_mail(
-                      reaction.data().object,
-                      reaction.data().message,
-                      reaction.data().receiver,
-                    );
-                  }
+                  this.determineReaction(request, reaction);
                 });
               }
             }
@@ -662,8 +588,6 @@ export class GithubController {
           actionSnapshot.forEach(async (doc) => {
             if (doc.data().repoName == repoName) {
               if (doc.data().name == 'github_issue_comment') {
-                const discordController = new DiscordController();
-                const mailReaction = new MailReaction();
                 const reactionsRef = Firebase.getInstance()
                   .getDb()
                   .collection('area')
@@ -673,44 +597,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  if (reaction.data().name == 'discord_classic_reaction') {
-                    discordController.executeDiscordClassicReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_success_reaction') {
-                    console.log(reaction.data().name);
-                    discordController.executeDiscordSuccessReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_error_reaction') {
-                    discordController.executeDiscordErrorReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_info_reaction') {
-                    discordController.executeDiscordInfoReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_warn_reaction') {
-                    discordController.executeDiscordWarnReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'mail_action') {
-                    mailReaction.send_mail(
-                      reaction.data().object,
-                      reaction.data().message,
-                      reaction.data().receiver,
-                    );
-                  }
+                  this.determineReaction(request, reaction);
                 });
               }
             }
@@ -732,8 +619,6 @@ export class GithubController {
           actionSnapshot.forEach(async (doc) => {
             if (doc.data().repoName == repoName) {
               if (doc.data().name == 'github_label') {
-                const discordController = new DiscordController();
-                const mailReaction = new MailReaction();
                 const reactionsRef = Firebase.getInstance()
                   .getDb()
                   .collection('area')
@@ -743,44 +628,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  if (reaction.data().name == 'discord_classic_reaction') {
-                    discordController.executeDiscordClassicReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_success_reaction') {
-                    console.log(reaction.data().name);
-                    discordController.executeDiscordSuccessReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_error_reaction') {
-                    discordController.executeDiscordErrorReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_info_reaction') {
-                    discordController.executeDiscordInfoReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_warn_reaction') {
-                    discordController.executeDiscordWarnReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'mail_action') {
-                    mailReaction.send_mail(
-                      reaction.data().object,
-                      reaction.data().message,
-                      reaction.data().receiver,
-                    );
-                  }
+                  this.determineReaction(request, reaction);
                 });
               }
             }
@@ -802,8 +650,6 @@ export class GithubController {
           actionSnapshot.forEach(async (doc) => {
             if (doc.data().repoName == repoName) {
               if (doc.data().name == 'github_milestone') {
-                const discordController = new DiscordController();
-                const mailReaction = new MailReaction();
                 const reactionsRef = Firebase.getInstance()
                   .getDb()
                   .collection('area')
@@ -813,44 +659,7 @@ export class GithubController {
                   .collection('reactions');
                 const reactionsSnapshot = await reactionsRef.get();
                 reactionsSnapshot.forEach((reaction) => {
-                  if (reaction.data().name == 'discord_classic_reaction') {
-                    discordController.executeDiscordClassicReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_success_reaction') {
-                    console.log(reaction.data().name);
-                    discordController.executeDiscordSuccessReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_error_reaction') {
-                    discordController.executeDiscordErrorReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_info_reaction') {
-                    discordController.executeDiscordInfoReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'discord_warn_reaction') {
-                    discordController.executeDiscordWarnReaction(
-                      request,
-                      reaction.data().message,
-                    );
-                  }
-                  if (reaction.data().name == 'mail_action') {
-                    mailReaction.send_mail(
-                      reaction.data().object,
-                      reaction.data().message,
-                      reaction.data().receiver,
-                    );
-                  }
+                  this.determineReaction(request, reaction);
                 });
               }
             }
