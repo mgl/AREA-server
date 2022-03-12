@@ -44,7 +44,7 @@ export class AppController {
       servicelist += doc.data().token;
       servicelist += ';';
     });
-    if (servicelist == '') return response.status(200).send('No service found');
+    if (servicelist == '') return response.status(210).send('No service found');
     return response.status(200).send(servicelist);
   }
 
@@ -66,11 +66,15 @@ export class AppController {
       actionlists += ';';
     });
     if (actionlists == '') return response.status(200).send('No service found');
-    return { actionlists };
+    return response.status(200).send(actionlists);
   }
 
   @Get('/reaction_list')
-  async getReactionList(@Req() request: Request, @Headers('id') id: string) {
+  async getReactionList(
+    @Res() response,
+    @Req() request: Request,
+    @Headers('id') id: string,
+  ) {
     let reactionlists = '';
     console.log(id);
     const reactionRef = firebase
@@ -89,8 +93,9 @@ export class AppController {
       reactionlists += doc.data().name;
       reactionlists += ';';
     });
-    if (reactionlists == '') return { message: 'Zero reactions created' };
-    return { reactionlists };
+    if (reactionlists == '')
+      return response.status(200).send('No service found');
+    return response.status(200).send(reactionlists);
   }
 
   @Delete('/profile')
