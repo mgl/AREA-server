@@ -414,189 +414,27 @@ export class GithubController {
   ) {
     switch (header) {
       case 'push': {
-        const repoName = actionContent['repository']['name'];
-        const areaRef = firebase.getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = firebase
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().repoName == repoName) {
-              if (doc.data().name == 'github_push') {
-                const reactionsRef = firebase
-                  .getDb()
-                  .collection('area')
-                  .doc(user.id)
-                  .collection('actions')
-                  .doc(doc.id)
-                  .collection('reactions');
-                const reactionsSnapshot = await reactionsRef.get();
-                reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction.data());
-                });
-              }
-            }
-          });
-        });
+        this.initReaction(request, actionContent, 'github_push');
         break;
       }
       case 'pull_request': {
-        const repoName = actionContent['repository']['name'];
-        const areaRef = firebase.getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = firebase
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().repoName == repoName) {
-              if (doc.data().name == 'github_pull_request') {
-                const reactionsRef = firebase
-                  .getDb()
-                  .collection('area')
-                  .doc(user.id)
-                  .collection('actions')
-                  .doc(doc.id)
-                  .collection('reactions');
-                const reactionsSnapshot = await reactionsRef.get();
-                reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction.data());
-                });
-              }
-            }
-          });
-        });
+        this.initReaction(request, actionContent, 'github_pull_request');
         break;
       }
       case 'issues': {
-        const repoName = actionContent['repository']['name'];
-        const areaRef = firebase.getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = firebase
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().repoName == repoName) {
-              if (doc.data().name == 'github_issues') {
-                const reactionsRef = firebase
-                  .getDb()
-                  .collection('area')
-                  .doc(user.id)
-                  .collection('actions')
-                  .doc(doc.id)
-                  .collection('reactions');
-                const reactionsSnapshot = await reactionsRef.get();
-                reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction.data());
-                });
-              }
-            }
-          });
-        });
+        this.initReaction(request, actionContent, 'github_issues');
         break;
       }
       case 'issue_comment': {
-        const repoName = actionContent['repository']['name'];
-        const areaRef = firebase.getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = firebase
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().repoName == repoName) {
-              if (doc.data().name == 'github_issue_comment') {
-                const reactionsRef = firebase
-                  .getDb()
-                  .collection('area')
-                  .doc(user.id)
-                  .collection('actions')
-                  .doc(doc.id)
-                  .collection('reactions');
-                const reactionsSnapshot = await reactionsRef.get();
-                reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction.data());
-                });
-              }
-            }
-          });
-        });
+        this.initReaction(request, actionContent, 'github_issue_comment');
         break;
       }
       case 'label': {
-        const repoName = actionContent['repository']['name'];
-        const areaRef = firebase.getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = firebase
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().repoName == repoName) {
-              if (doc.data().name == 'github_label') {
-                const reactionsRef = firebase
-                  .getDb()
-                  .collection('area')
-                  .doc(user.id)
-                  .collection('actions')
-                  .doc(doc.id)
-                  .collection('reactions');
-                const reactionsSnapshot = await reactionsRef.get();
-                reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction.data());
-                });
-              }
-            }
-          });
-        });
+        this.initReaction(request, actionContent, 'github_label');
         break;
       }
       case 'milestone': {
-        const repoName = actionContent['repository']['name'];
-        const areaRef = firebase.getDb().collection('area');
-        const areaSnapshot = await areaRef.get();
-        areaSnapshot.forEach(async (user) => {
-          const actionRef = firebase
-            .getDb()
-            .collection('area')
-            .doc(user.id)
-            .collection('actions');
-          const actionSnapshot = await actionRef.get();
-          actionSnapshot.forEach(async (doc) => {
-            if (doc.data().repoName == repoName) {
-              if (doc.data().name == 'github_milestone') {
-                const reactionsRef = firebase
-                  .getDb()
-                  .collection('area')
-                  .doc(user.id)
-                  .collection('actions')
-                  .doc(doc.id)
-                  .collection('reactions');
-                const reactionsSnapshot = await reactionsRef.get();
-                reactionsSnapshot.forEach((reaction) => {
-                  this.determineReaction(request, reaction.data());
-                });
-              }
-            }
-          });
-        });
+        this.initReaction(request, actionContent, 'github_milestone');
         break;
       }
     }
