@@ -8,7 +8,6 @@ import {
   Req,
   Headers,
 } from '@nestjs/common';
-import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 import { Octokit } from '@octokit/rest';
 import Firebase from 'src/firebase/firebase';
@@ -49,7 +48,7 @@ export class GithubController {
     await firebase
       .getDb()
       .collection('area')
-      .doc(request['uid'])
+      .doc()
       .collection('services')
       .doc('github')
       .set(data);

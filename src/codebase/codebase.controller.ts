@@ -1,6 +1,5 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
-import { DiscordController } from 'src/discord/discord.controller';
 import Firebase from '../firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { MailReaction } from '../reactions/MailReaction';

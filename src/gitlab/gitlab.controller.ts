@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from 'src/reactions/DiscordReaction';
-import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 
 const firebase = new Firebase();
