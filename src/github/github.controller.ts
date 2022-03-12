@@ -8,7 +8,6 @@ import {
   Req,
   Headers,
 } from '@nestjs/common';
-import { DiscordController } from '../discord/discord.controller';
 import { MailReaction } from '../reactions/MailReaction';
 import { Octokit } from '@octokit/rest';
 import Firebase from 'src/firebase/firebase';
