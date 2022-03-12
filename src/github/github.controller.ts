@@ -16,6 +16,7 @@ export class GithubController {
   @Post('subscribe')
   async subscribe(@Req() request: Request, @Body('token') token: string) {
     this.githubService.subscribe(request, token);
+    return { message: 'Subscribed to github service' };
   }
 
   @Get('/')

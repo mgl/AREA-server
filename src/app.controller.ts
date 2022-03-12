@@ -43,6 +43,7 @@ export class AppController {
       servicelist += doc.data().token;
       servicelist += ';';
     });
+    if (servicelist == '') return { message: 'Subscribed at zero services' };
     return { servicelist };
   }
 
@@ -63,6 +64,7 @@ export class AppController {
       actionlists += doc.data().name;
       actionlists += ';';
     });
+    if (actionlists == '') return { message: 'Zero actions created' };
     return { actionlists };
   }
 
@@ -86,6 +88,7 @@ export class AppController {
       reactionlists += doc.data().name;
       reactionlists += ';';
     });
+    if (reactionlists == '') return { message: 'Zero reactions created' };
     return { reactionlists };
   }
 
