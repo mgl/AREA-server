@@ -32,8 +32,6 @@ async function bootstrap_local() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
-  DiscordClientInstance.sendMessage('YearEndProject', 'bot-test', 'test');
-
   await app.listen(3000);
 }
 

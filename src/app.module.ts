@@ -10,6 +10,7 @@ import { AppService } from './app.service';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { PreauthMiddleware } from './auth/preauth.middleware';
 import { GithubController } from './github/github.controller';
+import { GithubService } from './github/github.service';
 import { AppController } from './app.controller';
 import { GitlabController } from './gitlab/gitlab.controller';
 import { TwitterController } from './twitter/twitter.controller';
@@ -34,7 +35,7 @@ import { CodebaseController } from './codebase/codebase.controller';
     GoogleController,
     CodebaseController,
   ],
-  providers: [AppService, AboutService],
+  providers: [AppService, AboutService, GithubService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
