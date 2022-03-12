@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Headers,
+  Res,
 } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { AppService } from './app.service';
@@ -29,7 +30,7 @@ export class AppController {
   }
 
   @Get('/service_list')
-  async getServiceList(@Req() request: Request) {
+  async getServiceList(@Res() response, @Req() request: Request) {
     let servicelist = '';
     const serviceRef = await firebase
       .getDb()
@@ -43,12 +44,12 @@ export class AppController {
       servicelist += doc.data().token;
       servicelist += ';';
     });
-    if (servicelist == '') return { message: 'Subscribed at zero services' };
-    return { servicelist };
+    if (servicelist == '') return response.status(200).send('No service found');
+    return response.status(200).send(servicelist);
   }
 
   @Get('/action_list')
-  async getActionList(@Req() request: Request) {
+  async getActionList(@Res() response, @Req() request: Request) {
     let actionlists = '';
     const actionRef = firebase
       .getDb()
@@ -64,7 +65,7 @@ export class AppController {
       actionlists += doc.data().name;
       actionlists += ';';
     });
-    if (actionlists == '') return { message: 'Zero actions created' };
+    if (actionlists == '') return response.status(200).send('No service found');
     return { actionlists };
   }
 
