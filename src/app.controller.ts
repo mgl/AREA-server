@@ -28,11 +28,6 @@ export class AppController {
     return 'Hello ' + request['email'] + ' with uid ' + request['uid'];
   }
 
-  @Get('/profile')
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
   @Get('/service_list')
   async getServiceList(@Req() request: Request) {
     let servicelist = '';
