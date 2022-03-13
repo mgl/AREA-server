@@ -7,55 +7,24 @@ import {
   Get,
   Controller,
 } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
-
-const firebase = new Firebase();
+import { DiscordService } from './discord.service';
 
 @Controller('/services/discord')
 export class DiscordController {
+  constructor(private readonly discordService: DiscordService) {}
   @Post('subscribe')
   async subscribe(@Req() request: Request, @Body('token') token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    const data = {
-      token: token,
-      name: 'discord',
-    };
-    const empty = {};
-    await firebase.getDb().collection('area').doc(request['uid']).set(empty);
-
-    await firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('services')
-      .doc('discord')
-      .set(data);
-    return { message: 'Subscribed to discord service' };
+    this.discordService.subscribe(request, token);
   }
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    const TokenRef = firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('services')
-      .doc('discord');
-    const doc = await TokenRef.get();
-    if (!doc.exists) return { statusCode: '404', message: 'Not found' };
-    return { message: '200' + doc.data() };
+    this.discordService.getToken(request);
   }
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    await firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('services')
-      .doc('discord')
-      .delete();
-    return { message: 'Unsubscribed to discord service' };
+    this.discordService.unsubscribe(request);
   }
 
   @Post('/action')
@@ -64,14 +33,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('token') token: string,
   ) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('actions')
-      .doc()
-      .set({ id: id, token: token, name: 'discord_action' });
+    this.discordService.createDiscordAction(request, id, token);
   }
 
   @Post('/classic_reaction')
@@ -84,37 +46,14 @@ export class DiscordController {
     @Body('server') server: string,
     @Body('channel') channel: string,
   ) {
-    if (!id || id == undefined) return { message: '400 Bad Parameter' };
-    if (!actionId || actionId == undefined)
-      return { message: '400 Bad Parameter' };
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('actions');
-    const userNameSnapshot = await actionRef.get();
-    userNameSnapshot.forEach(async (doc) => {
-      console.log(doc.data().id);
-      console.log(actionId);
-      if (doc.data().id == actionId) {
-        await firebase
-          .getDb()
-          .collection('area')
-          .doc(request['uid'])
-          .collection('actions')
-          .doc(doc.data().userName)
-          .collection('reactions')
-          .doc()
-          .set({
-            id: id,
-            token: token,
-            name: 'discord_classic_reaction',
-            message: message,
-            server: server,
-            channel: channel,
-          });
-      }
-    });
+    this.discordService.createDiscordClassicReaction(
+      request,
+      id,
+      actionId,
+      token,
+      message,
+      server,
+      channel,
+    );
   }
 }
