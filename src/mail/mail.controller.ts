@@ -1,54 +1,23 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
-import { MailReaction } from '../reactions/MailReaction';
+import { MailService } from './mail.service';
 
-const firebase = new Firebase();
 @Controller('/services/mail')
 export class MailController {
+  constructor(private readonly mailService: MailService) {}
   @Post('subscribe')
   async subscribe(@Req() request: Request, @Body('token') token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    const data = {
-      name: 'mail',
-      token: token,
-    };
-    const empty = {};
-    await firebase.getDb().collection('area').doc(request['uid']).set(empty);
-
-    await firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('services')
-      .doc('mail')
-      .set(data);
-    return { message: 'Subscribed to mail service' };
+    return this.mailService.subscribe(request, token);
   }
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    const TokenRef = firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('services')
-      .doc('mail');
-    const doc = await TokenRef.get();
-    if (!doc.exists) return { statusCode: '404', message: 'Not found' };
-    return { message: '200' + doc.data() };
+    return this.mailService.getToken(request);
   }
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    await firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('services')
-      .doc('mail')
-      .delete();
-    return { message: 'Unsubscribed to mail service' };
+    return this.mailService.unsubscribe(request);
   }
 
   @Post('/action')
@@ -57,14 +26,7 @@ export class MailController {
     @Body('id') id: string,
     @Body() token: string,
   ) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    await firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('actions')
-      .doc()
-      .set({ id: id, token: token, name: 'mail_action' });
+    return this.mailService.createMailAction(request, id, token);
   }
 
   @Post('/reaction')
@@ -77,38 +39,17 @@ export class MailController {
     @Body('content') content: string,
     @Body('reiceiver') reicever: string,
   ) {
-    if (!id || id == undefined) return { message: '400 Bad Parameter' };
-    if (!actionId || actionId == undefined)
-      return { message: '400 Bad Parameter' };
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
-    const actionRef = firebase
-      .getDb()
-      .collection('area')
-      .doc(request['uid'])
-      .collection('actions');
-    const userNameSnapshot = await actionRef.get();
-    userNameSnapshot.forEach(async (doc) => {
-      console.log(doc.data());
-      if (doc.data().userName == actionId) {
-        await firebase
-          .getDb()
-          .collection('area')
-          .doc(request['uid'])
-          .collection('actions')
-          .doc(doc.data().userName)
-          .collection('reactions')
-          .doc()
-          .set({
-            id: id,
-            token: token,
-            name: 'mail_reaction',
-            object: object,
-            content: content,
-            reicever: reicever,
-          });
-      }
-    });
+    return this.mailService.createMailReaction(
+      request,
+      id,
+      actionId,
+      object,
+      token,
+      content,
+      reicever,
+    );
   }
+
   @Post('/execute_mail_reaction')
   async executeMailReaction(
     @Req() request: Request,
@@ -116,8 +57,11 @@ export class MailController {
     @Body('content') content: string,
     @Body('reiceiver') reicever: string,
   ) {
-    const mailReaction = new MailReaction();
-
-    mailReaction.send_mail(object, content, reicever);
+    return this.mailService.executeMailReaction(
+      request,
+      object,
+      content,
+      reicever,
+    );
   }
 }
