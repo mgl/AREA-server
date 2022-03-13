@@ -6,11 +6,12 @@ const firebase = new Firebase();
 
 @Injectable()
 export class MailService {
-  async subscribe(request: any, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async subscribe(request: any, mail: string, password: string) {
+    if (!mail || mail === undefined) return { message: '400 Bad Parameter' };
     const data = {
       name: 'mail',
-      token: token,
+      mail: mail,
+      password: password,
     };
     const empty = {};
     await firebase.getDb().collection('area').doc(request['uid']).set(empty);

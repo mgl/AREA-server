@@ -6,8 +6,12 @@ import { MailService } from './mail.service';
 export class MailController {
   constructor(private readonly mailService: MailService) {}
   @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: string) {
-    return this.mailService.subscribe(request, token);
+  async subscribe(
+    @Req() request: Request,
+    @Body('mail') mail: string,
+    @Body('password') password: string,
+  ) {
+    return this.mailService.subscribe(request, mail, password);
   }
 
   @Get('/')

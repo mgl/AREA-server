@@ -8,18 +8,9 @@ export class TwitterController {
   @Post('subscribe')
   async subscribe(
     @Req() request: Request,
-    @Body('appKey') appKey: string,
-    @Body('appSecret') appSecret: string,
     @Body('accessToken') accessToken: string,
-    @Body('accessSecret') accessSecret: string,
   ) {
-    return this.twitterService.subscribe(
-      request,
-      appKey,
-      appSecret,
-      accessToken,
-      accessSecret,
-    );
+    return this.twitterService.subscribe(request, accessToken);
   }
 
   @Get('/')

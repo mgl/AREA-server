@@ -126,6 +126,7 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
+    console.log(authToken);
     await firebase
       .getDb()
       .collection('area')

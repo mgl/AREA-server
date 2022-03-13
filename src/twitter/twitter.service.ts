@@ -5,19 +5,7 @@ const firebase = new Firebase();
 
 @Injectable()
 export class TwitterService {
-  async subscribe(
-    request: any,
-    appKey: string,
-    appSecret: string,
-    accessToken: string,
-    accessSecret: string,
-  ) {
-    if (!appKey || appKey === undefined)
-      return { message: '400 Bad Parameter' };
-    if (!appSecret || appSecret === undefined)
-      return { message: '400 Bad Parameter' };
-    if (!accessSecret || accessSecret === undefined)
-      return { message: '400 Bad Parameter' };
+  async subscribe(request: any, accessToken: string) {
     if (!accessToken || accessToken === undefined)
       return { message: '400 Bad Parameter' };
 
@@ -26,11 +14,7 @@ export class TwitterService {
 
     const data = {
       name: 'twitter',
-      token: accessToken,
-      appKey: appKey,
-      appSecret: appSecret,
       accessToken: accessToken,
-      accessSecret: accessSecret,
     };
 
     await firebase
