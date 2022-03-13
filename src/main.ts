@@ -47,7 +47,7 @@ const bootstrap = async (expressInstance) => {
   app.use(compression());
   app.useGlobalPipes(new ValidationPipe());
 
-  DiscordClientInstance.sendMessage('YearEndProject', 'bot-test', 'test');
+  DiscordClientInstance.sendMessage('', '', '');
 
   return app.init();
 };

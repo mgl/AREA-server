@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 'lts/*'
       
-      - run: npm ci
+      - run: npm install --production
   
       - uses: jsdaniell/create-json@1.1.2
         id: create-config-json
