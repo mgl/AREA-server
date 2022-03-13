@@ -20,6 +20,8 @@ export class DiscordController {
       token: token,
       name: 'discord',
     };
+    const empty = {};
+    await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
     await firebase
       .getDb()
@@ -93,6 +95,8 @@ export class DiscordController {
       .collection('actions');
     const userNameSnapshot = await actionRef.get();
     userNameSnapshot.forEach(async (doc) => {
+      console.log(doc.data().id);
+      console.log(actionId);
       if (doc.data().id == actionId) {
         await firebase
           .getDb()

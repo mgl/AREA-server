@@ -22,6 +22,9 @@ export class TwitterController {
     if (!accessToken || accessToken === undefined)
       return { message: '400 Bad Parameter' };
 
+    const empty = {};
+    await firebase.getDb().collection('area').doc(request['uid']).set(empty);
+
     const data = {
       name: 'twitter',
       token: accessToken,

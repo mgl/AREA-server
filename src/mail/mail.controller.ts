@@ -13,6 +13,8 @@ export class MailController {
       name: 'mail',
       token: token,
     };
+    const empty = {};
+    await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
     await firebase
       .getDb()

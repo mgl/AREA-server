@@ -26,17 +26,20 @@ export class GithubService {
       },
     });
   }
-  async subscribe(_request: any, token: string) {
+
+  async subscribe(request: any, token: string) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     const data = {
       name: 'github',
       token: token,
     };
+    const empty = {};
+    await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
     await firebase
       .getDb()
       .collection('area')
-      .doc()
+      .doc(request['uid'])
       .collection('services')
       .doc('github')
       .set(data);

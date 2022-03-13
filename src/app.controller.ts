@@ -44,7 +44,7 @@ export class AppController {
       servicelist += doc.data().token;
       servicelist += ';';
     });
-    if (servicelist == '') return response.status(210).send('No service found');
+    if (servicelist == '') return response.status(200).send('No service found');
     return response.status(200).send(servicelist);
   }
 
@@ -65,7 +65,7 @@ export class AppController {
       actionlists += doc.data().name;
       actionlists += ';';
     });
-    if (actionlists == '') return response.status(200).send('No service found');
+    if (actionlists == '') return 'Putai';
     return response.status(200).send(actionlists);
   }
 
