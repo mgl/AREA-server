@@ -344,7 +344,6 @@ export class GithubService {
 
   async determineReaction(_request: any, reactionData: any) {
     const mailReaction = new MailReaction();
-    console.log(reactionData);
     if (reactionData.name == 'discord_classic_reaction') {
       DiscordClientInstance.sendMessage(
         reactionData.server,
