@@ -1,29 +1,12 @@
-FROM node:lts as builder
-
-ENV NODE_ENV build
-
-WORKDIR /app
-
-COPY . /app
-
-RUN npm ci \
-    && npm run build \
-    && npm prune --production
-
-# ---
-
-FROM node:lts-alpine
-
-RUN apk -U upgrade
-
-ENV NODE_ENV docker
+FROM node:lts
+ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY --from=builder /app/package*.json /app/
-COPY --from=builder /app/node_modules/ /app/node_modules/
-COPY --from=builder /app/dist/ /app/dist/
+COPY ["package.json", "package-lock.json*", "./"]
 
-EXPOSE 3000
+RUN npm install --production
 
-CMD ["node", "dist/main.js"]
+COPY . .
+
+CMD [ "node", "dist/main.js" ]
