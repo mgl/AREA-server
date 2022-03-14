@@ -42,7 +42,7 @@ jobs:
           ^DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 
       - name: GitHub Action for Firebase
-        uses: w9jds/firebase-action@v2.0.0
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions
         env:
