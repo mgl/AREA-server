@@ -78,15 +78,13 @@ export class DiscordService {
       .collection('actions');
     const userNameSnapshot = await actionRef.get();
     userNameSnapshot.forEach(async (doc) => {
-      console.log(doc.data().id);
-      console.log(actionId);
       if (doc.data().id == actionId) {
         await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
           .collection('actions')
-          .doc(doc.data().userName)
+          .doc(doc.data().id)
           .collection('reactions')
           .doc()
           .set({

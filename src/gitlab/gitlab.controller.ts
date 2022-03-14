@@ -8,10 +8,7 @@ import {
   Req,
   Headers,
 } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
 import { GitlabService } from './gitlab.service';
-
-const firebase = new Firebase();
 
 @Controller('/services/gitlab')
 export class GitlabController {

@@ -1,6 +1,5 @@
 import Firebase from 'src/firebase/firebase';
 import { Injectable } from '@nestjs/common';
-import { MailReaction } from '../reactions/MailReaction';
 
 const firebase = new Firebase();
 
@@ -73,12 +72,22 @@ export class MailService {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    let email = '';
     const actionRef = firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
       .collection('actions');
     const userNameSnapshot = await actionRef.get();
+    const serviceRef = firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('services');
+    const servicesSnapshot = await serviceRef.get();
+    servicesSnapshot.forEach(async (doc) => {
+      if (doc.data().name == 'mail') email = doc.data().name;
+    });
     userNameSnapshot.forEach(async (doc) => {
       if (doc.data().userName == actionId) {
         console.log(doc.data());
@@ -97,19 +106,9 @@ export class MailService {
             object: object,
             content: content,
             receiver: receiver,
+            sender: email,
           });
       }
     });
-  }
-
-  async executeMailReaction(
-    request: any,
-    object: string,
-    content: string,
-    receiver: string,
-  ) {
-    const mailReaction = new MailReaction();
-
-    mailReaction.send_mail(object, content, receiver);
   }
 }

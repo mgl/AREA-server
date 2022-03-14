@@ -53,19 +53,4 @@ export class MailController {
       receiver,
     );
   }
-
-  @Post('/execute_mail_reaction')
-  async executeMailReaction(
-    @Req() request: Request,
-    @Body('object') object: string,
-    @Body('content') content: string,
-    @Body('receiver') receiver: string,
-  ) {
-    return this.mailService.executeMailReaction(
-      request,
-      object,
-      content,
-      receiver,
-    );
-  }
 }

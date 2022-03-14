@@ -91,7 +91,7 @@ export class GithubService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(userName)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -132,7 +132,7 @@ export class GithubService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(userName)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -172,7 +172,7 @@ export class GithubService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(userName)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -213,7 +213,7 @@ export class GithubService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(userName)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -254,7 +254,7 @@ export class GithubService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(userName)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -294,7 +294,7 @@ export class GithubService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(userName)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -335,7 +335,7 @@ export class GithubService {
           .collection('area')
           .doc(request['uid'])
           .collection('actions')
-          .doc(doc.data().userName)
+          .doc(doc.data().id)
           .collection('reactions')
           .doc()
           .set({ id: id, token: token, name: 'github_reaction' });
@@ -357,6 +357,7 @@ export class GithubService {
         reactionData.object,
         reactionData.content,
         reactionData.receiver,
+        reactionData.sender,
       );
     }
   }

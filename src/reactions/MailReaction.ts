@@ -13,10 +13,15 @@ export class MailReaction {
     });
   }
 
-  async send_mail(object: string, content: string, receiver: string) {
+  async send_mail(
+    object: string,
+    content: string,
+    receiver: string,
+    sender: string,
+  ) {
     if (content != '') {
       const info = await this.transporter.sendMail({
-        from: '"SmartHears" <smarthears@gmail.com>',
+        from: sender,
         to: receiver,
         subject: object,
         text: content,
@@ -24,7 +29,7 @@ export class MailReaction {
       console.log('Message sent: %s', info.messageId);
     } else {
       const info = await this.transporter.sendMail({
-        from: '"SmartHears" <smarthears@gmail.com>',
+        from: sender,
         to: receiver,
         subject: object,
         html: '<h2>Précomandez SmartHears dès maintenant!<h2> <img src="cid:SmartHears"/>',

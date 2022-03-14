@@ -101,8 +101,13 @@ export class GitlabService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(repoId)
-      .set({ id: id, token: token, name: 'gitlab_push_events' });
+      .doc(id)
+      .set({
+        id: id,
+        token: token,
+        name: 'gitlab_push_events',
+        repoId: repoId,
+      });
 
     this.create_webhook_gitlab(
       repoId,
@@ -134,8 +139,13 @@ export class GitlabService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(repoId)
-      .set({ id: id, token: token, name: 'gitlab_wiki_page_events' });
+      .doc(id)
+      .set({
+        id: id,
+        token: token,
+        name: 'gitlab_wiki_page_events',
+        repoId: repoId,
+      });
 
     this.create_webhook_gitlab(
       repoId,
@@ -167,8 +177,13 @@ export class GitlabService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(repoId)
-      .set({ id: id, token: token, name: 'gitlab_note_events' });
+      .doc(id)
+      .set({
+        id: id,
+        token: token,
+        name: 'gitlab_note_events',
+        repoId: repoId,
+      });
 
     this.create_webhook_gitlab(
       repoId,
@@ -201,7 +216,12 @@ export class GitlabService {
       .doc(request['uid'])
       .collection('actions')
       .doc(repoId)
-      .set({ id: id, token: token, name: 'gitlab_merge_requests_events' });
+      .set({
+        id: id,
+        token: token,
+        name: 'gitlab_merge_requests_events',
+        repoId: repoId,
+      });
 
     this.create_webhook_gitlab(
       repoId,
@@ -214,17 +234,19 @@ export class GitlabService {
   async determineReaction(request: Request, reactionData: any) {
     const mailReaction = new MailReaction();
     if (reactionData.name == 'discord_classic_reaction') {
+      console.log(reactionData.name);
       DiscordClientInstance.sendMessage(
         reactionData.server,
         reactionData.channel,
         reactionData.message,
       );
     }
-    if (reactionData.name == 'mail_action') {
+    if (reactionData.name == 'mail_reaction') {
       mailReaction.send_mail(
         reactionData.object,
         reactionData.message,
         reactionData.receiver,
+        reactionData.sender,
       );
     }
   }
@@ -274,7 +296,7 @@ export class GitlabService {
             .collection('reactions')
             .get();
           reactionsSnapshot.forEach((reaction) => {
-            this.determineReaction(request, reaction);
+            this.determineReaction(request, reaction.data());
           });
         }
       });
