@@ -17,18 +17,22 @@ export class TwitterReaction {
     await this.twitterClient.v2.tweet(message);
   }
 
-  async Follow(userId: string, targetId: string) {
+  async Follow(targetName: string) {
     // Follow
-    await this.twitterClient.v2.follow(userId, targetId);
+    const id = (await this.twitterClient.v2.userByUsername(targetName)).data.id;
+		const me = (await this.twitterClient.v2.me()).data.id;
+    await this.twitterClient.v2.follow(me, id);
   }
 
-  async TwitterReTweet(userId: string, tweetId: string) {
+  async TwitterReTweet(tweetId: string) {
     // ReTweet
-    await this.twitterClient.v2.retweet(userId, tweetId);
+		const me = (await this.twitterClient.v2.me()).data.id;
+    await this.twitterClient.v2.retweet(me, tweetId);
   }
 
-  async TwitterLike(userId: string, tweetId: string) {
+  async TwitterLike(tweetId: string) {
     // Like
-    await this.twitterClient.v2.like(userId, tweetId);
+		const me = (await this.twitterClient.v2.me()).data.id;
+    await this.twitterClient.v2.like(me, tweetId);
   }
 }
