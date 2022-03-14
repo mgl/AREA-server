@@ -27,6 +27,15 @@ jobs:
           name: 'serviceAccount.json'
           json: '{"type": "${{ secrets.TYPE }}","auth_uri": "${{ secrets.AUTH_URI }}","auth_provider_x509_cert_url": "${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}","private_key_id": "${{ secrets.PRIVATE_KEY_ID }}","project_id": "${{ secrets.PROJECT_ID }}","private_key": "${{ secrets.PRIVATE_KEY }}","token_uri": "${{ secrets.TOKEN_URI }}", "client_email": "${{ secrets.CLIENT_EMAIL }}","client_x509_cert_url": "${{ secrets.CLIENT_X509_CERT_URL }}","client_id": "${{ secrets.CLIENT_ID }}"}'
           dir: '.'
+      
+      - name: Create .env.production
+        uses: weyheyhey/create-dotenv-action@v1
+        with:
+          wildecard: "^"
+          filename: ".env"
+        env:
+          ^DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          ^ENV_TWO: ${{ secrets.ENV_TWO }}
 
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v2.0.0
