@@ -1,4 +1,3 @@
-import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -45,7 +44,6 @@ const bootstrap = async (expressInstance) => {
   app.use(cookieParser());
   app.enableCors();
   app.use(compression());
-  app.useGlobalPipes(new ValidationPipe());
 
   DiscordClientInstance.sendMessage('', '', '');
 
@@ -56,6 +54,5 @@ if (process.env.NODE_ENV === 'docker') {
   bootstrap_local();
 } else {
   bootstrap(server);
+  exports.api = functions.region('europe-west1').https.onRequest(server);
 }
-
-export const api = functions.region('europe-west1').https.onRequest(server);
