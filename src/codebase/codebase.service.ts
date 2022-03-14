@@ -56,7 +56,7 @@ export class CodebaseService {
       .doc(request['uid'])
       .collection('actions')
       .doc()
-      .set({ id: id, token: token, name: 'ebase_merge_request' });
+      .set({ id: id, token: token, name: 'codebase_merge_request' });
   }
 
   async codebasePush(request: any, id: string, token: string) {
@@ -66,7 +66,7 @@ export class CodebaseService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(id)
       .set({ id: id, token: token, name: 'codebase_push' });
   }
 

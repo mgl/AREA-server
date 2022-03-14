@@ -89,14 +89,14 @@ export class MailService {
       if (doc.data().name == 'mail') email = doc.data().name;
     });
     userNameSnapshot.forEach(async (doc) => {
-      if (doc.data().userName == actionId) {
+      if (doc.data().id == actionId) {
         console.log(doc.data());
         await firebase
           .getDb()
           .collection('area')
           .doc(request['uid'])
           .collection('actions')
-          .doc(doc.data().userName)
+          .doc(doc.data().id)
           .collection('reactions')
           .doc()
           .set({
