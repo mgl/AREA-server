@@ -55,7 +55,7 @@ export class CodebaseService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(id)
       .set({ id: id, token: token, name: 'codebase_merge_request' });
   }
 
@@ -88,7 +88,7 @@ export class CodebaseService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(id)
       .set({ id: id, token: token, name: 'codebase_ticket_update' });
   }
 
@@ -99,7 +99,7 @@ export class CodebaseService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(id)
       .set({ id: id, token: token, name: 'codebase_wiki_page_hook' });
   }
 
