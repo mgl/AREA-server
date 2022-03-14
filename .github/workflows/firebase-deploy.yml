@@ -13,11 +13,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      
-      - uses: actions/setup-node@v2
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
         with:
-          node-version: 'lts/*'
+          name: dist
+          path: dist
+  
+    env_setup:
+      runs_on: ubuntu 
+    steps:
+      - uses: actions/checkout@v2
   
       - uses: jsdaniell/create-json@1.1.2
         id: create-config-json
@@ -35,6 +46,8 @@ jobs:
           ^DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           ^ENV_TWO: ${{ secrets.ENV_TWO }}
 
+    deploy:
+      runs-on: ubuntu-latest
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v2.0.0
         with:
