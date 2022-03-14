@@ -67,7 +67,7 @@ export class MailService {
     object: string,
     token: string,
     content: string,
-    reicever: string,
+    receiver: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -80,8 +80,8 @@ export class MailService {
       .collection('actions');
     const userNameSnapshot = await actionRef.get();
     userNameSnapshot.forEach(async (doc) => {
-      console.log(doc.data());
       if (doc.data().userName == actionId) {
+        console.log(doc.data());
         await firebase
           .getDb()
           .collection('area')
@@ -96,7 +96,7 @@ export class MailService {
             name: 'mail_reaction',
             object: object,
             content: content,
-            reicever: reicever,
+            receiver: receiver,
           });
       }
     });
@@ -106,10 +106,10 @@ export class MailService {
     request: any,
     object: string,
     content: string,
-    reicever: string,
+    receiver: string,
   ) {
     const mailReaction = new MailReaction();
 
-    mailReaction.send_mail(object, content, reicever);
+    mailReaction.send_mail(object, content, receiver);
   }
 }

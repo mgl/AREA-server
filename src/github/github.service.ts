@@ -352,10 +352,10 @@ export class GithubService {
         reactionData.message,
       );
     }
-    if (reactionData.name == 'mail_action') {
+    if (reactionData.name == 'mail_reaction') {
       mailReaction.send_mail(
         reactionData.object,
-        reactionData.message,
+        reactionData.content,
         reactionData.receiver,
       );
     }

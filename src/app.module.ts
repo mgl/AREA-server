@@ -20,7 +20,7 @@ import { AppController } from './app.controller';
 import { GitlabController } from './gitlab/gitlab.controller';
 import { TwitterController } from './twitter/twitter.controller';
 import { DiscordController } from './discord/discord.controller';
-import { GoogleController } from './google/google.controller';
+import { MailController } from './mail/mail.controller';
 import { CodebaseController } from './codebase/codebase.controller';
 
 @Module({
@@ -37,7 +37,7 @@ import { CodebaseController } from './codebase/codebase.controller';
     GitlabController,
     TwitterController,
     DiscordController,
-    GoogleController,
+    MailController,
     CodebaseController,
   ],
   providers: [

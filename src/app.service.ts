@@ -42,7 +42,7 @@ export class AppService {
       actionlists += doc.data().name;
       actionlists += ';';
     });
-    if (actionlists == '') return 'Putai';
+    if (actionlists == '') return response.status(200).send('No service found');
     return response.status(200).send(actionlists);
   }
 

@@ -41,7 +41,7 @@ export class MailController {
     @Body('object') object: string,
     @Body('token') token: string,
     @Body('content') content: string,
-    @Body('reiceiver') reicever: string,
+    @Body('receiver') receiver: string,
   ) {
     return this.mailService.createMailReaction(
       request,
@@ -50,7 +50,7 @@ export class MailController {
       object,
       token,
       content,
-      reicever,
+      receiver,
     );
   }
 
@@ -59,13 +59,13 @@ export class MailController {
     @Req() request: Request,
     @Body('object') object: string,
     @Body('content') content: string,
-    @Body('reiceiver') reicever: string,
+    @Body('receiver') receiver: string,
   ) {
     return this.mailService.executeMailReaction(
       request,
       object,
       content,
-      reicever,
+      receiver,
     );
   }
 }
