@@ -18,8 +18,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
-      
-      - run: npm install --production
   
       - uses: jsdaniell/create-json@1.1.2
         id: create-config-json
