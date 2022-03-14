@@ -54,5 +54,5 @@ if (process.env.NODE_ENV === 'docker') {
   bootstrap_local();
 } else {
   bootstrap(server);
-  functions.region('europe-west1').https.onRequest(server);
+  exports.api = functions.region('europe-west1').https.onRequest(server);
 }
