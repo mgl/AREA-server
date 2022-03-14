@@ -27,7 +27,7 @@ jobs:
   
     env_setup:
       runs_on: ubuntu 
-    steps:
+      steps:
       - uses: actions/checkout@v2
   
       - uses: jsdaniell/create-json@1.1.2
