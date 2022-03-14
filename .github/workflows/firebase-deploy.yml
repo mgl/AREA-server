@@ -41,8 +41,6 @@ jobs:
         env:
           ^DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 
-      - name: Checkout Repo
-        uses: actions/checkout@master
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@master
         with:
