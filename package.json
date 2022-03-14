@@ -38,6 +38,7 @@
     "cookie-parser": "^1.4.6",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
+    "firebase": "^9.6.8",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.18.1",
     "helmet": "^5.0.2",
