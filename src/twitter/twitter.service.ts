@@ -61,11 +61,12 @@ export class TwitterService {
       .set({ id: id, token: token, name: 'twitter_action' });
   }
 
-  async createTwitterReaction(
+  async createTwitterTweet(
     request: any,
     id: string,
     actionId: string,
     token: string,
+    message: string,
   ) {
     if (!id || id == undefined) return { message: '400 Bad Parameter' };
     if (!actionId || actionId == undefined)
@@ -79,6 +80,86 @@ export class TwitterService {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({ id: id, token: token, name: 'twitter_reaction' });
+      .set({
+        id: id,
+        token: token,
+        name: 'twitter_reaction',
+        message: message,
+      });
+  }
+
+  async createTwitterFollow(
+    request: any,
+    id: string,
+    actionId: string,
+    token: string,
+    user: string,
+  ) {
+    if (!id || id == undefined) return { message: '400 Bad Parameter' };
+    if (!actionId || actionId == undefined)
+      return { message: '400 Bad Parameter' };
+    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc(actionId)
+      .collection('reactions')
+      .doc()
+      .set({ id: id, token: token, name: 'twitter_reaction', user: user });
+  }
+
+  async createTwitterRetweet(
+    request: any,
+    id: string,
+    actionId: string,
+    token: string,
+    tweetId: string,
+  ) {
+    if (!id || id == undefined) return { message: '400 Bad Parameter' };
+    if (!actionId || actionId == undefined)
+      return { message: '400 Bad Parameter' };
+    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc(actionId)
+      .collection('reactions')
+      .doc()
+      .set({
+        id: id,
+        token: token,
+        name: 'twitter_reaction',
+        tweetId: tweetId,
+      });
+  }
+  async createTwitterLike(
+    request: any,
+    id: string,
+    actionId: string,
+    token: string,
+    tweetId: string,
+  ) {
+    if (!id || id == undefined) return { message: '400 Bad Parameter' };
+    if (!actionId || actionId == undefined)
+      return { message: '400 Bad Parameter' };
+    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc(actionId)
+      .collection('reactions')
+      .doc()
+      .set({
+        id: id,
+        token: token,
+        name: 'twitter_reaction',
+        tweetId: tweetId,
+      });
   }
 }
