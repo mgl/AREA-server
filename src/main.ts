@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
-import * as functions from 'firebase-functions';
+import functions from 'firebase-functions';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { DiscordClientInstance } from './reactions/DiscordReaction';
