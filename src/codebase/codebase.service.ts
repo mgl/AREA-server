@@ -224,7 +224,7 @@ export class CodebaseService {
         reactionData.accessToken,
         reactionData.accessSecret,
       );
-      twitterReaction.Tweet(reactionData.user);
+      twitterReaction.Follow(reactionData.user);
     }
     if (reactionData.name == 'twitter_retweet') {
       const twitterReaction = new TwitterReaction(
@@ -233,7 +233,7 @@ export class CodebaseService {
         reactionData.accessToken,
         reactionData.accessSecret,
       );
-      twitterReaction.Tweet(reactionData.tweetId);
+      twitterReaction.TwitterReTweet(reactionData.tweetId);
     }
     if (reactionData.name == 'twitter_like') {
       const twitterReaction = new TwitterReaction(
@@ -242,7 +242,7 @@ export class CodebaseService {
         reactionData.accessToken,
         reactionData.accessSecret,
       );
-      twitterReaction.Tweet(reactionData.tweetId);
+      twitterReaction.TwitterLike(reactionData.tweetId);
     }
   }
 
@@ -259,7 +259,7 @@ export class CodebaseService {
             .collection('reactions')
             .get();
           reactionsSnapshot.forEach((reaction) => {
-            this.determineReaction(request, reaction);
+            this.determineReaction(request, reaction.data());
           });
         }
       });
