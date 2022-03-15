@@ -17,7 +17,7 @@ export class MailService {
       .doc(request['uid'])
       .collection('services')
       .doc('mail')
-      .set({ name: 'mail', mail: mail, password: password });
+      .set({ name: 'mail', mail: mail, password: password, token: 'token' });
     return { message: 'Subscribed to mail service' };
   }
 

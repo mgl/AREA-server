@@ -14,7 +14,7 @@ export class TwitterService {
 
     const data = {
       name: 'twitter',
-      accessToken: accessToken,
+      token: accessToken,
     };
 
     await firebase
