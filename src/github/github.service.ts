@@ -3,6 +3,7 @@ import { Body, Injectable } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
+import { TwitterReaction } from '../reactions/TwitterReaction';
 
 const firebase = new Firebase();
 
@@ -365,6 +366,24 @@ export class GithubService {
         reactionData.receiver,
         reactionData.sender,
       );
+    }
+    const twitterReaction = new TwitterReaction(
+      reactionData.appKeyToken,
+      reactionData.appSecret,
+      reactionData.accessToken,
+      reactionData.accessSecret,
+    );
+    if (reactionData.name == 'twitter_tweet') {
+      twitterReaction.Tweet(reactionData.message);
+    }
+    if (reactionData.name == 'twitter_follow') {
+      twitterReaction.Tweet(reactionData.user);
+    }
+    if (reactionData.name == 'twitter_retweet') {
+      twitterReaction.Tweet(reactionData.tweetId);
+    }
+    if (reactionData.name == 'twitter_like') {
+      twitterReaction.Tweet(reactionData.tweetId);
     }
   }
 

@@ -2,6 +2,7 @@ import { MailReaction } from '../reactions/MailReaction';
 import { Injectable } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
+import { TwitterReaction } from 'src/reactions/TwitterReaction';
 
 const firebase = new Firebase();
 
@@ -291,6 +292,24 @@ export class GitlabService {
         reactionData.receiver,
         reactionData.sender,
       );
+    }
+    const twitterReaction = new TwitterReaction(
+      reactionData.appKeyToken,
+      reactionData.appSecret,
+      reactionData.accessToken,
+      reactionData.accessSecret,
+    );
+    if (reactionData.name == 'twitter_tweet') {
+      twitterReaction.Tweet(reactionData.message);
+    }
+    if (reactionData.name == 'twitter_follow') {
+      twitterReaction.Tweet(reactionData.user);
+    }
+    if (reactionData.name == 'twitter_retweet') {
+      twitterReaction.Tweet(reactionData.tweetId);
+    }
+    if (reactionData.name == 'twitter_like') {
+      twitterReaction.Tweet(reactionData.tweetId);
     }
   }
 

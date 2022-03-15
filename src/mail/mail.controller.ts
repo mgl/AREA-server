@@ -8,8 +8,8 @@ export class MailController {
   @Post('subscribe')
   async subscribe(
     @Req() request: Request,
-    @Body('mail') mail: string,
-    @Body('password') password: string,
+    @Body('username') mail: string,
+    @Body('appPassword') password: string,
   ) {
     return this.mailService.subscribe(request, mail, password);
   }
@@ -33,7 +33,7 @@ export class MailController {
     return this.mailService.createMailAction(request, id, token);
   }
 
-  @Post('/reaction')
+  @Post('/reaction/mail')
   async createMailReaction(
     @Req() request: Request,
     @Body('id') id: string,

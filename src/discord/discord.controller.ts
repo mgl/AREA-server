@@ -36,7 +36,7 @@ export class DiscordController {
     return this.discordService.createDiscordAction(request, id, token);
   }
 
-  @Post('/classic_reaction')
+  @Post('/reaction/message')
   async createDiscordClassicReaction(
     @Req() request: Request,
     @Body('id') id: string,

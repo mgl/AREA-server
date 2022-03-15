@@ -5,7 +5,13 @@ const firebase = new Firebase();
 
 @Injectable()
 export class TwitterService {
-  async subscribe(request: any, accessToken: string) {
+  async subscribe(
+    request: any,
+    accessToken: string,
+    accessPassword: string,
+    appKeyToken: string,
+    appPassword: string,
+  ) {
     if (!accessToken || accessToken === undefined)
       return { message: '400 Bad Parameter' };
 
@@ -15,6 +21,9 @@ export class TwitterService {
     const data = {
       name: 'twitter',
       token: accessToken,
+      accessSecret: accessPassword,
+      appKeyToken: appKeyToken,
+      appSecret: appPassword,
     };
 
     await firebase
@@ -72,6 +81,24 @@ export class TwitterService {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    let accessToken = '';
+    let accessSecret = '';
+    let appKeyToken = '';
+    let appSecret = '';
+    const serviceRef = firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('services');
+    const servicesSnapshot = await serviceRef.get();
+    servicesSnapshot.forEach(async (doc) => {
+      if (doc.data().name == 'twitter') {
+        accessToken = doc.data().token;
+        accessSecret = doc.data().accessSecret;
+        appKeyToken = doc.data().appKeyToken;
+        appSecret = doc.data().appSecret;
+      }
+    });
     await firebase
       .getDb()
       .collection('area')
@@ -85,6 +112,10 @@ export class TwitterService {
         token: token,
         name: 'twitter_tweet',
         message: message,
+        accessToken: accessToken,
+        accessSecret: accessSecret,
+        appKeyToken: appKeyToken,
+        appSecret: appSecret,
       });
     return { message: 'Twitter tweet action created' };
   }
@@ -100,6 +131,24 @@ export class TwitterService {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    let accessToken = '';
+    let accessSecret = '';
+    let appKeyToken = '';
+    let appSecret = '';
+    const serviceRef = firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('services');
+    const servicesSnapshot = await serviceRef.get();
+    servicesSnapshot.forEach(async (doc) => {
+      if (doc.data().name == 'twitter') {
+        accessToken = doc.data().token;
+        accessSecret = doc.data().accessSecret;
+        appKeyToken = doc.data().appKeyToken;
+        appSecret = doc.data().appSecret;
+      }
+    });
     await firebase
       .getDb()
       .collection('area')
@@ -108,7 +157,16 @@ export class TwitterService {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({ id: id, token: token, name: 'twitter_follow', user: user });
+      .set({
+        id: id,
+        token: token,
+        name: 'twitter_follow',
+        user: user,
+        accessToken: accessToken,
+        accessSecret: accessSecret,
+        appKeyToken: appKeyToken,
+        appSecret: appSecret,
+      });
     return { message: 'Twitter follow action created' };
   }
 
@@ -123,6 +181,24 @@ export class TwitterService {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    let accessToken = '';
+    let accessSecret = '';
+    let appKeyToken = '';
+    let appSecret = '';
+    const serviceRef = firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('services');
+    const servicesSnapshot = await serviceRef.get();
+    servicesSnapshot.forEach(async (doc) => {
+      if (doc.data().name == 'twitter') {
+        accessToken = doc.data().token;
+        accessSecret = doc.data().accessSecret;
+        appKeyToken = doc.data().appKeyToken;
+        appSecret = doc.data().appSecret;
+      }
+    });
     await firebase
       .getDb()
       .collection('area')
@@ -136,6 +212,10 @@ export class TwitterService {
         token: token,
         name: 'twitter_retweet',
         tweetId: tweetId,
+        accessToken: accessToken,
+        accessSecret: accessSecret,
+        appKeyToken: appKeyToken,
+        appSecret: appSecret,
       });
     return { message: 'Twitter retweet action created' };
   }
@@ -150,6 +230,24 @@ export class TwitterService {
     if (!actionId || actionId == undefined)
       return { message: '400 Bad Parameter' };
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    let accessToken = '';
+    let accessSecret = '';
+    let appKeyToken = '';
+    let appSecret = '';
+    const serviceRef = firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('services');
+    const servicesSnapshot = await serviceRef.get();
+    servicesSnapshot.forEach(async (doc) => {
+      if (doc.data().name == 'twitter') {
+        accessToken = doc.data().token;
+        accessSecret = doc.data().accessSecret;
+        appKeyToken = doc.data().appKeyToken;
+        appSecret = doc.data().appSecret;
+      }
+    });
     await firebase
       .getDb()
       .collection('area')
@@ -163,6 +261,10 @@ export class TwitterService {
         token: token,
         name: 'twitter_like',
         tweetId: tweetId,
+        accessToken: accessToken,
+        accessSecret: accessSecret,
+        appKeyToken: appKeyToken,
+        appSecret: appSecret,
       });
     return { message: 'Twitter like action created' };
   }

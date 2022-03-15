@@ -9,8 +9,17 @@ export class TwitterController {
   async subscribe(
     @Req() request: Request,
     @Body('accessToken') accessToken: string,
+    @Body('accessPassword') accessPassword: string,
+    @Body('appKeyToken') appKeyToken: string,
+    @Body('appPassword') appPassword: string,
   ) {
-    return this.twitterService.subscribe(request, accessToken);
+    return this.twitterService.subscribe(
+      request,
+      accessToken,
+      accessPassword,
+      appKeyToken,
+      appPassword,
+    );
   }
 
   @Get('/')
@@ -32,7 +41,7 @@ export class TwitterController {
     return this.twitterService.createTwitterAction(request, id, token);
   }
 
-  @Post('/tweet')
+  @Post('/reaction/tweet')
   async createTwitterTweet(
     @Req() request: Request,
     @Body('id') id: string,
@@ -49,7 +58,7 @@ export class TwitterController {
     );
   }
 
-  @Post('/follow')
+  @Post('/reaction/follow')
   async createTwitterFollow(
     @Req() request: Request,
     @Body('id') id: string,
@@ -66,7 +75,7 @@ export class TwitterController {
     );
   }
 
-  @Post('/retweet')
+  @Post('/reaction/retweet')
   async createTwitterRetweet(
     @Req() request: Request,
     @Body('id') id: string,
@@ -82,7 +91,7 @@ export class TwitterController {
       tweetId,
     );
   }
-  @Post('/like')
+  @Post('/reaction/like')
   async createTwitterLike(
     @Req() request: Request,
     @Body('id') id: string,
