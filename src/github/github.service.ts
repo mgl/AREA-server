@@ -367,22 +367,41 @@ export class GithubService {
         reactionData.sender,
       );
     }
-    const twitterReaction = new TwitterReaction(
-      reactionData.appKeyToken,
-      reactionData.appSecret,
-      reactionData.accessToken,
-      reactionData.accessSecret,
-    );
     if (reactionData.name == 'twitter_tweet') {
+      const twitterReaction = new TwitterReaction(
+        reactionData.appKeyToken,
+        reactionData.appSecret,
+        reactionData.accessToken,
+        reactionData.accessSecret,
+      );
       twitterReaction.Tweet(reactionData.message);
     }
+
     if (reactionData.name == 'twitter_follow') {
+      const twitterReaction = new TwitterReaction(
+        reactionData.appKeyToken,
+        reactionData.appSecret,
+        reactionData.accessToken,
+        reactionData.accessSecret,
+      );
       twitterReaction.Tweet(reactionData.user);
     }
     if (reactionData.name == 'twitter_retweet') {
+      const twitterReaction = new TwitterReaction(
+        reactionData.appKeyToken,
+        reactionData.appSecret,
+        reactionData.accessToken,
+        reactionData.accessSecret,
+      );
       twitterReaction.Tweet(reactionData.tweetId);
     }
     if (reactionData.name == 'twitter_like') {
+      const twitterReaction = new TwitterReaction(
+        reactionData.appKeyToken,
+        reactionData.appSecret,
+        reactionData.accessToken,
+        reactionData.accessSecret,
+      );
       twitterReaction.Tweet(reactionData.tweetId);
     }
   }
