@@ -13,9 +13,11 @@ export default class Firebase {
     }
     Firebase.instance = this;
 
-    initializeApp({
-      credential: applicationDefault(),
-    });
+    if (process.env.NODE_ENV === 'docker') {
+      initializeApp({ credential: applicationDefault() });
+    } else {
+      initializeApp();
+    }
     this.db = getFirestore();
     this.auth = getAuth();
   }
