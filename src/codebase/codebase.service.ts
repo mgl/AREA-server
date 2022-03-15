@@ -259,7 +259,7 @@ export class CodebaseService {
             .collection('reactions')
             .get();
           reactionsSnapshot.forEach((reaction) => {
-            this.determineReaction(request, reaction);
+            this.determineReaction(request, reaction.data());
           });
         }
       });

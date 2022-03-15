@@ -41,7 +41,7 @@ export class CodebaseController {
     @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
-    @Body() token: string,
+    @Body('token') token: string,
   ) {
     return this.codebaseService.codebasePush(res, request, id, token);
   }
@@ -51,7 +51,7 @@ export class CodebaseController {
     @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
-    @Body() token: string,
+    @Body('token') token: string,
   ) {
     return this.codebaseService.codebaseTicketCreation(res, request, id, token);
   }
@@ -61,7 +61,7 @@ export class CodebaseController {
     @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
-    @Body() token: string,
+    @Body('token') token: string,
   ) {
     return this.codebaseService.codebaseTicketUpdate(res, request, id, token);
   }
@@ -71,7 +71,7 @@ export class CodebaseController {
     @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
-    @Body() token: string,
+    @Body('token') token: string,
   ) {
     return this.codebaseService.codebaseWikiPageHook(res, request, id, token);
   }
@@ -104,6 +104,10 @@ export class CodebaseController {
       }
       case 'ticket_update': {
         this.codebaseService.initReaction(request, 'codebase_ticket_update');
+        break;
+      }
+      case 'ticket_creation': {
+        this.codebaseService.initReaction(request, 'codebase_ticket_creation');
         break;
       }
       case 'Wiki Page Hook': {
