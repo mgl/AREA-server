@@ -1,5 +1,5 @@
 import { MailReaction } from '../reactions/MailReaction';
-import { Body, Injectable } from '@nestjs/common';
+import { Body, Injectable, Request } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
@@ -28,7 +28,7 @@ export class GithubService {
     });
   }
 
-  async subscribe(request: any, token: string) {
+  async subscribe(request: Request, token: string) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     const data = {
       name: 'github',
@@ -47,7 +47,7 @@ export class GithubService {
     return { message: 'Subscribed to github service' };
   }
 
-  async getToken(request: any) {
+  async getToken(request: Request) {
     const TokenRef = firebase
       .getDb()
       .collection('area')
@@ -58,7 +58,7 @@ export class GithubService {
     if (!doc.exists) return { statusCode: '404', message: 'Not found' };
     return { message: '200' + doc.data() };
   }
-  async unsubscribe(request: any) {
+  async unsubscribe(request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -70,7 +70,7 @@ export class GithubService {
   }
 
   async createGithubPushAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     userName: string,
@@ -112,7 +112,7 @@ export class GithubService {
   }
 
   async createGithubPullRequestAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     userName: string,
@@ -153,7 +153,7 @@ export class GithubService {
     );
   }
   async createGithubIssuesAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     userName: string,
@@ -195,7 +195,7 @@ export class GithubService {
   }
 
   async createGithubIssueCommentAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     userName: string,
@@ -237,7 +237,7 @@ export class GithubService {
   }
 
   async createGithubLabelAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     userName: string,
@@ -278,7 +278,7 @@ export class GithubService {
   }
 
   async createGithubMilestoneAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     userName: string,
@@ -320,7 +320,7 @@ export class GithubService {
   }
 
   async createGithubReaction(
-    request: any,
+    request: Request,
     id: string,
     @Body('actionId') actionId: string,
     token: string,
@@ -350,7 +350,7 @@ export class GithubService {
     });
   }
 
-  async determineReaction(_request: any, reactionData: any) {
+  async determineReaction(_request: Request, reactionData: any) {
     const mailReaction = new MailReaction();
     if (reactionData.name == 'discord_classic_reaction') {
       DiscordClientInstance.sendMessage(
@@ -387,7 +387,7 @@ export class GithubService {
     }
   }
 
-  async initReaction(request: any, actionContent: any, name: string) {
+  async initReaction(request: Request, actionContent: any, name: string) {
     const repoName = actionContent['repository']['name'];
     const areaRef = firebase.getDb().collection('area');
     const areaSnapshot = await areaRef.get();

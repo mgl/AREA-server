@@ -1,5 +1,6 @@
-FROM node:lts
-ENV NODE_ENV=production
+FROM node:lts-alpine
+
+ENV NODE_ENV=docker
 
 WORKDIR /app
 
@@ -7,6 +8,10 @@ COPY ["package.json", "package-lock.json*", "./"]
 
 RUN npm install --production
 
+RUN npm install -g @nestjs/cli
+
 COPY . .
 
-CMD [ "node", "dist/main.js" ]
+RUN nest build
+
+CMD [ "npm", "run", "nest:start:prod" ]

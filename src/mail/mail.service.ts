@@ -5,7 +5,7 @@ const firebase = new Firebase();
 
 @Injectable()
 export class MailService {
-  async subscribe(request: any, mail: string, password: string) {
+  async subscribe(request: Request, mail: string, password: string) {
     if (!mail || mail === undefined) return { message: '400 Bad Parameter' };
 
     const empty = {};
@@ -21,7 +21,7 @@ export class MailService {
     return { message: 'Subscribed to mail service' };
   }
 
-  async getToken(request: any) {
+  async getToken(request: Request) {
     const TokenRef = firebase
       .getDb()
       .collection('area')
@@ -33,7 +33,7 @@ export class MailService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: any) {
+  async unsubscribe(request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -44,7 +44,7 @@ export class MailService {
     return { message: 'Unsubscribed to mail service' };
   }
 
-  async createMailAction(request: any, id: string, token: string) {
+  async createMailAction(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -57,7 +57,7 @@ export class MailService {
   }
 
   async createMailReaction(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     object: string,
