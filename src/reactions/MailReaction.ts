@@ -5,7 +5,7 @@ export class MailReaction {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: process.env.MAILER_TRANSPORT_SERVICE,
+      service: 'gmail',
       auth: {
         user: process.env.MAILER_AUTH_USER,
         pass: process.env.MAILER_AUTH_PASSWORD,
