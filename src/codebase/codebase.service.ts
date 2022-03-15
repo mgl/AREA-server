@@ -1,5 +1,5 @@
 import { MailReaction } from '../reactions/MailReaction';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Request } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
@@ -8,7 +8,7 @@ const firebase = new Firebase();
 
 @Injectable()
 export class CodebaseService {
-  async subscribe(request: any, token: string, userName: string) {
+  async subscribe(request: Request, token: string, userName: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     const empty = {};
     await firebase.getDb().collection('area').doc(request['uid']).set(empty);
@@ -23,7 +23,7 @@ export class CodebaseService {
     return { message: 'Subscribed to codebase service' };
   }
 
-  async getToken(request: any) {
+  async getToken(request: Request) {
     const TokenRef = firebase
       .getDb()
       .collection('area')
@@ -35,7 +35,7 @@ export class CodebaseService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: any) {
+  async unsubscribe(request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -46,7 +46,7 @@ export class CodebaseService {
     return { message: 'Unsubscribed to codebase service' };
   }
 
-  async codebaseMergeRequest(request: any, id: string, token: string) {
+  async codebaseMergeRequest(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -58,7 +58,7 @@ export class CodebaseService {
     return { message: 'Codebase merge request action created' };
   }
 
-  async codebasePush(request: any, id: string, token: string) {
+  async codebasePush(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -70,7 +70,7 @@ export class CodebaseService {
     return { message: 'Codebase push action created' };
   }
 
-  async codebaseTicketCreation(request: any, id: string, token: string) {
+  async codebaseTicketCreation(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -82,7 +82,7 @@ export class CodebaseService {
     return { message: 'Codebase ticket creation action created' };
   }
 
-  async codebaseTicketUpdate(request: any, id: string, token: string) {
+  async codebaseTicketUpdate(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -94,7 +94,7 @@ export class CodebaseService {
     return { message: 'Codebase ticket update action created' };
   }
 
-  async codebaseWikiPageHook(request: any, id: string, token: string) {
+  async codebaseWikiPageHook(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -107,7 +107,7 @@ export class CodebaseService {
   }
 
   async createCodebaseReaction(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,
@@ -127,7 +127,7 @@ export class CodebaseService {
       .set({ id: id, token: token, name: 'codebase_reaction' });
   }
 
-  async determineReaction(request: any, reactionData: any) {
+  async determineReaction(_request: Request, reactionData: any) {
     const mailReaction = new MailReaction();
     if (reactionData.name == 'discord_classic_reaction') {
       DiscordClientInstance.sendMessage(
@@ -183,7 +183,7 @@ export class CodebaseService {
     }
   }
 
-  async initReaction(request: any, name: string) {
+  async initReaction(request: Request, name: string) {
     const areaRef = firebase.getDb().collection('area');
     const areaSnapshot = await areaRef.get();
     areaSnapshot.forEach(async (user) => {

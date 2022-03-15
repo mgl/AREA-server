@@ -38,7 +38,7 @@ export class GitlabService {
     xhr.send(JSON.stringify(params));
   }
 
-  async subscribe(request: any, token: string) {
+  async subscribe(request: Request, token: string) {
     if (!token || token == undefined) return { message: '400 Bad Parameter' };
     const data = {
       name: 'gitlab',
@@ -57,7 +57,7 @@ export class GitlabService {
     return { message: 'Subscribed to gitlab service' };
   }
 
-  async getToken(request: any) {
+  async getToken(request: Request) {
     const TokenRef = firebase
       .getDb()
       .collection('area')
@@ -69,7 +69,7 @@ export class GitlabService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: any) {
+  async unsubscribe(request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -81,7 +81,7 @@ export class GitlabService {
   }
 
   async createGitlabPushEventsAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     repoId: string,
@@ -120,7 +120,7 @@ export class GitlabService {
   }
 
   async createGitlabIssueAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     repoId: string,
@@ -159,7 +159,7 @@ export class GitlabService {
   }
 
   async createWikiPageEventsAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     repoId: string,
@@ -198,7 +198,7 @@ export class GitlabService {
   }
 
   async createNoteEventsAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     repoId: string,
@@ -237,7 +237,7 @@ export class GitlabService {
   }
 
   async createMergeRequestsEventsAction(
-    request: any,
+    request: Request,
     id: string,
     token: string,
     repoId: string,
@@ -341,7 +341,7 @@ export class GitlabService {
   }
 
   async createGitlabReaction(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,
@@ -372,7 +372,7 @@ export class GitlabService {
     });
   }
 
-  async initReaction(request: any, name: string) {
+  async initReaction(request: Request, name: string) {
     const areaRef = firebase.getDb().collection('area');
     const areaSnapshot = await areaRef.get();
     areaSnapshot.forEach(async (user) => {

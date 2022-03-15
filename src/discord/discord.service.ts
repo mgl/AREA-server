@@ -1,11 +1,11 @@
 import Firebase from 'src/firebase/firebase';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Request } from '@nestjs/common';
 
 const firebase = new Firebase();
 
 @Injectable()
 export class DiscordService {
-  async subscribe(request: any, token: string) {
+  async subscribe(request: Request, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     const data = {
       token: token,
@@ -24,7 +24,7 @@ export class DiscordService {
     return { message: 'Subscribed to discord service' };
   }
 
-  async getToken(request: any) {
+  async getToken(request: Request) {
     const TokenRef = firebase
       .getDb()
       .collection('area')
@@ -36,7 +36,7 @@ export class DiscordService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: any) {
+  async unsubscribe(request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -47,7 +47,7 @@ export class DiscordService {
     return { message: 'Unsubscribed to discord service' };
   }
 
-  async createDiscordAction(request: any, id: string, token: string) {
+  async createDiscordAction(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -59,7 +59,7 @@ export class DiscordService {
   }
 
   async createDiscordClassicReaction(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,

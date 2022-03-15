@@ -6,7 +6,7 @@ const firebase = new Firebase();
 @Injectable()
 export class TwitterService {
   async subscribe(
-    request: any,
+    request: Request,
     accessToken: string,
     accessPassword: string,
     appKeyToken: string,
@@ -36,7 +36,7 @@ export class TwitterService {
     return { message: 'Subscribed to twitter service' };
   }
 
-  async getToken(request: any) {
+  async getToken(request: Request) {
     const TokenRef = firebase
       .getDb()
       .collection('area')
@@ -48,7 +48,7 @@ export class TwitterService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: any) {
+  async unsubscribe(request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -59,7 +59,7 @@ export class TwitterService {
     return { message: 'Unsubscribed to twitter service' };
   }
 
-  async createTwitterAction(request: any, id: string, token: string) {
+  async createTwitterAction(request: Request, id: string, token: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
     await firebase
       .getDb()
@@ -71,7 +71,7 @@ export class TwitterService {
   }
 
   async createTwitterTweet(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,
@@ -121,7 +121,7 @@ export class TwitterService {
   }
 
   async createTwitterFollow(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,
@@ -171,7 +171,7 @@ export class TwitterService {
   }
 
   async createTwitterRetweet(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,
@@ -220,7 +220,7 @@ export class TwitterService {
     return { message: 'Twitter retweet action created' };
   }
   async createTwitterLike(
-    request: any,
+    request: Request,
     id: string,
     actionId: string,
     token: string,

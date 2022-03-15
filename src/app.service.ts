@@ -8,6 +8,7 @@ export class AppService {
   getHello(): string {
     return 'Application Server API';
   }
+
   async getServiceList(response, request: Request) {
     let servicelist = '';
     const serviceRef = await firebase
