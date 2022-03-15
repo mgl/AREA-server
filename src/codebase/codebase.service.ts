@@ -1,15 +1,26 @@
 import { MailReaction } from '../reactions/MailReaction';
-import { Injectable, Request } from '@nestjs/common';
+import { HttpStatus, Injectable, Request } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
+import { Response } from 'express';
 
 const firebase = new Firebase();
 
 @Injectable()
 export class CodebaseService {
-  async subscribe(request: Request, token: string, userName: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async subscribe(
+    res: Response,
+    request: Request,
+    token: string,
+    userName: string,
+  ) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
     const empty = {};
     await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
@@ -20,7 +31,7 @@ export class CodebaseService {
       .collection('services')
       .doc('codebase')
       .set({ name: 'Codebase', token: token, userName: userName });
-    return { message: 'Subscribed to codebase service' };
+    return res.status(201).send('Subscribe to codebase service');
   }
 
   async getToken(request: Request) {
@@ -46,8 +57,18 @@ export class CodebaseService {
     return { message: 'Unsubscribed to codebase service' };
   }
 
-  async codebaseMergeRequest(request: Request, id: string, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async codebaseMergeRequest(
+    res: Response,
+    request: Request,
+    id: string,
+    token: string,
+  ) {
+    if (!token || token === undefined) {
+      return res.status(HttpStatus.BAD_REQUEST).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(HttpStatus.BAD_REQUEST).send('Invalid Id');
+    }
     await firebase
       .getDb()
       .collection('area')
@@ -55,11 +76,21 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_merge_request' });
-    return { message: 'Codebase merge request action created' };
+    return res.status(201).send('Codebase merge request action created');
   }
 
-  async codebasePush(request: Request, id: string, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async codebasePush(
+    res: Response,
+    request: Request,
+    id: string,
+    token: string,
+  ) {
+    if (!token || token === undefined) {
+      return res.status(HttpStatus.BAD_REQUEST).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid Id');
+    }
     await firebase
       .getDb()
       .collection('area')
@@ -67,11 +98,21 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_push' });
-    return { message: 'Codebase push action created' };
+    return res.status(201).send('Codebase push action created');
   }
 
-  async codebaseTicketCreation(request: Request, id: string, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async codebaseTicketCreation(
+    res: Response,
+    request: Request,
+    id: string,
+    token: string,
+  ) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid Id');
+    }
     await firebase
       .getDb()
       .collection('area')
@@ -79,11 +120,21 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_ticket_creation' });
-    return { message: 'Codebase ticket creation action created' };
+    return res.status(201).send('Codebase ticket creation action created');
   }
 
-  async codebaseTicketUpdate(request: Request, id: string, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async codebaseTicketUpdate(
+    res: Response,
+    request: Request,
+    id: string,
+    token: string,
+  ) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid Id');
+    }
     await firebase
       .getDb()
       .collection('area')
@@ -91,11 +142,21 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_ticket_update' });
-    return { message: 'Codebase ticket update action created' };
+    return res.status(201).send('Codebase ticket update action created');
   }
 
-  async codebaseWikiPageHook(request: Request, id: string, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async codebaseWikiPageHook(
+    res: Response,
+    request: Request,
+    id: string,
+    token: string,
+  ) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid Id');
+    }
     await firebase
       .getDb()
       .collection('area')
@@ -103,7 +164,9 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_wiki_page_hook' });
-    return { message: 'Codebase wiki page hook action created' };
+    return res
+      .status(201)
+      .send('Codebase ticket wiki page hook action created');
   }
 
   async createCodebaseReaction(

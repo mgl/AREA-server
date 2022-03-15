@@ -1,4 +1,4 @@
-import { Get } from '@nestjs/common';
+import { Get, Res } from '@nestjs/common';
 import {
   Controller,
   Request,
@@ -9,13 +9,18 @@ import {
   Headers,
 } from '@nestjs/common';
 import { GithubService } from './github.service';
+import { Response } from 'express';
 
 @Controller('/services/github')
 export class GithubController {
   constructor(private readonly githubService: GithubService) {}
   @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: string) {
-    this.githubService.subscribe(request, token);
+  async subscribe(
+    @Res() res: Response,
+    @Req() request: Request,
+    @Body('token') token: string,
+  ) {
+    this.githubService.subscribe(res, request, token);
     return { message: 'Subscribed to github service' };
   }
 
@@ -25,12 +30,13 @@ export class GithubController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe(@Req() request: Request) {
-    return this.githubService.unsubscribe(request);
+  async unsubscribe(@Res() res: Response, @Req() request: Request) {
+    return this.githubService.unsubscribe(res, request);
   }
 
   @Post('/action/push')
   async createGithubPushAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
@@ -38,6 +44,7 @@ export class GithubController {
     @Body('repoName') repoName: string,
   ) {
     return this.githubService.createGithubPushAction(
+      res,
       request,
       id,
       token,
@@ -48,6 +55,7 @@ export class GithubController {
 
   @Post('/action/pull_request')
   async createGithubPullRequestAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
@@ -55,6 +63,7 @@ export class GithubController {
     @Body('repoName') repoName: string,
   ) {
     return this.githubService.createGithubPullRequestAction(
+      res,
       request,
       id,
       token,
@@ -65,6 +74,7 @@ export class GithubController {
 
   @Post('/action/issues')
   async createGithubIssuesAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
@@ -72,6 +82,7 @@ export class GithubController {
     @Body('repoName') repoName: string,
   ) {
     return this.githubService.createGithubIssuesAction(
+      res,
       request,
       id,
       token,
@@ -82,6 +93,7 @@ export class GithubController {
 
   @Post('/action/issue_comment')
   async createGithubIssueCommentAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
@@ -89,6 +101,7 @@ export class GithubController {
     @Body('repoName') repoName: string,
   ) {
     return this.githubService.createGithubIssueCommentAction(
+      res,
       request,
       id,
       token,
@@ -99,6 +112,7 @@ export class GithubController {
 
   @Post('/action/label')
   async createGithubLabelAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
@@ -106,6 +120,7 @@ export class GithubController {
     @Body('repoName') repoName: string,
   ) {
     return this.githubService.createGithubLabelAction(
+      res,
       request,
       id,
       token,
@@ -116,6 +131,7 @@ export class GithubController {
 
   @Post('/action/milestone')
   async createGithubMilestoneAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
@@ -123,6 +139,7 @@ export class GithubController {
     @Body('repoName') repoName: string,
   ) {
     return this.githubService.createGithubIssuesAction(
+      res,
       request,
       id,
       token,

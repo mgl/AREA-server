@@ -4,6 +4,7 @@ import { Octokit } from '@octokit/rest';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from '../reactions/TwitterReaction';
+import { Response } from 'express';
 
 const firebase = new Firebase();
 
@@ -28,8 +29,10 @@ export class GithubService {
     });
   }
 
-  async subscribe(request: Request, token: string) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+  async subscribe(res: Response, request: Request, token: string) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
     const data = {
       name: 'github',
       token: token,
@@ -44,7 +47,7 @@ export class GithubService {
       .collection('services')
       .doc('github')
       .set(data);
-    return { message: 'Subscribed to github service' };
+    return res.status(201).send('Subscribe to github service');
   }
 
   async getToken(request: Request) {
@@ -58,7 +61,7 @@ export class GithubService {
     if (!doc.exists) return { statusCode: '404', message: 'Not found' };
     return { message: '200' + doc.data() };
   }
-  async unsubscribe(request: Request) {
+  async unsubscribe(res: Response, request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -66,17 +69,29 @@ export class GithubService {
       .collection('services')
       .doc('github')
       .delete();
-    return { message: 'Unsubscribed to github service' };
+    return res.status(201).send('Unsubscribe to github service');
   }
 
   async createGithubPushAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     userName: string,
     repoName: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
+    if (!repoName || repoName === undefined) {
+      return res.status(400).send('Invalid repository name');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -108,17 +123,29 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
-    return { message: 'Github puh action created' };
+    return res.status(201).send('Github push action created');
   }
 
   async createGithubPullRequestAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     userName: string,
     repoName: string,
   ) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
+    if (!repoName || repoName === undefined) {
+      return res.status(400).send('Invalid repository name');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -151,15 +178,29 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
+    return res.status(201).send('Github pull request action created');
   }
+
   async createGithubIssuesAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     userName: string,
     repoName: string,
   ) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
+    if (!repoName || repoName === undefined) {
+      return res.status(400).send('Invalid repository name');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -191,17 +232,29 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
-    return { message: 'Github issues action created' };
+    return res.status(201).send('Github issue action created');
   }
 
   async createGithubIssueCommentAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     userName: string,
     repoName: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
+    if (!repoName || repoName === undefined) {
+      return res.status(400).send('Invalid repository name');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -233,17 +286,29 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
-    return { message: 'Github issue comment action created' };
+    return res.status(201).send('Github issue comment action created');
   }
 
   async createGithubLabelAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     userName: string,
     repoName: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
+    if (!repoName || repoName === undefined) {
+      return res.status(400).send('Invalid repository name');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -274,17 +339,29 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
-    return { message: 'Github label action created' };
+    return res.status(201).send('Github label action created');
   }
 
   async createGithubMilestoneAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     userName: string,
     repoName: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!userName || userName === undefined) {
+      return res.status(400).send('Invalid username');
+    }
+    if (!repoName || repoName === undefined) {
+      return res.status(400).send('Invalid repository name');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -316,7 +393,7 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
-    return { message: 'Github milestone action created' };
+    return res.status(201).send('Github milestone action created');
   }
 
   async createGithubReaction(

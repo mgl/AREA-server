@@ -1,12 +1,14 @@
-import { Get } from '@nestjs/common';
+import { Get, Res } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
 import { TwitterService } from './twitter.service';
+import { Response } from 'express';
 
 @Controller('/services/twitter')
 export class TwitterController {
   constructor(private readonly twitterService: TwitterService) {}
   @Post('subscribe')
   async subscribe(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('accessToken') accessToken: string,
     @Body('accessPassword') accessPassword: string,
@@ -14,6 +16,7 @@ export class TwitterController {
     @Body('appPassword') appPassword: string,
   ) {
     return this.twitterService.subscribe(
+      res,
       request,
       accessToken,
       accessPassword,
@@ -28,8 +31,8 @@ export class TwitterController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe(@Req() request: Request) {
-    return this.twitterService.unsubscribe(request);
+  async unsubscribe(@Res() res: Response, @Req() request: Request) {
+    return this.twitterService.unsubscribe(res, request);
   }
 
   @Post('/action')
@@ -43,6 +46,7 @@ export class TwitterController {
 
   @Post('/reaction/tweet')
   async createTwitterTweet(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
@@ -50,6 +54,7 @@ export class TwitterController {
     @Body('message') message: string,
   ) {
     return this.twitterService.createTwitterTweet(
+      res,
       request,
       id,
       actionId,
@@ -60,6 +65,7 @@ export class TwitterController {
 
   @Post('/reaction/follow')
   async createTwitterFollow(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
@@ -67,6 +73,7 @@ export class TwitterController {
     @Body('user') user: string,
   ) {
     return this.twitterService.createTwitterFollow(
+      res,
       request,
       id,
       actionId,
@@ -77,6 +84,7 @@ export class TwitterController {
 
   @Post('/reaction/retweet')
   async createTwitterRetweet(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
@@ -84,6 +92,7 @@ export class TwitterController {
     @Body('tweetId') tweetId: string,
   ) {
     return this.twitterService.createTwitterRetweet(
+      res,
       request,
       id,
       actionId,
@@ -93,6 +102,7 @@ export class TwitterController {
   }
   @Post('/reaction/like')
   async createTwitterLike(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
@@ -100,6 +110,7 @@ export class TwitterController {
     @Body('tweetId') tweetId: string,
   ) {
     return this.twitterService.createTwitterLike(
+      res,
       request,
       id,
       actionId,

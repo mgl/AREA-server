@@ -1,4 +1,4 @@
-import { Get } from '@nestjs/common';
+import { Get, Res } from '@nestjs/common';
 import {
   Controller,
   Request,
@@ -9,13 +9,18 @@ import {
   Headers,
 } from '@nestjs/common';
 import { GitlabService } from './gitlab.service';
+import { Response } from 'express';
 
 @Controller('/services/gitlab')
 export class GitlabController {
   constructor(private readonly gitlabService: GitlabService) {}
   @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: string) {
-    return this.gitlabService.subscribe(request, token);
+  async subscribe(
+    @Res() res: Response,
+    @Req() request: Request,
+    @Body('token') token: string,
+  ) {
+    return this.gitlabService.subscribe(res, request, token);
   }
 
   @Get('/')
@@ -24,18 +29,20 @@ export class GitlabController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe(@Req() request: Request) {
-    return this.gitlabService.unsubscribe(request);
+  async unsubscribe(@Res() res: Response, @Req() request: Request) {
+    return this.gitlabService.unsubscribe(res, request);
   }
 
   @Post('/action/push_events')
   async createGitlabPushEventsAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
     @Body('repoId') repoId: string,
   ) {
     return this.gitlabService.createGitlabPushEventsAction(
+      res,
       request,
       id,
       token,
@@ -45,12 +52,14 @@ export class GitlabController {
 
   @Post('/action/wiki_page_events')
   async createWikiPageEventsAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
     @Body('repoId') repoId: string,
   ) {
     return this.gitlabService.createWikiPageEventsAction(
+      res,
       request,
       id,
       token,
@@ -60,12 +69,14 @@ export class GitlabController {
 
   @Post('/action/note_events')
   async createNoteEventsAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
     @Body('repoId') repoId: string,
   ) {
     return this.gitlabService.createNoteEventsAction(
+      res,
       request,
       id,
       token,
@@ -75,12 +86,14 @@ export class GitlabController {
 
   @Post('/action/issue')
   async createIssueEventsAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
     @Body('repoId') repoId: string,
   ) {
     return this.gitlabService.createGitlabIssueAction(
+      res,
       request,
       id,
       token,
@@ -90,12 +103,14 @@ export class GitlabController {
 
   @Post('/action/merge_requests_events')
   async createMergeRequestsEventsAction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('token') token: string,
     @Body('repoId') repoId: string,
   ) {
     return this.gitlabService.createMergeRequestsEventsAction(
+      res,
       request,
       id,
       token,

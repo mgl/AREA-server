@@ -6,15 +6,21 @@ import {
   Req,
   Get,
   Controller,
+  Res,
 } from '@nestjs/common';
 import { DiscordService } from './discord.service';
+import { Response } from 'express';
 
 @Controller('/services/discord')
 export class DiscordController {
   constructor(private readonly discordService: DiscordService) {}
   @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: string) {
-    return this.discordService.subscribe(request, token);
+  async subscribe(
+    @Res() res: Response,
+    @Req() request: Request,
+    @Body('token') token: string,
+  ) {
+    return this.discordService.subscribe(res, request, token);
   }
 
   @Get('/')
@@ -23,8 +29,8 @@ export class DiscordController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe(@Req() request: Request) {
-    return this.discordService.unsubscribe(request);
+  async unsubscribe(@Res() res: Response, @Req() request: Request) {
+    return this.discordService.unsubscribe(res, request);
   }
 
   @Post('/action')
@@ -38,6 +44,7 @@ export class DiscordController {
 
   @Post('/reaction/message')
   async createDiscordClassicReaction(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body('actionId') actionId: string,
@@ -47,6 +54,7 @@ export class DiscordController {
     @Body('channel') channel: string,
   ) {
     return this.discordService.createDiscordClassicReaction(
+      res,
       request,
       id,
       actionId,

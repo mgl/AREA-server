@@ -1,13 +1,23 @@
 import Firebase from 'src/firebase/firebase';
 import { Injectable } from '@nestjs/common';
+import { Response } from 'express';
 
 const firebase = new Firebase();
 
 @Injectable()
 export class MailService {
-  async subscribe(request: Request, mail: string, password: string) {
-    if (!mail || mail === undefined) return { message: '400 Bad Parameter' };
-
+  async subscribe(
+    res: Response,
+    request: Request,
+    mail: string,
+    password: string,
+  ) {
+    if (!mail || mail === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!password || password === undefined) {
+      return res.status(400).send('Invalid token');
+    }
     const empty = {};
     await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
@@ -18,7 +28,7 @@ export class MailService {
       .collection('services')
       .doc('mail')
       .set({ name: 'mail', mail: mail, password: password, token: 'token' });
-    return { message: 'Subscribed to mail service' };
+    return res.status(201).send('Subscribe to mail service');
   }
 
   async getToken(request: Request) {
@@ -33,7 +43,7 @@ export class MailService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: Request) {
+  async unsubscribe(res: Response, request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -41,7 +51,7 @@ export class MailService {
       .collection('services')
       .doc('mail')
       .delete();
-    return { message: 'Unsubscribed to mail service' };
+    return res.status(201).send('Unsubscribe to gitlab service');
   }
 
   async createMailAction(request: Request, id: string, token: string) {
@@ -57,6 +67,7 @@ export class MailService {
   }
 
   async createMailReaction(
+    res: Response,
     request: Request,
     id: string,
     actionId: string,
@@ -65,10 +76,24 @@ export class MailService {
     content: string,
     receiver: string,
   ) {
-    if (!id || id == undefined) return { message: '400 Bad Parameter' };
-    if (!actionId || actionId == undefined)
-      return { message: '400 Bad Parameter' };
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid Id');
+    }
+    if (!actionId || actionId === undefined) {
+      return res.status(400).send('Invalid actionId');
+    }
+    if (!object || object === undefined) {
+      return res.status(400).send('Invalid object');
+    }
+    if (!content || content === undefined) {
+      return res.status(400).send('Invalid content');
+    }
+    if (!receiver || receiver === undefined) {
+      return res.status(400).send('Invalid receiver');
+    }
     let email = '';
     const actionRef = firebase
       .getDb()
@@ -107,6 +132,6 @@ export class MailService {
           });
       }
     });
-    return { message: 'Mail reaction created' };
+    return res.status(201).send('Mail reaction created');
   }
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
+import { Response } from 'express';
 
 const firebase = new Firebase();
 
@@ -38,8 +39,10 @@ export class GitlabService {
     xhr.send(JSON.stringify(params));
   }
 
-  async subscribe(request: Request, token: string) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+  async subscribe(res: Response, request: Request, token: string) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
     const data = {
       name: 'gitlab',
       token: token,
@@ -54,7 +57,7 @@ export class GitlabService {
       .collection('services')
       .doc('gitlab')
       .set(data);
-    return { message: 'Subscribed to gitlab service' };
+    return res.status(201).send('Subscribe to gitlab service');
   }
 
   async getToken(request: Request) {
@@ -69,7 +72,7 @@ export class GitlabService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: Request) {
+  async unsubscribe(res: Response, request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -77,16 +80,25 @@ export class GitlabService {
       .collection('services')
       .doc('gitlab')
       .delete();
-    return { message: 'Unsubscribed to gitlab service' };
+    return res.status(201).send('Unsubscribe to gitlab service');
   }
 
   async createGitlabPushEventsAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     repoId: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!repoId || repoId === undefined) {
+      return res.status(400).send('Invalid repoId');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -116,16 +128,25 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
-    return { message: 'Gitlab push event action created' };
+    return res.status(201).send('Gitlab push event action created');
   }
 
   async createGitlabIssueAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     repoId: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!repoId || repoId === undefined) {
+      return res.status(400).send('Invalid repoId');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -155,16 +176,25 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
-    return { message: 'Gitlab issues event action created' };
+    return res.status(201).send('Gitlab issues event action created');
   }
 
   async createWikiPageEventsAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     repoId: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!repoId || repoId === undefined) {
+      return res.status(400).send('Invalid repoId');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -194,16 +224,25 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
-    return { message: 'Gitlab wiki page event action created' };
+    return res.status(201).send('Gitlab wiki page event action created');
   }
 
   async createNoteEventsAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     repoId: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!repoId || repoId === undefined) {
+      return res.status(400).send('Invalid repoId');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -233,16 +272,25 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
-    return { message: 'Gitlab note event action created' };
+    return res.status(201).send('Gitlab note event action created');
   }
 
   async createMergeRequestsEventsAction(
+    res: Response,
     request: Request,
     id: string,
     token: string,
     repoId: string,
   ) {
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid id');
+    }
+    if (!repoId || repoId === undefined) {
+      return res.status(400).send('Invalid repoId');
+    }
     let authToken = '';
     const serviceRef = firebase
       .getDb()
@@ -272,7 +320,7 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
-    return { message: 'Gitlab merge request event action created' };
+    return res.status(201).send('Gitlab merge request event action created');
   }
 
   async determineReaction(request: Request, reactionData: any) {

@@ -1,12 +1,15 @@
 import Firebase from 'src/firebase/firebase';
 import { Injectable, Request } from '@nestjs/common';
+import { Response } from 'express';
 
 const firebase = new Firebase();
 
 @Injectable()
 export class DiscordService {
-  async subscribe(request: Request, token: string) {
-    if (!token || token === undefined) return { message: '400 Bad Parameter' };
+  async subscribe(res: Response, request: Request, token: string) {
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
     const data = {
       token: token,
       name: 'discord',
@@ -21,7 +24,7 @@ export class DiscordService {
       .collection('services')
       .doc('discord')
       .set(data);
-    return { message: 'Subscribed to discord service' };
+    return res.status(201).send('Subscribe to discord service');
   }
 
   async getToken(request: Request) {
@@ -36,7 +39,7 @@ export class DiscordService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: Request) {
+  async unsubscribe(res: Response, request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -44,7 +47,7 @@ export class DiscordService {
       .collection('services')
       .doc('discord')
       .delete();
-    return { message: 'Unsubscribed to discord service' };
+    return res.status(201).send('Unsubscribe to codebase service');
   }
 
   async createDiscordAction(request: Request, id: string, token: string) {
@@ -59,6 +62,7 @@ export class DiscordService {
   }
 
   async createDiscordClassicReaction(
+    res: Response,
     request: Request,
     id: string,
     actionId: string,
@@ -67,10 +71,21 @@ export class DiscordService {
     server: string,
     channel: string,
   ) {
-    if (!id || id == undefined) return { message: '400 Bad Parameter' };
-    if (!actionId || actionId == undefined)
-      return { message: '400 Bad Parameter' };
-    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    if (!token || token === undefined) {
+      return res.status(400).send('Invalid token');
+    }
+    if (!id || id === undefined) {
+      return res.status(400).send('Invalid Id');
+    }
+    if (!actionId || actionId === undefined) {
+      return res.status(400).send('Invalid actionId');
+    }
+    if (!server || server === undefined) {
+      return res.status(400).send('Invalid server');
+    }
+    if (!channel || channel === undefined) {
+      return res.status(400).send('Invalid channel');
+    }
     const actionRef = firebase
       .getDb()
       .collection('area')
@@ -97,6 +112,6 @@ export class DiscordService {
           });
       }
     });
-    return { message: 'Discord reaction created' };
+    return res.status(201).send('Discord reaction created');
   }
 }

@@ -1,17 +1,19 @@
-import { Get } from '@nestjs/common';
+import { Get, Res } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
 import { CodebaseService } from './codebase.service';
+import { Response } from 'express';
 
 @Controller('/services/codebase')
 export class CodebaseController {
   constructor(private readonly codebaseService: CodebaseService) {}
   @Post('subscribe')
   async subscribe(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('token') token: string,
-    userName: string,
+    @Body('username') username: string,
   ) {
-    return this.codebaseService.subscribe(request, token, userName);
+    return this.codebaseService.subscribe(res, request, token, username);
   }
 
   @Get('/')
@@ -26,47 +28,52 @@ export class CodebaseController {
 
   @Post('/action/codebase_merge_request')
   async codebaseMergeRequest(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body() token: string,
   ) {
-    return this.codebaseService.codebaseMergeRequest(request, id, token);
+    return this.codebaseService.codebaseMergeRequest(res, request, id, token);
   }
 
   @Post('/action/codebase_push')
   async codebasePush(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body() token: string,
   ) {
-    return this.codebaseService.codebasePush(request, id, token);
+    return this.codebaseService.codebasePush(res, request, id, token);
   }
 
   @Post('/action/codebase_ticket_creation')
   async codebaseTicketCreation(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body() token: string,
   ) {
-    return this.codebaseService.codebaseTicketCreation(request, id, token);
+    return this.codebaseService.codebaseTicketCreation(res, request, id, token);
   }
 
   @Post('/action/codebase_ticket_update')
   async codebaseTicketUpdate(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body() token: string,
   ) {
-    return this.codebaseService.codebaseTicketUpdate(request, id, token);
+    return this.codebaseService.codebaseTicketUpdate(res, request, id, token);
   }
 
   @Post('/action/codebase_wiki_page_hook')
   async codebaseWikiPageHook(
+    @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
     @Body() token: string,
   ) {
-    return this.codebaseService.codebaseWikiPageHook(request, id, token);
+    return this.codebaseService.codebaseWikiPageHook(res, request, id, token);
   }
 
   @Post('/reaction')
