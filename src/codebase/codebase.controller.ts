@@ -6,8 +6,12 @@ import { CodebaseService } from './codebase.service';
 export class CodebaseController {
   constructor(private readonly codebaseService: CodebaseService) {}
   @Post('subscribe')
-  async subscribe(@Req() request: Request, @Body('token') token: string) {
-    return this.codebaseService.subscribe(request, token);
+  async subscribe(
+    @Req() request: Request,
+    @Body('token') token: string,
+    userName: string,
+  ) {
+    return this.codebaseService.subscribe(request, token, userName);
   }
 
   @Get('/')

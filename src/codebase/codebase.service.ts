@@ -7,11 +7,8 @@ const firebase = new Firebase();
 
 @Injectable()
 export class CodebaseService {
-  async subscribe(request: any, token: string) {
+  async subscribe(request: any, token: string, userName: string) {
     if (!token || token === undefined) return { message: '400 Bad Parameter' };
-    const data = {
-      token: token,
-    };
     const empty = {};
     await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
@@ -21,7 +18,7 @@ export class CodebaseService {
       .doc(request['uid'])
       .collection('services')
       .doc('codebase')
-      .set(data);
+      .set({ name: 'Codebase', token: token, userName: userName });
     return { message: 'Subscribed to codebase service' };
   }
 

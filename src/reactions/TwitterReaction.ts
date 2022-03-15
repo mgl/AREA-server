@@ -20,19 +20,19 @@ export class TwitterReaction {
   async Follow(targetName: string) {
     // Follow
     const id = (await this.twitterClient.v2.userByUsername(targetName)).data.id;
-		const me = (await this.twitterClient.v2.me()).data.id;
+    const me = (await this.twitterClient.v2.me()).data.id;
     await this.twitterClient.v2.follow(me, id);
   }
 
   async TwitterReTweet(tweetId: string) {
     // ReTweet
-		const me = (await this.twitterClient.v2.me()).data.id;
+    const me = (await this.twitterClient.v2.me()).data.id;
     await this.twitterClient.v2.retweet(me, tweetId);
   }
 
   async TwitterLike(tweetId: string) {
     // Like
-		const me = (await this.twitterClient.v2.me()).data.id;
+    const me = (await this.twitterClient.v2.me()).data.id;
     await this.twitterClient.v2.like(me, tweetId);
   }
 }

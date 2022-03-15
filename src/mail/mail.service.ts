@@ -7,11 +7,7 @@ const firebase = new Firebase();
 export class MailService {
   async subscribe(request: any, mail: string, password: string) {
     if (!mail || mail === undefined) return { message: '400 Bad Parameter' };
-    const data = {
-      name: 'mail',
-      mail: mail,
-      password: password,
-    };
+
     const empty = {};
     await firebase.getDb().collection('area').doc(request['uid']).set(empty);
 
@@ -21,7 +17,7 @@ export class MailService {
       .doc(request['uid'])
       .collection('services')
       .doc('mail')
-      .set(data);
+      .set({ name: 'mail', mail: mail, password: password });
     return { message: 'Subscribed to mail service' };
   }
 
