@@ -1,6 +1,6 @@
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { Auth, getAuth } from 'firebase-admin/auth';
-import { initializeApp } from 'firebase-admin/app';
+import { applicationDefault, initializeApp } from 'firebase-admin/app';
 
 export default class Firebase {
   private static instance: Firebase;
@@ -13,7 +13,9 @@ export default class Firebase {
     }
     Firebase.instance = this;
 
-    initializeApp();
+    initializeApp({
+      credential: applicationDefault(),
+    });
     this.db = getFirestore();
     this.auth = getAuth();
   }

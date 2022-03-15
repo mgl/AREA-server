@@ -9,17 +9,10 @@ import {
   Res,
 } from '@nestjs/common';
 import { AppService } from './app.service';
-import { DiscordClientInstance } from './reactions/DiscordReaction';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
-  @Get('/hello')
-  getHello(): string {
-    DiscordClientInstance.sendMessage('YearEndProject', 'bot-test', 'test');
-    return this.appService.getHello();
-  }
 
   @Get('/hello')
   getUser(@Req() request: Request): string {

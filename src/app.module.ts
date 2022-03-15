@@ -56,7 +56,6 @@ export class AppModule implements NestModule {
     consumer
       .apply(PreauthMiddleware)
       .exclude(
-        { path: '/hello', method: RequestMethod.GET },
         { path: '/api', method: RequestMethod.GET },
         { path: '/services/github/webhook', method: RequestMethod.POST },
         { path: '/services/twitter/webhook', method: RequestMethod.POST },
