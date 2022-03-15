@@ -306,7 +306,7 @@ export class GitlabService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc(repoId)
+      .doc(id)
       .set({
         id: id,
         token: token,
@@ -336,14 +336,6 @@ export class GitlabService {
     if (reactionData.name == 'mail_reaction') {
       mailReaction.send_mail(
         reactionData.object,
-        reactionData.message,
-        reactionData.receiver,
-        reactionData.sender,
-      );
-    }
-    if (reactionData.name == 'mail_reaction') {
-      mailReaction.send_mail(
-        reactionData.object,
         reactionData.content,
         reactionData.receiver,
         reactionData.sender,
@@ -366,7 +358,7 @@ export class GitlabService {
         reactionData.accessToken,
         reactionData.accessSecret,
       );
-      twitterReaction.Tweet(reactionData.user);
+      twitterReaction.Follow(reactionData.user);
     }
     if (reactionData.name == 'twitter_retweet') {
       const twitterReaction = new TwitterReaction(
@@ -375,7 +367,7 @@ export class GitlabService {
         reactionData.accessToken,
         reactionData.accessSecret,
       );
-      twitterReaction.Tweet(reactionData.tweetId);
+      twitterReaction.TwitterReTweet(reactionData.tweetId);
     }
     if (reactionData.name == 'twitter_like') {
       const twitterReaction = new TwitterReaction(
@@ -384,7 +376,7 @@ export class GitlabService {
         reactionData.accessToken,
         reactionData.accessSecret,
       );
-      twitterReaction.Tweet(reactionData.tweetId);
+      twitterReaction.TwitterLike(reactionData.tweetId);
     }
   }
 
