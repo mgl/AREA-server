@@ -107,7 +107,9 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
+    return { message: 'Github puh action created' };
   }
+
   async createGithubPullRequestAction(
     request: any,
     id: string,
@@ -188,6 +190,7 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
+    return { message: 'Github issues action created' };
   }
 
   async createGithubIssueCommentAction(
@@ -229,6 +232,7 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
+    return { message: 'Github issue comment action created' };
   }
 
   async createGithubLabelAction(
@@ -269,6 +273,7 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
+    return { message: 'Github label action created' };
   }
 
   async createGithubMilestoneAction(
@@ -310,6 +315,7 @@ export class GithubService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
       authToken,
     );
+    return { message: 'Github milestone action created' };
   }
 
   async createGithubReaction(

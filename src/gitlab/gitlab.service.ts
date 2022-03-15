@@ -115,6 +115,46 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
+    return { message: 'Gitlab push event action created' };
+  }
+
+  async createGitlabIssueAction(
+    request: any,
+    id: string,
+    token: string,
+    repoId: string,
+  ) {
+    if (!token || token == undefined) return { message: '400 Bad Parameter' };
+    let authToken = '';
+    const serviceRef = firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('services');
+    const snapshot = await serviceRef.where('name', '==', 'gitlab').get();
+    snapshot.forEach((doc) => {
+      authToken = doc.data().token;
+    });
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .doc(id)
+      .set({
+        id: id,
+        token: token,
+        name: 'gitlab_issues_events',
+        repoId: repoId,
+      });
+
+    this.create_webhook_gitlab(
+      repoId,
+      'issues_events',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
+      authToken,
+    );
+    return { message: 'Gitlab issues event action created' };
   }
 
   async createWikiPageEventsAction(
@@ -153,6 +193,7 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
+    return { message: 'Gitlab wiki page event action created' };
   }
 
   async createNoteEventsAction(
@@ -191,6 +232,7 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
+    return { message: 'Gitlab note event action created' };
   }
 
   async createMergeRequestsEventsAction(
@@ -229,6 +271,7 @@ export class GitlabService {
       'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
       authToken,
     );
+    return { message: 'Gitlab merge request event action created' };
   }
 
   async determineReaction(request: Request, reactionData: any) {

@@ -53,6 +53,7 @@ export class MailService {
       .collection('actions')
       .doc()
       .set({ id: id, token: token, name: 'mail_action' });
+    return { message: 'Mail action created' };
   }
 
   async createMailReaction(
@@ -106,5 +107,6 @@ export class MailService {
           });
       }
     });
+    return { message: 'Mail reaction created' };
   }
 }

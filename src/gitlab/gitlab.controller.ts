@@ -73,6 +73,21 @@ export class GitlabController {
     );
   }
 
+  @Post('/action/issue')
+  async createIssueEventsAction(
+    @Req() request: Request,
+    @Body('id') id: string,
+    @Body('token') token: string,
+    @Body('repoId') repoId: string,
+  ) {
+    return this.gitlabService.createGitlabIssueAction(
+      request,
+      id,
+      token,
+      repoId,
+    );
+  }
+
   @Post('/action/merge_requests_events')
   async createMergeRequestsEventsAction(
     @Req() request: Request,
@@ -121,7 +136,7 @@ export class GitlabController {
         break;
       }
       case 'Issue Hook': {
-        this.gitlabService.initReaction(request, 'gitlab_push_events');
+        this.gitlabService.initReaction(request, 'gitlab_issues_events');
         break;
       }
       case 'Note Hook': {

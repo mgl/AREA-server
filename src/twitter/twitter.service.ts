@@ -83,9 +83,10 @@ export class TwitterService {
       .set({
         id: id,
         token: token,
-        name: 'twitter_reaction',
+        name: 'twitter_tweet',
         message: message,
       });
+    return { message: 'Twitter tweet action created' };
   }
 
   async createTwitterFollow(
@@ -107,7 +108,8 @@ export class TwitterService {
       .doc(actionId)
       .collection('reactions')
       .doc()
-      .set({ id: id, token: token, name: 'twitter_reaction', user: user });
+      .set({ id: id, token: token, name: 'twitter_follow', user: user });
+    return { message: 'Twitter follow action created' };
   }
 
   async createTwitterRetweet(
@@ -132,9 +134,10 @@ export class TwitterService {
       .set({
         id: id,
         token: token,
-        name: 'twitter_reaction',
+        name: 'twitter_retweet',
         tweetId: tweetId,
       });
+    return { message: 'Twitter retweet action created' };
   }
   async createTwitterLike(
     request: any,
@@ -158,8 +161,9 @@ export class TwitterService {
       .set({
         id: id,
         token: token,
-        name: 'twitter_reaction',
+        name: 'twitter_like',
         tweetId: tweetId,
       });
+    return { message: 'Twitter like action created' };
   }
 }

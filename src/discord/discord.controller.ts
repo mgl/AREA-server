@@ -14,17 +14,17 @@ export class DiscordController {
   constructor(private readonly discordService: DiscordService) {}
   @Post('subscribe')
   async subscribe(@Req() request: Request, @Body('token') token: string) {
-    this.discordService.subscribe(request, token);
+    return this.discordService.subscribe(request, token);
   }
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    this.discordService.getToken(request);
+    return this.discordService.getToken(request);
   }
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    this.discordService.unsubscribe(request);
+    return this.discordService.unsubscribe(request);
   }
 
   @Post('/action')
@@ -33,7 +33,7 @@ export class DiscordController {
     @Body('id') id: string,
     @Body('token') token: string,
   ) {
-    this.discordService.createDiscordAction(request, id, token);
+    return this.discordService.createDiscordAction(request, id, token);
   }
 
   @Post('/classic_reaction')
@@ -46,7 +46,7 @@ export class DiscordController {
     @Body('server') server: string,
     @Body('channel') channel: string,
   ) {
-    this.discordService.createDiscordClassicReaction(
+    return this.discordService.createDiscordClassicReaction(
       request,
       id,
       actionId,

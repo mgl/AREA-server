@@ -21,12 +21,12 @@ export class GithubController {
 
   @Get('/')
   async getToken(@Req() request: Request) {
-    this.githubService.getToken(request);
+    return this.githubService.getToken(request);
   }
 
   @Delete('/unsubscribe')
   async unsubscribe(@Req() request: Request) {
-    this.githubService.unsubscribe(request);
+    return this.githubService.unsubscribe(request);
   }
 
   @Post('/action/push')
@@ -37,7 +37,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    this.githubService.createGithubPushAction(
+    return this.githubService.createGithubPushAction(
       request,
       id,
       token,
@@ -54,7 +54,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    this.githubService.createGithubPullRequestAction(
+    return this.githubService.createGithubPullRequestAction(
       request,
       id,
       token,
@@ -71,7 +71,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    this.githubService.createGithubIssuesAction(
+    return this.githubService.createGithubIssuesAction(
       request,
       id,
       token,
@@ -88,7 +88,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    this.githubService.createGithubIssueCommentAction(
+    return this.githubService.createGithubIssueCommentAction(
       request,
       id,
       token,
@@ -105,7 +105,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    this.githubService.createGithubLabelAction(
+    return this.githubService.createGithubLabelAction(
       request,
       id,
       token,
@@ -122,7 +122,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    this.githubService.createGithubIssuesAction(
+    return this.githubService.createGithubIssuesAction(
       request,
       id,
       token,
@@ -138,7 +138,7 @@ export class GithubController {
     @Body('actionId') actionId: string,
     @Body('token') token: string,
   ) {
-    this.createGithubReaction(request, id, actionId, token);
+    return this.createGithubReaction(request, id, actionId, token);
   }
 
   @Post('/webhook')

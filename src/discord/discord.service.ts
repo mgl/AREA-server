@@ -97,5 +97,6 @@ export class DiscordService {
           });
       }
     });
+    return { message: 'Discord reaction created' };
   }
 }

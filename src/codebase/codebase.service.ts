@@ -54,6 +54,7 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_merge_request' });
+    return { message: 'Codebase merge request action created' };
   }
 
   async codebasePush(request: any, id: string, token: string) {
@@ -65,6 +66,7 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_push' });
+    return { message: 'Codebase push action created' };
   }
 
   async codebaseTicketCreation(request: any, id: string, token: string) {
@@ -74,8 +76,9 @@ export class CodebaseService {
       .collection('area')
       .doc(request['uid'])
       .collection('actions')
-      .doc()
+      .doc(id)
       .set({ id: id, token: token, name: 'codebase_ticket_creation' });
+    return { message: 'Codebase ticket creation action created' };
   }
 
   async codebaseTicketUpdate(request: any, id: string, token: string) {
@@ -87,6 +90,7 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_ticket_update' });
+    return { message: 'Codebase ticket update action created' };
   }
 
   async codebaseWikiPageHook(request: any, id: string, token: string) {
@@ -98,6 +102,7 @@ export class CodebaseService {
       .collection('actions')
       .doc(id)
       .set({ id: id, token: token, name: 'codebase_wiki_page_hook' });
+    return { message: 'Codebase wiki page hook action created' };
   }
 
   async createCodebaseReaction(
