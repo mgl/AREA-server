@@ -142,7 +142,7 @@ export class GitlabService {
     this.create_webhook_gitlab(
       repoId,
       'push_events',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
+      process.env.WEBHOOK_URL + 'services/gitlab/webhook',
       authToken,
     );
     return res.status(201).send('Gitlab push event action created');
@@ -190,7 +190,7 @@ export class GitlabService {
     this.create_webhook_gitlab(
       repoId,
       'issues_events',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
+      process.env.WEBHOOK_URL + 'services/gitlab/webhook',
       authToken,
     );
     return res.status(201).send('Gitlab issues event action created');
@@ -238,7 +238,7 @@ export class GitlabService {
     this.create_webhook_gitlab(
       repoId,
       'wiki_page_events',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
+      process.env.WEBHOOK_URL + 'services/gitlab/webhook',
       authToken,
     );
     return res.status(201).send('Gitlab wiki page event action created');
@@ -286,7 +286,7 @@ export class GitlabService {
     this.create_webhook_gitlab(
       repoId,
       'note_events',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
+      process.env.WEBHOOK_URL + 'services/gitlab/webhook',
       authToken,
     );
     return res.status(201).send('Gitlab note event action created');
@@ -334,7 +334,7 @@ export class GitlabService {
     this.create_webhook_gitlab(
       repoId,
       'merge_requests_events',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/gitlab/webhook',
+      process.env.WEBHOOK_URL + 'services/gitlab/webhook',
       authToken,
     );
     return res.status(201).send('Gitlab merge request event action created');
