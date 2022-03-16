@@ -31,7 +31,7 @@ export class CodebaseController {
     @Res() res: Response,
     @Req() request: Request,
     @Body('id') id: string,
-    @Body() token: string,
+    @Body('token') token: string,
   ) {
     return this.codebaseService.codebaseMergeRequest(res, request, id, token);
   }
