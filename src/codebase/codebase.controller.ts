@@ -22,8 +22,8 @@ export class CodebaseController {
   }
 
   @Delete('/unsubscribe')
-  async unsubscribe(@Req() request: Request) {
-    return this.codebaseService.unsubscribe(request);
+  async unsubscribe(@Res() res: Response, @Req() request: Request) {
+    return this.codebaseService.unsubscribe(res, request);
   }
 
   @Post('/action/codebase_merge_request')
