@@ -51,7 +51,23 @@ export class MailService {
       .collection('services')
       .doc('mail')
       .delete();
-    return res.status(201).send('Unsubscribe to gitlab service');
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('reactions')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().name.includes('mail')) {
+            doc.ref.delete();
+          }
+        });
+        return res.status(201).send('Unsubscribe from mail service');
+      })
+      .catch(() => {
+        return res.status(400).send('Error unsubscribing');
+      });
   }
 
   async createMailAction(request: Request, id: string, token: string) {
