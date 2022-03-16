@@ -67,7 +67,23 @@ export class TwitterService {
       .collection('services')
       .doc('twitter')
       .delete();
-    return res.status(201).send('Unsubscribed to twitter service');
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('reactions')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().name.includes('twitter')) {
+            doc.ref.delete();
+          }
+        });
+        return res.status(201).send('Unsubscribe from twitter service');
+      })
+      .catch(() => {
+        return res.status(400).send('Error unsubscribing');
+      });
   }
 
   async createTwitterAction(request: Request, id: string, token: string) {

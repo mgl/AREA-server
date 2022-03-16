@@ -124,7 +124,7 @@ export class GithubService {
       userName,
       repoName,
       'push',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
@@ -181,7 +181,7 @@ export class GithubService {
       userName,
       repoName,
       'pull_request',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
@@ -238,7 +238,7 @@ export class GithubService {
       userName,
       repoName,
       'issues',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
@@ -295,7 +295,7 @@ export class GithubService {
       userName,
       repoName,
       'issue_comment',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
@@ -352,7 +352,7 @@ export class GithubService {
       userName,
       repoName,
       'label',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
@@ -409,7 +409,7 @@ export class GithubService {
       userName,
       repoName,
       'milestone',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
@@ -540,7 +540,4 @@ export class GithubService {
       });
     });
   }
-}
-function then(arg0: () => boolean) {
-  throw new Error('Function not implemented.');
 }

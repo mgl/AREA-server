@@ -47,7 +47,23 @@ export class DiscordService {
       .collection('services')
       .doc('discord')
       .delete();
-    return res.status(201).send('Unsubscribe to codebase service');
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('reactions')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().name.includes('discord')) {
+            doc.ref.delete();
+          }
+        });
+        return res.status(201).send('Unsubscribe from discord service');
+      })
+      .catch(() => {
+        return res.status(400).send('Error unsubscribing');
+      });
   }
 
   async createDiscordAction(request: Request, id: string, token: string) {
