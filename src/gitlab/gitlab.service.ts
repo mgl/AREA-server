@@ -4,6 +4,7 @@ import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
 import { Response } from 'express';
+import axios from 'axios';
 
 const firebase = new Firebase();
 
@@ -15,28 +16,28 @@ export class GitlabService {
     url: string,
     authToken: string,
   ) {
+    const headers = {
+      'PRIVATE-TOKEN': authToken,
+    };
+
     const params = {
       url: url,
-      event: true,
     };
-    const urlTarget = 'https://gitlab.com/api/v4/projects/' + repoId + '/hooks';
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const XMLHttpRequest = require('xhr2');
+    params[event] = true;
+    if (event !== 'push_events') {
+      params['push_events'] = false;
+    }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', urlTarget);
-
-    xhr.setRequestHeader('PRIVATE-TOKEN', authToken);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        console.log(xhr.status);
-        console.log(xhr.responseText);
-      }
-    };
-
-    xhr.send(JSON.stringify(params));
+    axios
+      .post('https://gitlab.com/api/v4/projects/' + repoId + '/hooks', params, {
+        headers: headers,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   async subscribe(res: Response, request: Request, token: string) {
