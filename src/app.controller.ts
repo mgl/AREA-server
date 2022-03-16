@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   Res,
+  Header,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -30,12 +31,12 @@ export class AppController {
   }
 
   @Get('/reaction_list')
-  async getReactionList(
-    @Res() response,
-    @Req() request: Request,
-    @Body('id') id: string,
-  ) {
-    return this.appService.getReactionList(response, request, id);
+  async getReactionList(@Res() response, @Req() request: Request) {
+    return this.appService.getReactionList(
+      response,
+      request,
+      request.headers['id'],
+    );
   }
 
   @Delete('/profile')
