@@ -11,10 +11,22 @@ export class AboutService {
                     {
                         name: 'twitter',
                         reactions: [
-                            { name: 'follow', description: 'Follows a user on Twitter' },
-                            { name: 'tweet', description: 'Posts a new tweet' },
-                            { name: 'retweet', description: 'Retweet a tweet' },
-                            { name: 'like', description: 'Like a tweet' },
+                            { 
+                                name: 'follow', 
+                                description: 'Follows a user on Twitter' 
+                            },
+                            { 
+                                name: 'tweet', 
+                                description: 'Posts a new tweet' 
+                            },
+                            { 
+                                name: 'retweet', 
+                                description: 'Retweet a tweet' 
+                            },
+                            { 
+                                name: 'like', 
+                                description: 'Like a tweet' 
+                            },
                         ],
                     },
                     {
