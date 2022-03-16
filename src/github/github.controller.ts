@@ -138,7 +138,7 @@ export class GithubController {
     @Body('userName') userName: string,
     @Body('repoName') repoName: string,
   ) {
-    return this.githubService.createGithubIssuesAction(
+    return this.githubService.createGithubMilestoneAction(
       res,
       request,
       id,
