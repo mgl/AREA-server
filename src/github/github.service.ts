@@ -18,7 +18,7 @@ export class GithubService {
     authToken: string,
   ) {
     const octokit = new Octokit({ auth: authToken });
-    await octokit.request('POST /repos/{owner}/{repo}/hooks', {
+    return octokit.request('POST /repos/{owner}/{repo}/hooks', {
       owner: owner,
       repo: repo,
       events: [event],
@@ -47,7 +47,7 @@ export class GithubService {
       .collection('services')
       .doc('github')
       .set(data);
-    return res.status(201).send('Subscribe to github service');
+    return res.status(201).send('Subscribed to github service');
   }
 
   async getToken(request: Request) {
@@ -102,7 +102,19 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
-    await firebase
+
+
+    await this.create_webhook_github(
+      userName,
+      repoName,
+      'push',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      authToken,
+    ).catch(() => {
+      return res.status(400).send('Error creating webhook');
+    });
+
+    firebase
       .getDb()
       .collection('area')
       .doc(request['uid'])
@@ -115,14 +127,6 @@ export class GithubService {
         userName: userName,
         repoName: repoName,
       });
-
-    this.create_webhook_github(
-      userName,
-      repoName,
-      'push',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
-      authToken,
-    );
     return res.status(201).send('Github push action created');
   }
 
@@ -505,4 +509,7 @@ export class GithubService {
       });
     });
   }
+}
+function then(arg0: () => boolean) {
+  throw new Error('Function not implemented.');
 }
