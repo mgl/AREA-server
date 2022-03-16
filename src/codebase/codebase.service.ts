@@ -4,6 +4,7 @@ import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
 import { Response } from 'express';
+import console from 'console';
 
 const firebase = new Firebase();
 
@@ -246,10 +247,17 @@ export class CodebaseService {
     }
   }
 
-  async initReaction(request: Request, name: string) {
+  async initReaction(request: Request, name: string, username: string,) {
     const areaRef = firebase.getDb().collection('area');
     const areaSnapshot = await areaRef.get();
     areaSnapshot.forEach(async (user) => {
+      let userToken = '';
+      const userRef = areaRef.doc(request['uid']).collection('services');
+      const snapshot = await userRef.where('name', '==', 'Codebase').get();
+      snapshot.forEach((doc) => {
+        userToken = doc.data().userName;
+        if (userToken !== username) return;
+      });
       const actionRef = areaRef.doc(user.id).collection('actions');
       const actionSnapshot = await actionRef.get();
       actionSnapshot.forEach(async (doc) => {

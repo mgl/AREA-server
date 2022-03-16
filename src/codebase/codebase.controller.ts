@@ -93,25 +93,42 @@ export class CodebaseController {
 
   @Post('/webhook')
   async ReactCodebaseWebhook(@Req() request: Request, @Body() payload: any) {
+    const username = JSON.parse(payload.payload).reporter.username;
     switch (payload['type']) {
       case 'push': {
-        this.codebaseService.initReaction(request, 'codebase_push');
+        this.codebaseService.initReaction(request, 'codebase_push', username);
         break;
       }
       case 'merge_request_creation': {
-        this.codebaseService.initReaction(request, 'codebase_merge_request');
+        this.codebaseService.initReaction(
+          request,
+          'codebase_merge_request',
+          username,
+        );
         break;
       }
       case 'ticket_update': {
-        this.codebaseService.initReaction(request, 'codebase_ticket_update');
+        this.codebaseService.initReaction(
+          request,
+          'codebase_ticket_update',
+          username,
+        );
         break;
       }
       case 'ticket_creation': {
-        this.codebaseService.initReaction(request, 'codebase_ticket_creation');
+        this.codebaseService.initReaction(
+          request,
+          'codebase_ticket_creation',
+          username,
+        );
         break;
       }
       case 'Wiki Page Hook': {
-        this.codebaseService.initReaction(request, 'codebase_wiki_page_hook');
+        this.codebaseService.initReaction(
+          request,
+          'codebase_wiki_page_hook',
+          username,
+        );
         break;
       }
     }
