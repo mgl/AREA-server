@@ -49,11 +49,10 @@ export class AppService {
 
   async getReactionList(response, request: Request, id: string) {
     let reactionlists = '';
-    console.log(id);
     const reactionRef = firebase
       .getDb()
       .collection('area')
-      .doc()
+      .doc(request['uid'])
       .collection('actions')
       .doc(id)
       .collection('reactions');
@@ -67,7 +66,7 @@ export class AppService {
       reactionlists += ';';
     });
     if (reactionlists == '')
-      return response.status(200).send('No service found');
+      return response.status(200).send('No reaction found');
     return response.status(200).send(reactionlists);
   }
 
