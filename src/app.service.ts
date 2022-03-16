@@ -48,6 +48,7 @@ export class AppService {
   }
 
   async getReactionList(response, request: Request, id: string) {
+    if (id == '' || id == undefined) return response.status(400).send('Bad id');
     let reactionlists = '';
     const reactionRef = firebase
       .getDb()
