@@ -10,10 +10,15 @@ import {
 } from '@nestjs/common';
 import { GithubService } from './github.service';
 import { Response } from 'express';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('/services/github')
 export class GithubController {
   constructor(private readonly githubService: GithubService) {}
+  @ApiOperation({
+    summary: 'Subscribe to Github',
+    description: 'Subscribe to Github with his authentification token',
+  })
   @Post('subscribe')
   async subscribe(
     @Res() res: Response,
@@ -24,16 +29,29 @@ export class GithubController {
     return { message: 'Subscribed to github service' };
   }
 
+  @ApiOperation({
+    summary: 'Get github service token',
+    description: 'Get github service token',
+  })
   @Get('/')
   async getToken(@Req() request: Request) {
     return this.githubService.getToken(request);
   }
 
+  @ApiOperation({
+    summary: 'Unsubscribe to github service',
+    description: 'Unsubscribe to github service',
+  })
   @Delete('/unsubscribe')
   async unsubscribe(@Res() res: Response, @Req() request: Request) {
     return this.githubService.unsubscribe(res, request);
   }
 
+  @ApiOperation({
+    summary: 'github push action',
+    description:
+      'Create github push action with his id and his token, his username Github and the name of his Github repository',
+  })
   @Post('/action/push')
   async createGithubPushAction(
     @Res() res: Response,
@@ -53,6 +71,11 @@ export class GithubController {
     );
   }
 
+  @ApiOperation({
+    summary: 'github pull request action',
+    description:
+      'Create github pull request action with his id and his token, his username Github and the name of his Github repository',
+  })
   @Post('/action/pull_request')
   async createGithubPullRequestAction(
     @Res() res: Response,
@@ -72,6 +95,11 @@ export class GithubController {
     );
   }
 
+  @ApiOperation({
+    summary: 'github issues action',
+    description:
+      'Create github issues action with his id and his token, his username Github and the name of his Github repository',
+  })
   @Post('/action/issues')
   async createGithubIssuesAction(
     @Res() res: Response,
@@ -91,6 +119,11 @@ export class GithubController {
     );
   }
 
+  @ApiOperation({
+    summary: 'github issue comment action',
+    description:
+      'Create github issue comment action with his id and his token, his username Github and the name of his Github repository',
+  })
   @Post('/action/issue_comment')
   async createGithubIssueCommentAction(
     @Res() res: Response,
@@ -110,6 +143,11 @@ export class GithubController {
     );
   }
 
+  @ApiOperation({
+    summary: 'github label action',
+    description:
+      'Create github label action with his id and his token, his username Github and the name of his Github repository',
+  })
   @Post('/action/label')
   async createGithubLabelAction(
     @Res() res: Response,
@@ -129,6 +167,11 @@ export class GithubController {
     );
   }
 
+  @ApiOperation({
+    summary: 'github milestone action',
+    description:
+      'Create github milestone action with his id and his token, his username Github and the name of his Github repository',
+  })
   @Post('/action/milestone')
   async createGithubMilestoneAction(
     @Res() res: Response,
@@ -158,6 +201,10 @@ export class GithubController {
     return this.createGithubReaction(request, id, actionId, token);
   }
 
+  @ApiOperation({
+    summary: 'Manage github trigger',
+    description: 'Trigger reaction with github action',
+  })
   @Post('/webhook')
   async ReactGithubWebhook(
     @Headers('X-GitHub-Event') header: any,
