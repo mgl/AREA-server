@@ -10,6 +10,9 @@ export class CodebaseController {
   async subscribe(
     @Res() res: Response,
     @Req() request: Request,
+    /**
+     * Random token for identification of the service.
+     */
     @Body('token') token: string,
     @Body('username') username: string,
   ) {
