@@ -46,7 +46,7 @@ export class CodebaseService {
     return { message: '200' + doc.data() };
   }
 
-  async unsubscribe(request: Request) {
+  async unsubscribe(res: Response, request: Request) {
     await firebase
       .getDb()
       .collection('area')
@@ -54,7 +54,23 @@ export class CodebaseService {
       .collection('services')
       .doc('codebase')
       .delete();
-    return { message: 'Unsubscribed to codebase service' };
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().name.includes('codebase')) {
+            doc.ref.delete();
+          }
+        });
+        return res.status(201).send('Unsubscribe from gitlab service');
+      })
+      .catch(() => {
+        return res.status(400).send('Error unsubscribing');
+      });
   }
 
   async codebaseMergeRequest(

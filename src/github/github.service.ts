@@ -61,6 +61,7 @@ export class GithubService {
     if (!doc.exists) return { statusCode: '404', message: 'Not found' };
     return { message: '200' + doc.data() };
   }
+
   async unsubscribe(res: Response, request: Request) {
     await firebase
       .getDb()
@@ -69,7 +70,23 @@ export class GithubService {
       .collection('services')
       .doc('github')
       .delete();
-    return res.status(201).send('Unsubscribe to github service');
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().name.includes('github')) {
+            doc.ref.delete();
+          }
+        });
+        return res.status(201).send('Unsubscribe to github service');
+      })
+      .catch(() => {
+        return res.status(400).send('Error unsubscribing');
+      });
   }
 
   async createGithubPushAction(

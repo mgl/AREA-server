@@ -81,7 +81,23 @@ export class GitlabService {
       .collection('services')
       .doc('gitlab')
       .delete();
-    return res.status(201).send('Unsubscribe to gitlab service');
+    await firebase
+      .getDb()
+      .collection('area')
+      .doc(request['uid'])
+      .collection('actions')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (doc.data().name.includes('gitlab')) {
+            doc.ref.delete();
+          }
+        });
+        return res.status(201).send('Unsubscribe from gitlab service');
+      })
+      .catch(() => {
+        return res.status(400).send('Error unsubscribing');
+      });
   }
 
   async createGitlabPushEventsAction(
