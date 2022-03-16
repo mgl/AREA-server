@@ -103,7 +103,6 @@ export class GithubService {
       authToken = doc.data().token;
     });
 
-
     await this.create_webhook_github(
       userName,
       repoName,
@@ -160,7 +159,17 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
-    console.log(authToken);
+
+    await this.create_webhook_github(
+      userName,
+      repoName,
+      'pull_request',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      authToken,
+    ).catch(() => {
+      return res.status(400).send('Error creating webhook');
+    });
+
     await firebase
       .getDb()
       .collection('area')
@@ -174,14 +183,6 @@ export class GithubService {
         userName: userName,
         repoName: repoName,
       });
-
-    this.create_webhook_github(
-      userName,
-      repoName,
-      'pull_request',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
-      authToken,
-    );
     return res.status(201).send('Github pull request action created');
   }
 
@@ -215,6 +216,17 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
+
+    await this.create_webhook_github(
+      userName,
+      repoName,
+      'issues',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      authToken,
+    ).catch(() => {
+      return res.status(400).send('Error creating webhook');
+    });
+
     await firebase
       .getDb()
       .collection('area')
@@ -228,14 +240,6 @@ export class GithubService {
         userName: userName,
         repoName: repoName,
       });
-
-    this.create_webhook_github(
-      userName,
-      repoName,
-      'issues',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
-      authToken,
-    );
     return res.status(201).send('Github issue action created');
   }
 
@@ -269,6 +273,17 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
+
+    await this.create_webhook_github(
+      userName,
+      repoName,
+      'issue_comment',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      authToken,
+    ).catch(() => {
+      return res.status(400).send('Error creating webhook');
+    });
+
     await firebase
       .getDb()
       .collection('area')
@@ -282,14 +297,6 @@ export class GithubService {
         userName: userName,
         repoName: repoName,
       });
-
-    this.create_webhook_github(
-      userName,
-      repoName,
-      'issue_comment',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
-      authToken,
-    );
     return res.status(201).send('Github issue comment action created');
   }
 
@@ -323,6 +330,17 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
+
+    await this.create_webhook_github(
+      userName,
+      repoName,
+      'label',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      authToken,
+    ).catch(() => {
+      return res.status(400).send('Error creating webhook');
+    });
+
     await firebase
       .getDb()
       .collection('area')
@@ -336,13 +354,6 @@ export class GithubService {
         userName: userName,
         repoName: repoName,
       });
-    this.create_webhook_github(
-      userName,
-      repoName,
-      'label',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
-      authToken,
-    );
     return res.status(201).send('Github label action created');
   }
 
@@ -376,6 +387,17 @@ export class GithubService {
     snapshot.forEach((doc) => {
       authToken = doc.data().token;
     });
+
+    await this.create_webhook_github(
+      userName,
+      repoName,
+      'milestone',
+      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
+      authToken,
+    ).catch(() => {
+      return res.status(400).send('Error creating webhook');
+    });
+
     await firebase
       .getDb()
       .collection('area')
@@ -389,14 +411,6 @@ export class GithubService {
         userName: userName,
         repoName: repoName,
       });
-
-    this.create_webhook_github(
-      userName,
-      repoName,
-      'milestone',
-      'https://europe-west1-area-37a17.cloudfunctions.net/api/services/github/webhook',
-      authToken,
-    );
     return res.status(201).send('Github milestone action created');
   }
 
