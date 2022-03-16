@@ -5,7 +5,7 @@ import {
   Req,
   Delete,
   Param,
-  Headers,
+  Body,
   Res,
 } from '@nestjs/common';
 import { AppService } from './app.service';
@@ -33,7 +33,7 @@ export class AppController {
   async getReactionList(
     @Res() response,
     @Req() request: Request,
-    @Headers('id') id: string,
+    @Body('id') id: string,
   ) {
     return this.appService.getReactionList(response, request, id);
   }

@@ -4,7 +4,6 @@ import Firebase from 'src/firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
 import { Response } from 'express';
-import console from 'console';
 
 const firebase = new Firebase();
 
@@ -247,7 +246,7 @@ export class CodebaseService {
     }
   }
 
-  async initReaction(request: Request, name: string, username: string,) {
+  async initReaction(request: Request, name: string, username: string) {
     const areaRef = firebase.getDb().collection('area');
     const areaSnapshot = await areaRef.get();
     areaSnapshot.forEach(async (user) => {
