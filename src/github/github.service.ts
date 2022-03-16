@@ -352,7 +352,7 @@ export class GithubService {
       userName,
       repoName,
       'label',
-      process.env.WEBHOOK_URL + 'github/webhook',
+      process.env.WEBHOOK_URL + 'services/github/webhook',
       authToken,
     ).catch(() => {
       return res.status(400).send('Error creating webhook');
