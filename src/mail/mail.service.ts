@@ -111,6 +111,7 @@ export class MailService {
       return res.status(400).send('Invalid receiver');
     }
     let email = '';
+    let pass = '';
     const actionRef = firebase
       .getDb()
       .collection('area')
@@ -124,11 +125,13 @@ export class MailService {
       .collection('services');
     const servicesSnapshot = await serviceRef.get();
     servicesSnapshot.forEach(async (doc) => {
-      if (doc.data().name == 'mail') email = doc.data().name;
+      if (doc.data().name == 'mail') {
+        email = doc.data().name;
+        pass = doc.data().password;
+      }
     });
     userNameSnapshot.forEach(async (doc) => {
       if (doc.data().id == actionId) {
-        console.log(doc.data());
         await firebase
           .getDb()
           .collection('area')
@@ -145,6 +148,7 @@ export class MailService {
             content: content,
             receiver: receiver,
             sender: email,
+            password: pass,
           });
       }
     });
