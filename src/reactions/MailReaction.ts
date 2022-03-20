@@ -3,22 +3,20 @@ import * as nodemailer from 'nodemailer';
 export class MailReaction {
   private transporter: nodemailer.Transporter;
 
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MAILER_AUTH_USER,
-        pass: process.env.MAILER_AUTH_PASSWORD,
-      },
-    });
-  }
-
   async send_mail(
     object: string,
     content: string,
     receiver: string,
     sender: string,
+    password: string,
   ) {
+    this.transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: sender,
+        pass: password,
+      },
+    });
     if (content != '') {
       const info = await this.transporter.sendMail({
         from: sender,
