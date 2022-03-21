@@ -1,6 +1,6 @@
 import { Get } from '@nestjs/common';
 import { Controller, Request, Post, Delete, Body, Req } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
+import { Firebase } from '../firebase/firebase';
 
 const firebase = new Firebase();
 @Controller('/services/google')

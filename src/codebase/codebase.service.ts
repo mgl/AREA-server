@@ -1,6 +1,6 @@
 import { MailReaction } from '../reactions/MailReaction';
 import { HttpStatus, Injectable, Request } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
+import { Firebase } from '../firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
 import { Response } from 'express';
@@ -221,6 +221,7 @@ export class CodebaseService {
         reactionData.message,
         reactionData.receiver,
         reactionData.sender,
+        reactionData.password,
       );
     }
     if (reactionData.name == 'twitter_tweet') {

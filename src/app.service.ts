@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
+import { Firebase } from './firebase/firebase';
 
 const firebase = new Firebase();
 

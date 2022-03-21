@@ -1,6 +1,6 @@
 import { MailReaction } from '../reactions/MailReaction';
 import { Injectable } from '@nestjs/common';
-import Firebase from 'src/firebase/firebase';
+import { Firebase } from '../firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from 'src/reactions/TwitterReaction';
 import { Response } from 'express';
@@ -356,6 +356,7 @@ export class GitlabService {
         reactionData.content,
         reactionData.receiver,
         reactionData.sender,
+        reactionData.password,
       );
     }
     if (reactionData.name == 'twitter_tweet') {

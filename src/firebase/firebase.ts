@@ -2,7 +2,7 @@ import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { Auth, getAuth } from 'firebase-admin/auth';
 import { applicationDefault, initializeApp } from 'firebase-admin/app';
 
-export default class Firebase {
+export class Firebase {
   private static instance: Firebase;
   private db: Firestore;
   private auth: Auth;

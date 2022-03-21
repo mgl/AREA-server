@@ -1,7 +1,7 @@
 import { MailReaction } from '../reactions/MailReaction';
 import { Body, Injectable, Request } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
-import Firebase from 'src/firebase/firebase';
+import { Firebase } from '../firebase/firebase';
 import { DiscordClientInstance } from '../reactions/DiscordReaction';
 import { TwitterReaction } from '../reactions/TwitterReaction';
 import { Response } from 'express';
@@ -477,6 +477,7 @@ export class GithubService {
         reactionData.content,
         reactionData.receiver,
         reactionData.sender,
+        reactionData.password,
       );
     }
     if (reactionData.name == 'twitter_tweet') {

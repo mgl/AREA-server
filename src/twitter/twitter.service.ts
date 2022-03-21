@@ -1,4 +1,4 @@
-import Firebase from 'src/firebase/firebase';
+import { Firebase } from '../firebase/firebase';
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
 
